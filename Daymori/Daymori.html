@@ -90,6 +90,20 @@ body.dark-mode .feature-center-icon svg{stroke:#d8ba86}
 .dev-letter-title{margin:0 0 14px;font-size:1.25rem;color:#2f5c94;letter-spacing:.02em}
 .dev-letter-content{margin:0;font-size:1rem;line-height:1.92;color:#22456f;white-space:pre-wrap;min-height:280px}
 .dev-letter-close{position:absolute;top:8px;right:8px;z-index:2;padding:8px 14px;border-radius:999px;border:1px solid rgba(95,137,186,.26);background:rgba(255,255,255,.86);color:#2f5c94}
+.onboarding-overlay{position:fixed;inset:0;z-index:125;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(17,35,57,.42);backdrop-filter:blur(4px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s ease,visibility .28s ease}
+.onboarding-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
+.onboarding-card{width:min(560px,96vw);padding:22px 20px 18px;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(239,247,255,.96));border:1px solid rgba(114,154,203,.26);box-shadow:0 24px 56px rgba(39,84,137,.22)}
+.onboarding-tag{display:inline-flex;padding:5px 10px;border-radius:999px;border:1px solid rgba(114,154,203,.26);background:rgba(255,255,255,.78);color:#4e74a1;font-size:.78rem}
+.onboarding-title{margin:12px 0 8px;font-size:1.2rem;color:#305b8f}
+.onboarding-desc{margin:0;color:#355d8d;line-height:1.85;min-height:132px;white-space:pre-wrap}
+.onboarding-progress{margin:12px 0 0;color:#6282a8;font-size:.9rem}
+.onboarding-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.onboarding-actions button{min-width:110px}
+body.dark-mode .onboarding-card{background:linear-gradient(180deg,rgba(43,55,70,.98),rgba(36,48,62,.96));border-color:rgba(136,162,193,.34)}
+body.dark-mode .onboarding-tag{background:rgba(32,42,56,.86);border-color:rgba(136,162,193,.34);color:#d4e6ff}
+body.dark-mode .onboarding-title{color:#d4e6ff}
+body.dark-mode .onboarding-desc{color:#dbeaff}
+body.dark-mode .onboarding-progress{color:#b6cbe6}
 body.dark-mode .dev-letter-overlay{background:radial-gradient(circle at 16% 8%,rgba(59,76,98,.55),transparent 34%),radial-gradient(circle at 82% 10%,rgba(48,67,93,.45),transparent 32%),linear-gradient(180deg,rgba(39,48,63,.95),rgba(30,39,51,.92))}
 body.dark-mode .dev-letter-paper{background:linear-gradient(180deg,rgba(71,79,92,.96) 0%,rgba(58,68,84,.96) 26%,rgba(48,61,78,.96) 54%,rgba(40,54,72,.96) 100%);border-color:rgba(136,162,193,.32)}
 body.dark-mode .dev-letter-title{color:#d3e5ff}
@@ -348,6 +362,19 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
     </article>
   </div>
 </section>
+<section class="onboarding-overlay" id="onboardingOverlay" aria-hidden="true">
+  <div class="onboarding-card">
+    <small class="onboarding-tag">30 秒快速上手</small>
+    <h3 class="onboarding-title" id="onboardingTitle"></h3>
+    <p class="onboarding-desc" id="onboardingDesc"></p>
+    <p class="onboarding-progress" id="onboardingProgress"></p>
+    <div class="onboarding-actions">
+      <button id="onboardingSkip" type="button">跳过</button>
+      <button id="onboardingPrev" type="button">上一步</button>
+      <button class="primary" id="onboardingNext" type="button">下一步</button>
+    </div>
+  </div>
+</section>
 <script>
 const STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
 const timerModes=[{id:'focus',label:'专注',minutes:25,button:'25 分钟专注'},{id:'focus40',label:'深度专注',minutes:40,button:'40 分钟专注'},{id:'focus50',label:'深度专注',minutes:50,button:'50 分钟专注'},{id:'short',label:'短休息',minutes:5,button:'5 分钟休息'},{id:'long',label:'长休息',minutes:15,button:'15 分钟休息'},{id:'rest30',label:'休息',minutes:30,button:'30 分钟休息'}];
@@ -362,6 +389,13 @@ const DEV_LETTER_TEXT=`感谢您使用这一软件，首先，不知您是否觉
 
                                                        ——Andrew McCain`;
 let devLetterTimer=null;
+const ONBOARDING_KEY='daymori-onboarding-v1';
+const ONBOARDING_STEPS=[
+  {title:'如何进入 Super 专注',desc:'点击左上角设置按钮，在侧边栏中点“进入 Super 专注模式”。\n进入后可选 25/50/90 分钟，也可自定义时间，并支持白噪音。'},
+  {title:'如何开启护眼模式',desc:'点击左上角设置按钮，打开“护眼模式”开关。\n夜间学习建议开启，可降低蓝光刺激与亮度对比。'},
+  {title:'如何添加桌面快捷方式',desc:'在 Chrome/Edge 打开菜单，选择“安装应用”或“创建快捷方式（作为窗口）”。\n手机可用“添加到主屏幕”，下次可像 App 一样直接打开。'}
+];
+let onboardingStepIndex=0;
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify({mode:state.mode,timeLeft:state.timeLeft,totalDuration:state.totalDuration,sessionsCompleted:state.sessionsCompleted,todos:state.todos,quote:state.quote,sortBy:state.sortBy,wishes:state.wishes,wishMessage:state.wishMessage,visitCount:state.visitCount,boundTodoId:state.boundTodoId}))}
 function loadState(){try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');state.mode=s.mode||'focus';state.timeLeft=Number.isFinite(s.timeLeft)?s.timeLeft:1500;state.totalDuration=Number.isFinite(s.totalDuration)?s.totalDuration:state.timeLeft;state.sessionsCompleted=Number.isFinite(s.sessionsCompleted)?s.sessionsCompleted:0;state.todos=Array.isArray(s.todos)?s.todos.map(t=>({...t,status:t.status||(t.done?'done':'todo')})):[];state.quote=s.quote||'';state.sortBy=s.sortBy||'manual';state.wishes=Array.isArray(s.wishes)?s.wishes:[];state.wishMessage=s.wishMessage||state.wishMessage;state.visitCount=Number.isFinite(s.visitCount)?s.visitCount:0;state.boundTodoId=s.boundTodoId??null}catch{}if(!state.quote)setRandomQuote(false)}
 function trackVisit(){state.visitCount+=1;saveState()}function getModeConfig(id){return timerModes.find(m=>m.id===id)||timerModes[0]}function isFocusMode(id){return id==='focus'||id==='focus40'||id==='focus50'}function getNextMode(id){return isFocusMode(id)?'short':'focus'}function formatTime(sec){const m=Math.floor(sec/60),r=sec%60;return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`}
@@ -380,7 +414,17 @@ function switchMode(id){const mode=getModeConfig(id);stopTimer();state.mode=mode
 function playIntroChime(){if(introChimePlayed)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;introChimePlayed=true;const ctx=new C();[{f:659.25,s:0,d:1.02,g:.052},{f:880,s:.28,d:1.18,g:.048},{f:1046.5,s:.62,d:1.42,g:.046}].forEach(n=>{const mg=ctx.createGain();mg.connect(ctx.destination);mg.gain.setValueAtTime(.0001,ctx.currentTime+n.s);mg.gain.exponentialRampToValueAtTime(n.g,ctx.currentTime+n.s+.035);mg.gain.exponentialRampToValueAtTime(n.g*.42,ctx.currentTime+n.s+n.d*.28);mg.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+n.s+n.d);[{t:'sine',det:0,g:1},{t:'sine',det:12,g:.2},{t:'triangle',det:24,g:.06}].forEach(p=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=p.t;o.frequency.setValueAtTime(n.f,ctx.currentTime+n.s);o.detune.setValueAtTime(p.det,ctx.currentTime+n.s);g.gain.setValueAtTime(p.g,ctx.currentTime+n.s);o.connect(g);g.connect(mg);o.start(ctx.currentTime+n.s);o.stop(ctx.currentTime+n.s+n.d+.04)})});setTimeout(()=>{if(ctx.state!=='closed')ctx.close().catch(()=>{})},2400)}
 function revealBlock(block){if(!block||block.classList.contains('visible'))return;block.classList.add('visible');block.classList.remove('armed')}
 function setupReveal(){revealBlocks.forEach(block=>{block.classList.add('armed');const r=()=>revealBlock(block);block.addEventListener('mouseenter',r,{once:true});block.addEventListener('touchstart',r,{once:true,passive:true});block.addEventListener('click',r,{once:true})})}
-function revealHome(){introOverlayEl.classList.add('hidden');pageShellEl.classList.add('ready');setupReveal()}function runIntroAnimation(){if(introStarted)return;introStarted=true;playIntroChime();introHintEl.textContent='Sound on. Entering Daymori...';introOverlayEl.classList.add('exit');setTimeout(revealHome,800)}
+function maybeOpenOnboarding(){
+  if(localStorage.getItem(ONBOARDING_KEY)==='done')return;
+  window.setTimeout(()=>openOnboarding(),260);
+}
+function revealHome(){
+  introOverlayEl.classList.add('hidden');
+  pageShellEl.classList.add('ready');
+  setupReveal();
+  maybeOpenOnboarding();
+}
+function runIntroAnimation(){if(introStarted)return;introStarted=true;playIntroChime();introHintEl.textContent='Sound on. Entering Daymori...';introOverlayEl.classList.add('exit');setTimeout(revealHome,800)}
 function playDoneSound(){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C();[880,1174.66,1567.98].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,ctx.currentTime+i*.18);g.gain.exponentialRampToValueAtTime(.16,ctx.currentTime+i*.18+.03);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+i*.18+.18);o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+i*.18);o.stop(ctx.currentTime+i*.18+.2)});setTimeout(()=>ctx.close().catch(()=>{}),1200)}
 function celebrateWishCompletion(){playDoneSound();new Audio(GOOD_JOB_AUDIO_SRC).play().catch(()=>new Audio(DREAM_AUDIO_SRC).play().catch(()=>{}))}
 function completeSession(){const c=getModeConfig(state.mode);stopTimer();if(isFocusMode(c.id))state.sessionsCompleted+=1;if(isFocusMode(c.id)&&state.boundTodoId){const bound=getBoundTodo();if(bound)setTodoStatus(bound.id,'done');state.boundTodoId=null;renderTodos();renderBoundTask()}playDoneSound();const n=getModeConfig(getNextMode(state.mode));alert(`${c.label}结束了，已为你切换到${n.label}。`);state.mode=n.id;state.totalDuration=n.minutes*60;state.timeLeft=state.totalDuration;startBtn.textContent=isFocusMode(n.id)?'开始专注':'开始休息';updateStats();renderModes();updateTimerDisplay();saveState()}
@@ -559,6 +603,34 @@ function closeDevLetter(){
   }
 }
 
+function renderOnboardingStep(){
+  const titleEl=$('onboardingTitle'),descEl=$('onboardingDesc'),progressEl=$('onboardingProgress'),prevBtn=$('onboardingPrev'),nextBtn=$('onboardingNext');
+  if(!titleEl||!descEl||!progressEl||!prevBtn||!nextBtn)return;
+  const step=ONBOARDING_STEPS[onboardingStepIndex];
+  titleEl.textContent=step.title;
+  descEl.textContent=step.desc;
+  progressEl.textContent=`第 ${onboardingStepIndex+1} 步 / 共 ${ONBOARDING_STEPS.length} 步`;
+  prevBtn.disabled=onboardingStepIndex===0;
+  nextBtn.textContent=onboardingStepIndex===ONBOARDING_STEPS.length-1?'完成':'下一步';
+}
+
+function openOnboarding(){
+  const overlay=$('onboardingOverlay');
+  if(!overlay)return;
+  onboardingStepIndex=0;
+  renderOnboardingStep();
+  overlay.classList.add('show');
+  overlay.setAttribute('aria-hidden','false');
+}
+
+function closeOnboarding(markDone=true){
+  const overlay=$('onboardingOverlay');
+  if(!overlay)return;
+  overlay.classList.remove('show');
+  overlay.setAttribute('aria-hidden','true');
+  if(markDone)localStorage.setItem(ONBOARDING_KEY,'done');
+}
+
 async function repairInstalledApp(){
   const ok=window.confirm('将执行应用修复：清除旧缓存与离线文件，然后自动刷新到最新版本。是否继续？');
   if(!ok)return;
@@ -614,6 +686,24 @@ if(openDevLetterBtn&&closeDevLetterBtn&&devLetterOverlay){
   closeDevLetterBtn.addEventListener('click',closeDevLetter);
   devLetterOverlay.addEventListener('click',e=>{if(e.target===devLetterOverlay)closeDevLetter()});
 }
+const onboardingOverlay=$('onboardingOverlay'),onboardingSkip=$('onboardingSkip'),onboardingPrev=$('onboardingPrev'),onboardingNext=$('onboardingNext');
+if(onboardingOverlay&&onboardingSkip&&onboardingPrev&&onboardingNext){
+  onboardingSkip.addEventListener('click',()=>closeOnboarding(true));
+  onboardingPrev.addEventListener('click',()=>{
+    if(onboardingStepIndex===0)return;
+    onboardingStepIndex-=1;
+    renderOnboardingStep();
+  });
+  onboardingNext.addEventListener('click',()=>{
+    if(onboardingStepIndex>=ONBOARDING_STEPS.length-1){
+      closeOnboarding(true);
+      return;
+    }
+    onboardingStepIndex+=1;
+    renderOnboardingStep();
+  });
+  onboardingOverlay.addEventListener('click',e=>{if(e.target===onboardingOverlay)closeOnboarding(true)});
+}
 if(repairAppBtn){
   repairAppBtn.addEventListener('click',()=>{repairInstalledApp().catch(()=>alert('修复遇到异常，请手动刷新后重试。'))});
 }
@@ -630,6 +720,7 @@ sfNoiseType.addEventListener('change',()=>{if(sfNoiseToggle.checked){stopSuperNo
 window.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&document.body.classList.contains('super-focus-active'))exitSuperFocus();
   if(e.key==='Escape'&&devLetterOverlay&&devLetterOverlay.classList.contains('show'))closeDevLetter();
+  if(e.key==='Escape'&&onboardingOverlay&&onboardingOverlay.classList.contains('show'))closeOnboarding(true);
 });
 
 // 初始化深色模式
