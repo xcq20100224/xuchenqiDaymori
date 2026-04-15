@@ -78,6 +78,21 @@ body.dark-mode .feature-item svg{stroke:#d8ba86}
 .feature-disk.show .feature-center-icon{background:linear-gradient(135deg,rgba(109,149,203,.25),rgba(109,149,203,.12))}
 .feature-center-icon svg{width:24px;height:24px;fill:none;stroke:#5a7da8;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 body.dark-mode .feature-center-icon svg{stroke:#d8ba86}
+.dev-letter-btn{width:100%;border:1px solid rgba(109,149,203,.22);background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(232,242,255,.9));color:#416792;font-weight:500}
+.dev-letter-overlay{position:fixed;inset:0;z-index:120;display:flex;align-items:flex-start;justify-content:center;padding:4vh 16px;background:radial-gradient(circle at 16% 8%,rgba(238,248,255,.62),transparent 34%),radial-gradient(circle at 82% 10%,rgba(194,223,255,.48),transparent 32%),linear-gradient(180deg,rgba(226,240,255,.95),rgba(212,233,255,.92));opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s ease,visibility .45s ease}
+.dev-letter-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
+.dev-letter-wrap{position:relative;width:min(760px,96vw);height:min(90vh,920px);display:flex;align-items:flex-start;justify-content:center}
+.dev-letter-paper{position:relative;width:min(700px,92vw);max-height:84vh;overflow:auto;padding:26px 24px 24px;border-radius:0 0 24px 24px;transform-origin:top center;transform:perspective(900px) rotateX(-16deg) scaleY(0);opacity:0;background:linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(245,251,255,.98) 26%,rgba(229,243,255,.98) 54%,rgba(218,236,255,.98) 100%);border:1px solid rgba(132,174,221,.4);box-shadow:0 30px 80px rgba(57,104,163,.24),inset 0 1px 0 rgba(255,255,255,.9)}
+.dev-letter-overlay.show .dev-letter-paper{animation:letterDropOpen 1.55s cubic-bezier(.18,.85,.17,1) forwards}
+.dev-letter-paper::before{content:"";position:sticky;top:0;display:block;height:2px;background:linear-gradient(90deg,rgba(108,152,204,.0),rgba(108,152,204,.35),rgba(108,152,204,.0));margin:-20px 0 16px}
+.dev-letter-title{margin:0 0 14px;font-size:1.25rem;color:#2f5c94;letter-spacing:.02em}
+.dev-letter-content{margin:0;font-size:1rem;line-height:1.92;color:#22456f;white-space:pre-wrap;min-height:280px}
+.dev-letter-close{position:absolute;top:8px;right:8px;z-index:2;padding:8px 14px;border-radius:999px;border:1px solid rgba(95,137,186,.26);background:rgba(255,255,255,.86);color:#2f5c94}
+body.dark-mode .dev-letter-overlay{background:radial-gradient(circle at 16% 8%,rgba(59,76,98,.55),transparent 34%),radial-gradient(circle at 82% 10%,rgba(48,67,93,.45),transparent 32%),linear-gradient(180deg,rgba(39,48,63,.95),rgba(30,39,51,.92))}
+body.dark-mode .dev-letter-paper{background:linear-gradient(180deg,rgba(71,79,92,.96) 0%,rgba(58,68,84,.96) 26%,rgba(48,61,78,.96) 54%,rgba(40,54,72,.96) 100%);border-color:rgba(136,162,193,.32)}
+body.dark-mode .dev-letter-title{color:#d3e5ff}
+body.dark-mode .dev-letter-content{color:#deebfb}
+body.dark-mode .dev-letter-close{background:rgba(33,42,56,.9);border-color:rgba(152,178,210,.35);color:#deebfb}
 .super-btn{width:100%}
 .super-focus{position:fixed;inset:0;z-index:70;overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;transform:translate3d(0,30px,0) scale(1.03);transition:opacity .52s cubic-bezier(.16,.84,.2,1),transform .52s cubic-bezier(.16,.84,.2,1),visibility .52s;background:radial-gradient(circle at 18% 16%,rgba(238,255,246,.62),transparent 34%),radial-gradient(circle at 80% 10%,rgba(230,255,241,.38),transparent 28%),linear-gradient(160deg,#f2fff7,#e8fdf1 42%,#d9f6e7);will-change:transform,opacity}
 .super-focus.active{opacity:1;visibility:visible;pointer-events:auto;transform:translate3d(0,0,0) scale(1)}
@@ -138,6 +153,7 @@ body.super-focus-active .super-focus.level-extreme .panel-wrap{animation:cameraD
 @keyframes refractFlow{0%{transform:translate3d(0,18px,0) scale(1.05)}100%{transform:translate3d(0,-24px,0) scale(1.02)}}
 @keyframes refractPulse{0%,100%{opacity:.34}50%{opacity:.56}}
 @keyframes cameraDrift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-1px,1px,0)}}
+@keyframes letterDropOpen{0%{transform:perspective(900px) rotateX(-16deg) scaleY(0);opacity:0}45%{transform:perspective(900px) rotateX(-8deg) scaleY(.58);opacity:.95}100%{transform:perspective(900px) rotateX(0deg) scaleY(1);opacity:1}}
 /* ── 字体体系统一 ── */h1,h2,h3,.panel h2,.super-head h3{font-weight:600}.mode-btn,.pill,.tag,.stat span,button,select,input[type=text],input[type=date],.sort-select,.super-level-btn{font-weight:400}.hero small,.hero p,.quote-foot,.note,.super-hint,.noise-tip,.eye-care-hint,.install-note,.empty,.moment p,.encourage,.orb-time{font-weight:300}/* ── 专注计时模块：强化层级 ── */
 #timerBlock{
   border:1.5px solid rgba(16,185,129,.24);
@@ -279,6 +295,7 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
   <div class="sidebar-content panel card">
     <h3>快捷设置</h3>
     <div class="setting-row"><span class="setting-title">护眼模式</span><label class="switch" for="darkModeToggle"><input id="darkModeToggle" type="checkbox" role="switch" aria-label="切换护眼模式"><span class="switch-slider"></span></label></div><p class="eye-care-hint" id="eyeCareHint">关闭：标准明亮模式。</p>
+    <button id="openDevLetterBtn" class="dev-letter-btn" type="button">来自开发者的一封信</button>
     <button class="primary super-btn" id="superFocusBtn" type="button">进入 Super 专注模式</button>
   </div>
 </div>
@@ -318,12 +335,29 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
   <div class="super-refract" aria-hidden="true"></div>
   <div class="super-bubbles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
 </section>
+<section class="dev-letter-overlay" id="devLetterOverlay" aria-hidden="true">
+  <div class="dev-letter-wrap">
+    <button class="dev-letter-close" id="closeDevLetterBtn" type="button">关闭</button>
+    <article class="dev-letter-paper" id="devLetterPaper">
+      <h3 class="dev-letter-title">致用户的一封信：</h3>
+      <p class="dev-letter-content" id="devLetterContent"></p>
+    </article>
+  </div>
+</section>
 <script>
 const STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
 const timerModes=[{id:'focus',label:'专注',minutes:25,button:'25 分钟专注'},{id:'focus40',label:'深度专注',minutes:40,button:'40 分钟专注'},{id:'focus50',label:'深度专注',minutes:50,button:'50 分钟专注'},{id:'short',label:'短休息',minutes:5,button:'5 分钟休息'},{id:'long',label:'长休息',minutes:15,button:'15 分钟休息'},{id:'rest30',label:'休息',minutes:30,button:'30 分钟休息'}];
 const quotes=['每一个不曾起舞的日子，都是对生命的辜负。','自律不是苛待自己，而是温柔地兑现承诺。','慢慢来，比较快。','你的努力，时间一直看得见。','先完成眼前这一小步，路就会继续亮起来。','种一棵树最好的时间是十年前，其次是现在。'];
 const state={mode:'focus',timeLeft:1500,totalDuration:1500,timerInterval:null,sessionsCompleted:0,todos:[],quote:'',sortBy:'manual',wishes:[],wishMessage:'写下一个愿望后，这里会随机送你一句鼓励。',visitCount:0,boundTodoId:null};
 const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel');const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null};
+const DEV_LETTER_TEXT=`感谢您使用这一软件，首先，不知您是否觉得很好用呢？super专注模式好用吗，这是否帮助您更加地专注于学习和生活了呢？护眼模式是否满足您在晚自习使用时的需求了呢？活动圆盘是否让您耳目一新呢？
+
+当然，如果您觉得可以改进的话，请及时通知我哈！那么，话说回来，我为什么要做这个软件呢？也许是兴趣使然吧，这得益于我对AI编码的热情，不过，最重要的还是这一点：我想要做出真正有益于人们的产品，我想要创造出价值非凡的事物，我想要世界因为它而变得更好！在阅读完《埃隆·马斯克传》后，我就下定了决心，我要成为他那样的人，所以我要创造出一个伟大的产品，尽管就目前来说，远远算不上伟大，但总得先迈出一步吧，不是吗！无论是后续的游戏企划，还是当前的Daymori制作，我都想把这个产品做得富有价值！在后续，我会继续努力完善这个软件的！！！
+
+最后，感谢您使用我做的软件，我想世界有它会变得更好！
+
+                                                       ——Andrew McCain`;
+let devLetterTimer=null;
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify({mode:state.mode,timeLeft:state.timeLeft,totalDuration:state.totalDuration,sessionsCompleted:state.sessionsCompleted,todos:state.todos,quote:state.quote,sortBy:state.sortBy,wishes:state.wishes,wishMessage:state.wishMessage,visitCount:state.visitCount,boundTodoId:state.boundTodoId}))}
 function loadState(){try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');state.mode=s.mode||'focus';state.timeLeft=Number.isFinite(s.timeLeft)?s.timeLeft:1500;state.totalDuration=Number.isFinite(s.totalDuration)?s.totalDuration:state.timeLeft;state.sessionsCompleted=Number.isFinite(s.sessionsCompleted)?s.sessionsCompleted:0;state.todos=Array.isArray(s.todos)?s.todos.map(t=>({...t,status:t.status||(t.done?'done':'todo')})):[];state.quote=s.quote||'';state.sortBy=s.sortBy||'manual';state.wishes=Array.isArray(s.wishes)?s.wishes:[];state.wishMessage=s.wishMessage||state.wishMessage;state.visitCount=Number.isFinite(s.visitCount)?s.visitCount:0;state.boundTodoId=s.boundTodoId??null}catch{}if(!state.quote)setRandomQuote(false)}
 function trackVisit(){state.visitCount+=1;saveState()}function getModeConfig(id){return timerModes.find(m=>m.id===id)||timerModes[0]}function isFocusMode(id){return id==='focus'||id==='focus40'||id==='focus50'}function getNextMode(id){return isFocusMode(id)?'short':'focus'}function formatTime(sec){const m=Math.floor(sec/60),r=sec%60;return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`}
@@ -478,6 +512,49 @@ function toggleFeatureDisk(){
   featureDisk.classList.toggle('show');
 }
 
+function playDevLetterText(){
+  const devLetterContent=$('devLetterContent');
+  if(!devLetterContent)return;
+  if(devLetterTimer){
+    clearInterval(devLetterTimer);
+    devLetterTimer=null;
+  }
+  devLetterContent.textContent='';
+  const chars=Array.from(DEV_LETTER_TEXT);
+  let idx=0;
+  devLetterTimer=setInterval(()=>{
+    idx+=1;
+    devLetterContent.textContent=chars.slice(0,idx).join('');
+    if(idx>=chars.length){
+      clearInterval(devLetterTimer);
+      devLetterTimer=null;
+    }
+  },22);
+}
+
+function openDevLetter(){
+  const devLetterOverlay=$('devLetterOverlay');
+  const devLetterPaper=$('devLetterPaper');
+  if(!devLetterOverlay||!devLetterPaper)return;
+  sidebarEl.classList.remove('show');
+  if(featureDisk&&featureDisk.classList.contains('show'))featureDisk.classList.remove('show');
+  devLetterPaper.scrollTop=0;
+  devLetterOverlay.classList.add('show');
+  devLetterOverlay.setAttribute('aria-hidden','false');
+  playDevLetterText();
+}
+
+function closeDevLetter(){
+  const devLetterOverlay=$('devLetterOverlay');
+  if(!devLetterOverlay)return;
+  devLetterOverlay.classList.remove('show');
+  devLetterOverlay.setAttribute('aria-hidden','true');
+  if(devLetterTimer){
+    clearInterval(devLetterTimer);
+    devLetterTimer=null;
+  }
+}
+
 // 功能按钮事件
 if(featureBtn&&featureDisk&&featureItems){
   featureBtn.addEventListener('click',e=>{
@@ -502,6 +579,12 @@ if(featureBtn&&featureDisk&&featureItems){
   // 初始化功能圆盘
   renderFeatureDisk();
 }
+const openDevLetterBtn=$('openDevLetterBtn'),closeDevLetterBtn=$('closeDevLetterBtn'),devLetterOverlay=$('devLetterOverlay');
+if(openDevLetterBtn&&closeDevLetterBtn&&devLetterOverlay){
+  openDevLetterBtn.addEventListener('click',openDevLetter);
+  closeDevLetterBtn.addEventListener('click',closeDevLetter);
+  devLetterOverlay.addEventListener('click',e=>{if(e.target===devLetterOverlay)closeDevLetter()});
+}
 sfApply.addEventListener('click',applySuperCustom);
 sfPreset25.addEventListener('click',()=>setSuperDuration(25*60));
 sfPreset50.addEventListener('click',()=>setSuperDuration(50*60));
@@ -512,7 +595,10 @@ sfReset.addEventListener('click',()=>setSuperDuration(superState.total));
 sfLevelButtons.forEach(btn=>btn.addEventListener('click',()=>applySuperLevel(btn.dataset.sfLevel)));
 sfNoiseToggle.addEventListener('change',()=>{if(sfNoiseToggle.checked){startSuperNoise().catch(()=>{sfNoiseToggle.checked=false;updateNoiseTip(false)})}else stopSuperNoise()});
 sfNoiseType.addEventListener('change',()=>{if(sfNoiseToggle.checked){stopSuperNoise();startSuperNoise().catch(()=>{sfNoiseToggle.checked=false;updateNoiseTip(false)})}});
-window.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('super-focus-active'))exitSuperFocus()});
+window.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&document.body.classList.contains('super-focus-active'))exitSuperFocus();
+  if(e.key==='Escape'&&devLetterOverlay&&devLetterOverlay.classList.contains('show'))closeDevLetter();
+});
 
 // 初始化深色模式
 loadDarkMode();
