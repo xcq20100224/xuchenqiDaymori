@@ -1,0 +1,27 @@
+{
+  "name": "Daymori",
+  "short_name": "Daymori",
+  "description": "Gentle discipline for everyday growth.",
+  "lang": "zh-CN",
+  "start_url": "./Daymori.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#edf5ff",
+  "theme_color": "#6f96cb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Open Dream",
+      "short_name": "Dream",
+      "url": "./dream.html"
+    }
+  ]
+}
