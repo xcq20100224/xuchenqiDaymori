@@ -428,6 +428,10 @@ darkModeToggle.addEventListener('change',()=>{
   updateDarkModeHint();
 });
 
+// 先绑定 Super 入口，避免后续模块异常影响进入专注模式
+superFocusBtn.addEventListener('click',enterSuperFocus);
+sfExitBtn.addEventListener('click',exitSuperFocus);
+
 // ────── 功能圆盘配置 ──────
 const FEATURE_MENU_ITEMS=[
   {id:'feature1',label:'功能1',icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'},
@@ -475,29 +479,29 @@ function toggleFeatureDisk(){
 }
 
 // 功能按钮事件
-featureBtn.addEventListener('click',e=>{
-  e.stopPropagation();
-  toggleFeatureDisk();
-});
-
-// 点击圆盘背景关闭
-featureDisk.addEventListener('click',e=>{
-  if(e.target===featureDisk){
+if(featureBtn&&featureDisk&&featureItems){
+  featureBtn.addEventListener('click',e=>{
+    e.stopPropagation();
     toggleFeatureDisk();
-  }
-});
+  });
 
-// 按 Escape 关闭圆盘
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'&&featureDisk.classList.contains('show')){
-    featureDisk.classList.remove('show');
-  }
-});
+  // 点击圆盘背景关闭
+  featureDisk.addEventListener('click',e=>{
+    if(e.target===featureDisk){
+      toggleFeatureDisk();
+    }
+  });
 
-// 初始化功能圆盘
-renderFeatureDisk();
-superFocusBtn.addEventListener('click',enterSuperFocus);
-sfExitBtn.addEventListener('click',exitSuperFocus);
+  // 按 Escape 关闭圆盘
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'&&featureDisk.classList.contains('show')){
+      featureDisk.classList.remove('show');
+    }
+  });
+
+  // 初始化功能圆盘
+  renderFeatureDisk();
+}
 sfApply.addEventListener('click',applySuperCustom);
 sfPreset25.addEventListener('click',()=>setSuperDuration(25*60));
 sfPreset50.addEventListener('click',()=>setSuperDuration(50*60));
