@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daymori</title>
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./favicon.svg">
+<meta name="theme-color" content="#6f96cb">
+<style>
+:root{--bg:#eef5ff;--bg2:#dfeafd;--card:rgba(255,255,255,.82);--line:rgba(106,140,186,.16);--text:#233654;--muted:#7085a0;--accent:#6d95cb;--shadow:0 24px 60px rgba(94,128,173,.16)}*{box-sizing:border-box}html,body{margin:0}body{font-family:"SF Pro Display","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:radial-gradient(circle at top left,rgba(255,255,255,.96),transparent 28%),radial-gradient(circle at 82% 12%,rgba(198,224,255,.72),transparent 22%),linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh}body::before,body::after{content:"";position:fixed;border-radius:999px;filter:blur(16px);pointer-events:none;opacity:.6}body::before{top:8vh;left:-6vw;width:240px;height:86px;background:radial-gradient(circle at 35% 50%,rgba(255,255,255,.96),rgba(255,255,255,.18) 70%,transparent 73%)}body::after{top:24vh;right:-4vw;width:280px;height:96px;background:radial-gradient(circle at 42% 50%,rgba(255,255,255,.84),rgba(222,236,255,.16) 72%,transparent 75%)}.page{width:min(100%,960px);margin:0 auto;padding:28px 16px 44px;display:grid;gap:20px;opacity:0}.page.ready{opacity:1}.card{background:var(--card);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);backdrop-filter:blur(16px)}.hero{padding:34px 28px}.hero small{display:inline-flex;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.4);color:var(--muted);letter-spacing:.03em;font-weight:300;font-size:.88rem}.hero h1{margin:18px 0 8px;font-size:clamp(2.2rem,4vw,3.7rem);line-height:1.02}.hero p{margin:0;color:var(--muted);line-height:1.8}.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}.install-note{margin-top:10px;font-size:.92rem;color:var(--muted)}.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:20px}.panel{padding:24px}.panel h2{margin:0 0 16px;font-size:1rem}.mode-switcher,.timer-actions,.todo-tools{display:flex;flex-wrap:wrap;gap:10px}.pill{display:inline-flex;padding:8px 12px;border-radius:999px;border:1px solid rgba(109,149,203,.16);background:rgba(255,255,255,.54);color:#4d72a1;font-size:.86rem}.timer-display{text-align:center;font-size:clamp(3.7rem,10vw,6.2rem);font-weight:660;letter-spacing:.05em;margin:22px 0}.progress{height:14px;border-radius:999px;background:rgba(109,149,203,.12);overflow:hidden}.progress>div{height:100%;width:0;background:linear-gradient(90deg,#7aa8df,#bedcff);transition:width .35s ease}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}.stat{padding:15px;border-radius:22px;background:rgba(255,255,255,.82);border:1px solid rgba(109,149,203,.1)}.stat strong{display:block;font-size:1.22rem}.stat span{font-size:.84rem;color:var(--muted)}button,a.button{border:1px solid rgba(109,149,203,.12);background:rgba(255,255,255,.78);color:var(--text);padding:12px 18px;border-radius:999px;cursor:pointer;text-decoration:none;font:inherit}button.primary,a.primary{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(232,242,255,.92));color:#416792}.mode-btn.active{color:#416792;background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(232,242,255,.92))}.install-btn{display:none}.install-btn.show{display:inline-flex}.todo-input-group,.todo-extra-group{display:grid;gap:10px;margin-bottom:14px}.todo-input-group{grid-template-columns:1fr auto}.todo-extra-group{grid-template-columns:1fr 1fr}input[type=text],input[type=date],select{width:100%;padding:14px 16px;border-radius:18px;border:1px solid rgba(109,149,203,.14);background:rgba(255,255,255,.88);font:inherit;color:var(--text)}.todo-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;color:var(--muted)}.sort-select{min-width:170px}.list{list-style:none;padding:0;margin:0;display:grid;gap:10px}.item{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:22px;background:rgba(255,255,255,.9);border:1px solid var(--line);transform-origin:center;transition:opacity .32s ease,transform .32s ease,filter .32s ease,margin .32s ease}.item.removing{opacity:0;transform:translateY(10px) scale(.96);filter:blur(6px);margin-top:-6px;margin-bottom:-6px;pointer-events:none}.item.done .text{text-decoration:line-through;color:#91a0b2}.item.overdue{border-color:rgba(128,169,221,.28)}.main{flex:1;display:grid;gap:8px}.tags{display:flex;gap:8px;flex-wrap:wrap}.tag{display:inline-flex;padding:6px 10px;border-radius:999px;font-size:.78rem;background:rgba(255,255,255,.74);border:1px solid rgba(109,149,203,.08);color:var(--muted)}.priority-high{background:rgba(123,163,214,.18);color:#4d74a6}.priority-medium{background:rgba(215,234,255,.92);color:#6686ab}.priority-low{background:rgba(239,246,255,.95);color:#7a95b2}.empty{padding:22px 16px;text-align:center;color:var(--muted);border:1px dashed rgba(109,149,203,.24);border-radius:18px;background:rgba(255,255,255,.45)}.quote-text{margin:0;font-size:1.03rem;line-height:1.84}.quote-foot,.note{color:var(--muted);font-size:.9rem;line-height:1.7}.wish-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px}.encourage{min-height:64px;padding:14px 16px;border-radius:20px;background:rgba(255,255,255,.56);border:1px solid rgba(109,149,203,.1);color:#466e9d;line-height:1.7}.moment{position:fixed;right:22px;bottom:22px;width:min(360px,calc(100vw - 28px));padding:18px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(236,245,255,.92));border:1px solid rgba(111,150,203,.14);box-shadow:0 24px 48px rgba(68,103,146,.18);opacity:0;transform:translateY(18px) scale(.98);pointer-events:none;transition:opacity .6s ease,transform .6s ease}.moment.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}.moment small{display:inline-flex;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.74);color:#466e9d}.moment h3{margin:14px 0 8px;font-size:1.1rem}.moment p{margin:0 0 14px;color:var(--muted);line-height:1.7}.intro{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;cursor:pointer;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.88),transparent 24%),radial-gradient(circle at 70% 35%,rgba(207,228,255,.72),transparent 26%),linear-gradient(180deg,rgba(244,250,255,.98),rgba(223,237,255,.96));transition:opacity .9s ease,visibility .9s ease}.intro.hidden{opacity:0;visibility:hidden;pointer-events:none}.intro.exit .intro-card{animation:introZoomOut .82s cubic-bezier(.18,.82,.18,1) forwards}.intro.exit .logo,.intro.exit h2,.intro.exit p{animation-play-state:paused}.intro-card{text-align:center;padding:40px 30px;width:min(92vw,520px)}.logo{position:relative;width:124px;height:124px;margin:0 auto 14px}.logo::before,.logo::after{content:"";position:absolute;inset:0;border-radius:50%}.logo::before{border:1.5px solid rgba(111,150,203,.16);box-shadow:0 18px 44px rgba(111,150,203,.12)}.logo::before{animation:ringGlow 2.8s ease-in-out infinite}.logo::after{inset:16px;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.96),rgba(192,220,255,.38) 58%,rgba(111,150,203,.08) 74%,transparent 75%);animation:corePulse 2.6s ease-in-out infinite}.logo span{position:absolute;inset:-1px;border-radius:50%;border:1.5px solid transparent;border-top-color:rgba(111,150,203,.88);border-right-color:rgba(164,203,247,.76);transform:rotate(-120deg);animation:logoSpin 8s linear infinite}.intro h2{margin:0;font-size:clamp(2.6rem,8vw,4.8rem);letter-spacing:-.08em;color:#335984;opacity:0;transform:translateY(12px);filter:blur(4px);animation:introFadeUp .9s cubic-bezier(.2,.8,.2,1) .18s forwards}.intro p{margin:12px 0 0;color:#6f88a3;line-height:1.8;opacity:0;transform:translateY(12px);filter:blur(4px);animation:introFadeUp .9s cubic-bezier(.2,.8,.2,1) .45s forwards}.reveal{opacity:0;transform:translateY(22px);filter:blur(8px)}.reveal.armed{cursor:pointer;opacity:.2;filter:blur(3px);transform:translateY(10px) scale(.995)}.reveal.visible{opacity:1;transform:none;filter:none;transition:opacity 1s cubic-bezier(.2,.8,.2,1),transform 1s cubic-bezier(.2,.8,.2,1),filter 1s cubic-bezier(.2,.8,.2,1)}@keyframes introFadeUp{from{opacity:0;transform:translateY(12px);filter:blur(4px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}@keyframes logoSpin{from{transform:rotate(-120deg)}to{transform:rotate(240deg)}}@keyframes corePulse{0%,100%{transform:scale(.96);opacity:.82}50%{transform:scale(1.04);opacity:1}}@keyframes ringGlow{0%,100%{box-shadow:0 18px 44px rgba(111,150,203,.12)}50%{box-shadow:0 18px 52px rgba(111,150,203,.2)}}@keyframes introZoomOut{0%{transform:scale(1);opacity:1;filter:blur(0)}48%{transform:scale(1.22);opacity:1;filter:blur(0)}100%{transform:scale(0);opacity:0;filter:blur(10px)}}body.dark-mode{
+  --bg:#17140f;
+  --bg2:#262018;
+  --card:rgba(45, 39, 30, .84);
+  --line:rgba(178, 148, 98, .24);
+  --text:#f2e7d3;
+  --muted:#c5b69e;
+  --accent:#d8ba86;
+  --shadow:0 24px 60px rgba(0,0,0,.4);
+}
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  height:100vh;
+  width:260px;
+  transform:translateX(-100%);
+  transition:transform .3s ease;
+  z-index:40;
+  padding:20px;
+}
+.sidebar.show{
+  transform:translateX(0);
+}
+.sidebar-content{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.setting-title{color:var(--muted);font-size:.92rem}
+.switch{position:relative;display:inline-block;width:56px;height:32px}
+.switch input{opacity:0;width:0;height:0}
+.switch-slider{position:absolute;inset:0;cursor:pointer;background:rgba(255,255,255,.35);border:1px solid rgba(109,149,203,.2);border-radius:999px;transition:all .25s ease}
+.switch-slider::before{content:"";position:absolute;height:24px;width:24px;left:3px;top:3px;border-radius:50%;background:rgba(255,255,255,.95);box-shadow:0 3px 10px rgba(0,0,0,.2);transition:transform .25s ease}
+.switch input:checked + .switch-slider{background:linear-gradient(180deg,rgba(218,188,134,.88),rgba(198,163,104,.88));border-color:rgba(177,139,79,.55)}
+.switch input:checked + .switch-slider::before{transform:translateX(24px)}
+.eye-care-hint{margin:0;color:var(--muted);font-size:.86rem;line-height:1.7}
+.settings-btn{position:fixed;top:16px;left:16px;z-index:50;width:44px;height:44px;border-radius:50%;border:1px solid rgba(109,149,203,.18);background:rgba(255,255,255,.82);backdrop-filter:blur(12px);box-shadow:0 4px 16px rgba(94,128,173,.14);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:background .2s,box-shadow .2s}
+.settings-btn:hover{background:rgba(255,255,255,.96);box-shadow:0 6px 20px rgba(94,128,173,.22)}
+.settings-btn svg{width:20px;height:20px;fill:none;stroke:#5a7da8;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body.dark-mode .settings-btn{background:rgba(45,39,30,.82);border-color:rgba(178,148,98,.28)}
+body.dark-mode .settings-btn svg{stroke:#d8ba86}
+.feature-btn{position:fixed;top:16px;right:16px;z-index:50;width:44px;height:44px;border-radius:50%;border:1px solid rgba(109,149,203,.18);background:rgba(255,255,255,.82);backdrop-filter:blur(12px);box-shadow:0 4px 16px rgba(94,128,173,.14);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:background .2s,box-shadow .2s,transform .3s}
+.feature-btn:hover{background:rgba(255,255,255,.96);box-shadow:0 6px 20px rgba(94,128,173,.22)}
+.feature-btn svg{width:20px;height:20px;fill:none;stroke:#5a7da8;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body.dark-mode .feature-btn{background:rgba(45,39,30,.82);border-color:rgba(178,148,98,.28)}
+body.dark-mode .feature-btn svg{stroke:#d8ba86}
+.feature-disk{position:fixed;inset:0;z-index:49;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease,visibility .35s ease;background:rgba(0,0,0,.0)}
+.feature-disk.show{opacity:1;visibility:visible;pointer-events:auto}
+.feature-disk-container{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.85);width:360px;height:360px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .35s ease,transform .35s ease}
+.feature-disk.show .feature-disk-container{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.feature-disk-center{position:absolute;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.feature-disk-circle{position:absolute;width:100%;height:100%;border-radius:50%;border:2px solid rgba(109,149,203,.22);background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),rgba(232,242,255,.88) 45%,rgba(200,222,255,.76));box-shadow:0 0 60px rgba(109,149,203,.18),inset 0 0 40px rgba(255,255,255,.4)}
+body.dark-mode .feature-disk-circle{border-color:rgba(178,148,98,.28);background:radial-gradient(circle at 30% 30%,rgba(45,39,30,.92),rgba(32,28,20,.88) 45%,rgba(25,20,14,.85))}
+.feature-items{position:absolute;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.feature-item{position:absolute;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,255,255,.88);border:1.5px solid rgba(109,149,203,.24);box-shadow:0 4px 12px rgba(109,149,203,.15);transition:all .25s ease;opacity:0;transform:scale(.4) rotate(0deg)}
+.feature-item:hover{background:rgba(109,149,203,.12);border-color:rgba(109,149,203,.45);box-shadow:0 6px 16px rgba(109,149,203,.28)}
+.feature-disk.show .feature-item{opacity:1;transform:scale(1) rotate(var(--angle))}
+body.dark-mode .feature-item{background:rgba(45,39,30,.88);border-color:rgba(178,148,98,.32)}
+body.dark-mode .feature-item:hover{background:rgba(178,148,98,.18);border-color:rgba(178,148,98,.55)}
+.feature-item svg{width:22px;height:22px;fill:none;stroke:#5a7da8;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}
+body.dark-mode .feature-item svg{stroke:#d8ba86}
+.feature-item:hover svg{transform:scale(1.15)}
+.feature-center-icon{position:absolute;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(109,149,203,.15),rgba(109,149,203,.06));border:1.5px solid rgba(109,149,203,.3);box-shadow:0 0 30px rgba(109,149,203,.12);transition:all .25s ease}
+.feature-disk.show .feature-center-icon{background:linear-gradient(135deg,rgba(109,149,203,.25),rgba(109,149,203,.12))}
+.feature-center-icon svg{width:24px;height:24px;fill:none;stroke:#5a7da8;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body.dark-mode .feature-center-icon svg{stroke:#d8ba86}
+.super-btn{width:100%}
+.super-focus{position:fixed;inset:0;z-index:70;overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;transform:translate3d(0,30px,0) scale(1.03);transition:opacity .52s cubic-bezier(.16,.84,.2,1),transform .52s cubic-bezier(.16,.84,.2,1),visibility .52s;background:radial-gradient(circle at 18% 16%,rgba(238,255,246,.62),transparent 34%),radial-gradient(circle at 80% 10%,rgba(230,255,241,.38),transparent 28%),linear-gradient(160deg,#f2fff7,#e8fdf1 42%,#d9f6e7);will-change:transform,opacity}
+.super-focus.active{opacity:1;visibility:visible;pointer-events:auto;transform:translate3d(0,0,0) scale(1)}
+.super-focus::before{content:"";position:absolute;inset:-20% -12%;background:repeating-linear-gradient(102deg,rgba(255,255,255,.0) 0 20px,rgba(255,255,255,.2) 20px 23px,rgba(255,255,255,.0) 23px 44px);opacity:0;mix-blend-mode:screen;transform:translate3d(0,24px,0) scale(1.06);filter:blur(1.2px);pointer-events:none}
+.super-focus::after{content:"";position:absolute;inset:-8%;background:radial-gradient(circle at center,rgba(232,255,242,0) 36%,rgba(69,142,95,.15) 82%,rgba(28,87,54,.22) 100%);opacity:0;filter:blur(8px);pointer-events:none}
+.super-focus.active::before{animation:speedLineFlow 680ms cubic-bezier(.2,.8,.2,1) 1, speedLineDrift 2200ms linear 680ms infinite}
+.super-focus.active::after{opacity:1;transition:opacity .55s ease .05s}
+.super-focus.entering::before{animation:speedLineFlow 680ms cubic-bezier(.2,.8,.2,1) 1}
+.super-focus.entering::after{opacity:1}
+.super-focus .panel-wrap{position:relative;z-index:3;max-width:500px;margin:20px;padding:16px;border-radius:24px;background:rgba(255,255,255,.78);border:1px solid rgba(92,172,122,.22);backdrop-filter:blur(8px);box-shadow:0 14px 30px rgba(48,122,77,.16)}
+.super-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.super-head h3{margin:0;font-size:1.15rem;color:#1d5734}
+.super-hint{margin:8px 0 0;color:#4a7a5d;font-size:.9rem;line-height:1.7}
+.super-levels{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.super-level-btn{padding:4px 8px;font-size:.72rem;border-radius:999px;border:1px solid rgba(65,138,92,.22);background:rgba(255,255,255,.78);color:#245f3a;cursor:pointer}
+.super-level-btn.active{background:linear-gradient(180deg,rgba(228,255,238,.95),rgba(194,240,211,.92));border-color:rgba(65,138,92,.45);color:#184a2b}
+.super-presets,.super-controls,.super-custom{display:flex;gap:10px;flex-wrap:wrap}
+.super-presets button,.super-controls button{padding:6px 8px;font-size:.74rem;background:rgba(255,255,255,.9);border:1px solid rgba(65,138,92,.26);color:#1e5f39}
+.super-custom input{width:90px;padding:10px 12px;border-radius:12px;border:1px solid rgba(65,138,92,.22);background:rgba(255,255,255,.9)}
+.noise-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+.noise-row select{min-width:120px;padding:8px 10px;border-radius:10px;border:1px solid rgba(65,138,92,.22);background:rgba(255,255,255,.9)}
+.noise-tip{margin:6px 0 0;color:#3f6f54;font-size:.82rem;line-height:1.6}
+.super-orb{position:absolute;left:50%;top:54%;width:min(58vmin,520px);height:min(58vmin,520px);transform:translate3d(-50%,-50%,0);display:flex;align-items:center;justify-content:center;border-radius:56% 44% 63% 37% / 43% 56% 44% 57%;background:radial-gradient(circle at 30% 32%,rgba(249,255,252,.98),rgba(181,240,203,.88) 38%,rgba(97,192,131,.82) 68%,rgba(56,149,93,.8));filter:blur(0.3px);box-shadow:0 0 110px rgba(89,182,122,.34);animation:orbMorph 6.5s ease-in-out infinite;will-change:transform,border-radius}
+.super-orb::before,.super-orb::after{content:"";position:absolute;inset:-14px;border-radius:inherit;border:2px solid rgba(170,238,193,.78);animation:orbRipple 2.8s ease-out infinite}
+.super-orb::after{inset:-30px;animation-delay:.9s;opacity:.72}
+.orb-time{font-size:clamp(1.7rem,5vw,2.5rem);font-weight:700;letter-spacing:.04em;color:#103d25;text-shadow:0 2px 16px rgba(255,255,255,.35)}
+.super-bubbles{position:absolute;inset:0;pointer-events:none}
+.super-bubbles span{position:absolute;bottom:-40px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.95),rgba(182,240,201,.7));opacity:.55;animation:bubbleRise linear infinite}
+.super-bubbles span:nth-child(1){left:4%;animation-duration:7s;animation-delay:0s}
+.super-bubbles span:nth-child(2){left:11%;animation-duration:9s;animation-delay:1.1s}
+.super-bubbles span:nth-child(3){left:90%;animation-duration:8s;animation-delay:.3s}
+.super-bubbles span:nth-child(4){left:95%;animation-duration:10s;animation-delay:1.6s}
+.super-bubbles span:nth-child(5){left:2%;animation-duration:11s;animation-delay:2.3s}
+.super-bubbles span:nth-child(6){left:88%;animation-duration:12s;animation-delay:2.8s}
+.super-refract{position:absolute;inset:-16%;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 40%,rgba(255,255,255,.22),rgba(255,255,255,0) 46%),repeating-linear-gradient(104deg,rgba(255,255,255,.0) 0 14px,rgba(210,255,227,.32) 14px 16px,rgba(255,255,255,.0) 16px 34px);mix-blend-mode:screen;filter:blur(1.1px);transform:translate3d(0,12px,0) scale(1.05)}
+body.super-focus-active .super-refract{opacity:.48;animation:refractPulse 1400ms ease-in-out infinite,refractFlow 2800ms linear infinite}
+body.super-focus-entering{overflow:hidden}
+body.super-focus-entering .page{opacity:0;transform:translate3d(0,-180px,0) scale(.965);filter:blur(14px);pointer-events:none}
+body.super-focus-active{overflow:hidden}
+body.super-focus-active .page{opacity:.06;transform:translate3d(0,-180px,0) scale(.965);filter:blur(9px);pointer-events:none}
+body.super-focus-active .settings-btn{opacity:.2;pointer-events:none}
+body.super-focus-active .super-orb{animation:orbMorph 6.5s ease-in-out infinite}
+body.super-focus-active .panel-wrap{animation:cameraDrift 3600ms ease-in-out infinite}
+.super-focus.level-normal .super-refract{opacity:.2 !important;animation:refractFlow 5200ms linear infinite}
+.super-focus.level-normal.active::before{animation:speedLineFlow 760ms cubic-bezier(.2,.8,.2,1) 1}
+body.super-focus-active .super-focus.level-normal .super-orb{animation:orbMorph 8.8s ease-in-out infinite}
+body.super-focus-active .super-focus.level-normal .panel-wrap{animation:none}
+.super-focus.level-cinematic .super-refract{opacity:.48 !important;animation:refractPulse 1400ms ease-in-out infinite,refractFlow 2800ms linear infinite}
+.super-focus.level-extreme .super-refract{opacity:.72 !important;animation:refractPulse 850ms ease-in-out infinite,refractFlow 1700ms linear infinite}
+.super-focus.level-extreme.active::before{animation:speedLineFlow 520ms cubic-bezier(.2,.8,.2,1) 1, speedLineDrift 1200ms linear 520ms infinite}
+body.super-focus-active .super-focus.level-extreme .super-orb{animation:orbMorph 4.9s ease-in-out infinite}
+body.super-focus-active .super-focus.level-extreme .panel-wrap{animation:cameraDrift 1900ms ease-in-out infinite}
+@keyframes orbMorph{0%,100%{border-radius:56% 44% 63% 37% / 43% 56% 44% 57%;transform:translate3d(-50%,-50%,0) scale(1)}50%{border-radius:42% 58% 39% 61% / 57% 40% 60% 43%;transform:translate3d(-50%,-50%,0) scale(1.07)}}
+@keyframes orbRipple{0%{transform:scale(1);opacity:.68}100%{transform:scale(1.14);opacity:0}}
+@keyframes bubbleRise{0%{transform:translateY(0) scale(.9);opacity:0}20%{opacity:.58}100%{transform:translateY(-115vh) scale(1.45);opacity:0}}
+@keyframes speedLineFlow{0%{opacity:0;transform:translate3d(0,48px,0) scale(1.09)}45%{opacity:.4}100%{opacity:.16;transform:translate3d(0,-8px,0) scale(1)}}
+@keyframes speedLineDrift{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(0,-40px,0)}}
+@keyframes refractFlow{0%{transform:translate3d(0,18px,0) scale(1.05)}100%{transform:translate3d(0,-24px,0) scale(1.02)}}
+@keyframes refractPulse{0%,100%{opacity:.34}50%{opacity:.56}}
+@keyframes cameraDrift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-1px,1px,0)}}
+/* ── 字体体系统一 ── */h1,h2,h3,.panel h2,.super-head h3{font-weight:600}.mode-btn,.pill,.tag,.stat span,button,select,input[type=text],input[type=date],.sort-select,.super-level-btn{font-weight:400}.hero small,.hero p,.quote-foot,.note,.super-hint,.noise-tip,.eye-care-hint,.install-note,.empty,.moment p,.encourage,.orb-time{font-weight:300}/* ── 专注计时模块：强化层级 ── */
+#timerBlock{
+  border:1.5px solid rgba(16,185,129,.24);
+  box-shadow:0 28px 70px rgba(16,185,129,.14),0 4px 18px rgba(16,185,129,.08);
+}
+/* 开始专注 / 开始休息 / 继续 → 实色青绿主按钮 */
+#startBtn{
+  background:#10b981;
+  border-color:transparent;
+  color:#fff;
+  font-weight:600;
+  letter-spacing:.02em;
+  box-shadow:0 4px 18px rgba(16,185,129,.32);
+  transition:background .18s ease,box-shadow .18s ease,transform .1s ease;
+}
+#startBtn:hover{background:#0ea572;box-shadow:0 6px 26px rgba(16,185,129,.42)}
+#startBtn:active{background:#0d9068;transform:scale(.96);box-shadow:0 2px 10px rgba(16,185,129,.22)}
+/* 重置 / 换一句鼓励 → 保持描边轮廓风格，与主按钮对比 */
+#resetBtn,#nextQuoteBtn{
+  background:transparent;
+  border:1.5px solid rgba(109,149,203,.28);
+  color:var(--muted);
+  transition:border-color .18s,background .18s,color .18s,transform .1s;
+}
+#resetBtn:hover,#nextQuoteBtn:hover{
+  background:rgba(109,149,203,.08);
+  border-color:rgba(109,149,203,.5);
+  color:var(--text);
+}
+#resetBtn:active,#nextQuoteBtn:active{transform:scale(.96)}
+/* ── 学习清单：降饱和度作为次要功能区 ── */
+#todoBlock{
+  background:rgba(245,246,248,.90);
+  border-color:rgba(0,0,0,.055);
+  box-shadow:0 8px 28px rgba(0,0,0,.05);
+}
+body.dark-mode #todoBlock{
+  background:rgba(32,29,24,.78);
+  border-color:rgba(178,148,98,.10);
+  box-shadow:0 8px 28px rgba(0,0,0,.18);
+}
+/* ── 交互反馈与过渡 ── */
+body,.card,.panel,.stat,.pill,.tag,input,select,button,a.button,.item,.sidebar,.super-focus,.super-focus .panel-wrap{
+  transition:background-color .3s ease,color .3s ease,border-color .3s ease,box-shadow .3s ease,opacity .3s ease,transform .3s ease;
+}
+button:not(:disabled),a.button{
+  transition:transform .16s ease,filter .16s ease,background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+button:not(:disabled):hover,a.button:hover{transform:translateY(-1px) scale(1.02);filter:saturate(1.05)}
+button:not(:disabled):active,a.button:active{transform:translateY(0) scale(.97);filter:brightness(.9)}
+
+/* Super 分类与控制按钮文字风格统一 */
+.super-level-btn,.super-presets button,.super-controls button,.super-custom button,.noise-row .setting-title{
+  font-size:.82rem;
+  letter-spacing:.01em;
+  font-weight:400;
+}
+
+/* 输入框浮动标签 */
+.float-field{position:relative;min-width:0}
+.float-field input{padding-top:18px;padding-bottom:10px}
+.float-field label{
+  position:absolute;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--muted);
+  font-size:.9rem;
+  font-weight:300;
+  pointer-events:none;
+  background:transparent;
+  padding:0 4px;
+  transition:transform .2s ease,font-size .2s ease,color .2s ease,top .2s ease,background-color .2s ease;
+}
+.float-field input:focus+label,
+.float-field input:not(:placeholder-shown)+label{
+  top:0;
+  transform:translateY(-50%);
+  font-size:.72rem;
+  color:var(--accent);
+  background:rgba(255,255,255,.88);
+}
+body.dark-mode .float-field input:focus+label,
+body.dark-mode .float-field input:not(:placeholder-shown)+label{
+  background:rgba(45,39,30,.88);
+}
+
+.bind-task-btn{background:rgba(255,255,255,.72);border:1px dashed rgba(16,185,129,.42);color:#1b6a4e}
+.bind-task-btn:hover{background:rgba(16,185,129,.12);border-style:solid}
+.bound-task-chip{margin-top:12px;padding:10px 12px;border-radius:14px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.22);color:#1e5f44;font-size:.86rem}
+.bound-task-chip strong{font-weight:600}
+.task-status{font-size:.75rem}
+.status-todo{background:rgba(226,236,250,.9);color:#5f7596}
+.status-in_progress{background:rgba(208,245,228,.92);color:#1e7352}
+.status-done{background:rgba(220,240,223,.95);color:#3a6f45}
+.bind-modal{position:fixed;inset:0;z-index:95;background:rgba(17,24,39,.25);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;pointer-events:none}
+.bind-modal.show{opacity:1;visibility:visible;pointer-events:auto}
+.bind-modal-card{width:min(92vw,460px);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 24px 56px rgba(0,0,0,.2);transform:translateY(12px) scale(.98);transition:transform .22s ease}
+.bind-modal.show .bind-modal-card{transform:translateY(0) scale(1)}
+.bind-modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.progress-task-row{display:flex;align-items:center;gap:10px}
+.progress-task-row .progress{flex:1}
+.progress-bound-task{white-space:nowrap;max-width:42%;overflow:hidden;text-overflow:ellipsis;padding:5px 10px;border-radius:999px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.22);color:#1e5f44;font-size:.78rem}
+
+/* Super 弹窗右侧滑入/滑出 */
+.super-focus{transform:none}
+.super-focus .panel-wrap{
+  margin:20px 20px 20px auto;
+  transform:translateX(64px);
+  opacity:0;
+}
+.super-focus.active .panel-wrap{
+  transform:translateX(0);
+  opacity:1;
+}
+.super-focus.closing .panel-wrap{
+  transform:translateX(72px);
+  opacity:0;
+}
+@media (max-width:760px){.grid,.wish-layout,.todo-extra-group,.todo-input-group,.stats{grid-template-columns:1fr}.hero-actions,.timer-actions,.mode-switcher,.todo-tools{flex-direction:column}.page{padding-top:16px;gap:16px}.panel,.hero{padding:18px}.moment{right:14px;bottom:14px;width:calc(100vw - 28px)}button,a.button{width:100%}.sidebar{width:calc(100vw - 60px)}.progress-task-row{flex-direction:column;align-items:stretch}.progress-bound-task{max-width:100%;text-align:center}}
+</style>
+</head>
+<body>
+<button class="settings-btn" id="settingsBtn" type="button" aria-label="打开设置"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+<button class="feature-btn" id="featureBtn" type="button" aria-label="打开功能菜单"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+<div class="feature-disk" id="featureDisk">
+  <div class="feature-disk-container">
+    <div class="feature-disk-center">
+      <div class="feature-disk-circle"></div>
+      <div class="feature-items" id="featureItems">
+        <!-- 功能项动态生成 -->
+      </div>
+      <div class="feature-center-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></div>
+    </div>
+  </div>
+</div>
+<div class="intro" id="introOverlay"><div class="intro-card"><div class="logo"><span></span></div><h2>Daymori</h2><p>Gentle discipline for everyday growth.</p><p id="introHint">Click to play the chime and enter Daymori.</p></div></div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-content panel card">
+    <h3>快捷设置</h3>
+    <div class="setting-row"><span class="setting-title">护眼模式</span><label class="switch" for="darkModeToggle"><input id="darkModeToggle" type="checkbox" role="switch" aria-label="切换护眼模式"><span class="switch-slider"></span></label></div><p class="eye-care-hint" id="eyeCareHint">关闭：标准明亮模式。</p>
+    <button class="primary super-btn" id="superFocusBtn" type="button">进入 Super 专注模式</button>
+  </div>
+</div>
+<main class="page" id="pageShell">
+<section class="hero card reveal" id="heroBlock"><small>Patience is the key in life</small><h1>Daymori</h1><p class="hero-copy">Gentle discipline for everyday growth.</p><div class="hero-actions"><button class="primary install-btn" id="installBtn" type="button">Install Daymori</button><a class="button" href="dream.html">Open Dream</a></div><div class="install-note" id="installNote">Daymori 现在可以被浏览器安装成独立应用。</div></section>
+<section class="grid"><article class="panel card reveal" id="timerBlock"><h2>专注计时</h2><div class="mode-switcher" id="modeSwitcher"></div><div class="pill" id="timerStage">当前阶段：专注 25 分钟</div><div class="timer-display" id="timer">25:00</div><div class="progress-task-row"><div class="progress"><div id="progressBar"></div></div><span class="progress-bound-task" id="progressBoundTask">任务：未绑定</span></div><div class="timer-actions"><button id="bindTaskBtn" class="bind-task-btn" type="button">绑定当前任务</button><button class="primary" id="startBtn" type="button">开始专注</button><button id="resetBtn" type="button">重置</button><button id="nextQuoteBtn" type="button">换一句鼓励</button></div><div class="bound-task-chip" id="currentBoundTask">当前绑定任务：未绑定</div><div class="stats"><div class="stat"><strong id="completedSessions">0</strong><span>完成番茄</span></div><div class="stat"><strong id="completedTasks">0</strong><span>已完成任务</span></div><div class="stat"><strong id="focusModeLabel">专注</strong><span>当前节奏</span></div></div></article><article class="panel card reveal" id="todoBlock"><h2>学习清单</h2><div class="todo-input-group"><div class="float-field"><input type="text" id="todoInput" placeholder=" "><label for="todoInput">写下你现在最重要的一件事</label></div><button class="primary" id="addTodoBtn" type="button">添加</button></div><div class="todo-extra-group"><select id="priorityInput"><option value="high">高优先级</option><option value="medium" selected>中优先级</option><option value="low">低优先级</option></select><input type="date" id="deadlineInput"></div><div class="todo-meta"><span id="todoSummary">今天先完成 1 件小事也很好。</span><div class="todo-tools"><select id="sortInput" class="sort-select"><option value="manual">默认顺序</option><option value="priority">按优先级排序</option><option value="deadline">按截止时间排序</option></select><button id="clearDoneBtn" type="button">清除已完成</button></div></div><ul class="list" id="todoList"></ul></article></section>
+<section class="panel card reveal" id="quoteBlock"><h2>今日一句</h2><p class="quote-text" id="quote">正在为你挑一句适合现在的话...</p><div class="quote-foot">慢一点没关系，方向对了就会靠近。</div></section>
+<section class="panel card reveal" id="wishBlock"><h2>愿望墙</h2><div class="wish-layout"><div><p class="note">把你想完成的学习目标、工作愿望，或者一个正在靠近的小计划写下来。写下它，本身就是一种开始。</p><div class="float-field"><input type="text" id="wishInput" placeholder=" "><label for="wishInput">例如：这周完成课程第 3 章，或者做完项目初稿</label></div><div style="height:10px"></div><button class="primary" id="addWishBtn" type="button">加入愿望墙</button><div class="encourage" id="wishEncourage">写下一个愿望后，这里会随机送你一句鼓励。</div></div><div><ul class="list" id="wishList"></ul></div></div></section>
+<aside class="moment" id="lightningMoment"><small>Lightning Moment</small><h3>这一刻值得被记住。</h3><p id="momentCopy">当你完成一个愿望，这里会出现通往 Dream 的入口。</p><a class="button primary" id="momentLink" href="dream.html">进入 Dream</a></aside>
+</main>
+<div class="bind-modal" id="bindTaskModal" aria-hidden="true">
+  <div class="bind-modal-card">
+    <h3 style="margin:0 0 8px">绑定当前任务</h3>
+    <p class="note" style="margin:0 0 10px">开始专注前，选择一个学习清单任务。计时中会标记为进行中，结束后自动完成。</p>
+    <select id="bindTaskSelect"></select>
+    <div class="bind-modal-actions">
+      <button class="primary" id="bindTaskConfirm" type="button">绑定并开始</button>
+      <button id="bindTaskSkip" type="button">先不绑定</button>
+      <button id="bindTaskCancel" type="button">取消</button>
+    </div>
+  </div>
+</div>
+<section class="super-focus" id="superFocusLayer" aria-hidden="true">
+  <div class="panel-wrap">
+    <div class="super-head"><h3>Super 专注模式</h3><button id="sfExitBtn" type="button">退出</button></div>
+    <p class="super-hint">已进入沉浸场景。将尝试全屏和常亮；系统通知无法被网页完全屏蔽，建议同时开启系统勿扰。</p>
+    <div class="super-levels" id="sfLevels"><button class="super-level-btn" data-sf-level="normal" type="button">标准</button><button class="super-level-btn active" data-sf-level="cinematic" type="button">电影</button><button class="super-level-btn" data-sf-level="extreme" type="button">沉浸</button></div>
+    <div class="super-presets"><button id="sfPreset25" type="button">25 分钟</button><button id="sfPreset50" type="button">50 分钟</button><button id="sfPreset90" type="button">90 分钟</button></div>
+    <div style="height:10px"></div>
+    <div class="super-custom"><div class="float-field"><input id="sfHour" type="number" min="0" max="23" value="0" placeholder=" "><label for="sfHour">小时</label></div><div class="float-field"><input id="sfMinute" type="number" min="0" max="59" value="25" placeholder=" "><label for="sfMinute">分钟</label></div><div class="float-field"><input id="sfSecond" type="number" min="0" max="59" value="0" placeholder=" "><label for="sfSecond">秒</label></div><button id="sfApply" type="button">应用时间</button></div>
+    <div class="noise-row"><label class="switch" for="sfNoiseToggle"><input id="sfNoiseToggle" type="checkbox" role="switch" aria-label="开启白噪音"><span class="switch-slider"></span></label><span class="setting-title">白噪音</span><select id="sfNoiseType"><option value="white">纯白噪音</option><option value="pink">柔和白噪音</option><option value="brown">低频白噪音</option></select></div>
+    <p class="noise-tip" id="sfNoiseTip">开启后，带上耳机，效果更佳！</p>
+    <div style="height:10px"></div>
+    <div class="super-controls"><button class="primary" id="sfStart" type="button">开始</button><button id="sfPause" type="button">暂停</button><button id="sfReset" type="button">重置</button></div>
+  </div>
+  <div class="super-orb" aria-hidden="true"><div class="orb-time" id="sfTimer">00:25:00</div></div>
+  <div class="super-refract" aria-hidden="true"></div>
+  <div class="super-bubbles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+</section>
+<script>
+const STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
+const timerModes=[{id:'focus',label:'专注',minutes:25,button:'25 分钟专注'},{id:'focus40',label:'深度专注',minutes:40,button:'40 分钟专注'},{id:'focus50',label:'深度专注',minutes:50,button:'50 分钟专注'},{id:'short',label:'短休息',minutes:5,button:'5 分钟休息'},{id:'long',label:'长休息',minutes:15,button:'15 分钟休息'},{id:'rest30',label:'休息',minutes:30,button:'30 分钟休息'}];
+const quotes=['每一个不曾起舞的日子，都是对生命的辜负。','自律不是苛待自己，而是温柔地兑现承诺。','慢慢来，比较快。','你的努力，时间一直看得见。','先完成眼前这一小步，路就会继续亮起来。','种一棵树最好的时间是十年前，其次是现在。'];
+const state={mode:'focus',timeLeft:1500,totalDuration:1500,timerInterval:null,sessionsCompleted:0,todos:[],quote:'',sortBy:'manual',wishes:[],wishMessage:'写下一个愿望后，这里会随机送你一句鼓励。',visitCount:0,boundTodoId:null};
+const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel');const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null};
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify({mode:state.mode,timeLeft:state.timeLeft,totalDuration:state.totalDuration,sessionsCompleted:state.sessionsCompleted,todos:state.todos,quote:state.quote,sortBy:state.sortBy,wishes:state.wishes,wishMessage:state.wishMessage,visitCount:state.visitCount,boundTodoId:state.boundTodoId}))}
+function loadState(){try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');state.mode=s.mode||'focus';state.timeLeft=Number.isFinite(s.timeLeft)?s.timeLeft:1500;state.totalDuration=Number.isFinite(s.totalDuration)?s.totalDuration:state.timeLeft;state.sessionsCompleted=Number.isFinite(s.sessionsCompleted)?s.sessionsCompleted:0;state.todos=Array.isArray(s.todos)?s.todos.map(t=>({...t,status:t.status||(t.done?'done':'todo')})):[];state.quote=s.quote||'';state.sortBy=s.sortBy||'manual';state.wishes=Array.isArray(s.wishes)?s.wishes:[];state.wishMessage=s.wishMessage||state.wishMessage;state.visitCount=Number.isFinite(s.visitCount)?s.visitCount:0;state.boundTodoId=s.boundTodoId??null}catch{}if(!state.quote)setRandomQuote(false)}
+function trackVisit(){state.visitCount+=1;saveState()}function getModeConfig(id){return timerModes.find(m=>m.id===id)||timerModes[0]}function isFocusMode(id){return id==='focus'||id==='focus40'||id==='focus50'}function getNextMode(id){return isFocusMode(id)?'short':'focus'}function formatTime(sec){const m=Math.floor(sec/60),r=sec%60;return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`}
+function renderModes(){modeSwitcherEl.innerHTML='';timerModes.forEach(m=>{const b=document.createElement('button');b.type='button';b.className=`mode-btn${state.mode===m.id?' active':''}`;b.textContent=m.button;b.addEventListener('click',()=>switchMode(m.id));modeSwitcherEl.appendChild(b)})}
+function updateTimerDisplay(){const mode=getModeConfig(state.mode);timerEl.textContent=formatTime(state.timeLeft);timerStageEl.textContent=`当前阶段：${mode.label} ${mode.minutes} 分钟`;focusModeLabelEl.textContent=mode.label;const p=((state.totalDuration-state.timeLeft)/state.totalDuration)*100;progressBarEl.style.width=`${Math.max(0,Math.min(100,p))}%`}
+function stopTimer(){if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}}
+function getTodoStatus(todo){return todo.status||(todo.done?'done':'todo')}
+function getTodoStatusLabel(status){return({todo:'待开始',in_progress:'进行中',done:'已完成'})[status]||'待开始'}
+function setTodoStatus(id,status){state.todos=state.todos.map(t=>t.id===id?{...t,status,done:status==='done'}:t)}
+function getBoundTodo(){return state.todos.find(t=>t.id===state.boundTodoId)||null}
+function renderBoundTask(){const task=getBoundTodo();if(!task||task.done){state.boundTodoId=null;currentBoundTaskEl.textContent='当前绑定任务：未绑定';progressBoundTaskEl.textContent='任务：未绑定';return}const status=getTodoStatusLabel(getTodoStatus(task));currentBoundTaskEl.innerHTML=`当前绑定任务：<strong>${task.text}</strong> · ${status}`;progressBoundTaskEl.textContent=`任务：${task.text}（${status}）`}
+function openBindTaskModal(autoStart){const pending=state.todos.filter(t=>!t.done);if(!pending.length){alert('学习清单暂无可绑定任务，先添加任务吧。');return}bindTaskSelect.innerHTML='';pending.forEach(t=>{const op=document.createElement('option');op.value=String(t.id);op.textContent=t.text;bindTaskSelect.appendChild(op)});shouldAutoStartAfterBind=autoStart;bindTaskModal.classList.add('show');bindTaskModal.setAttribute('aria-hidden','false')}
+function closeBindTaskModal(){bindTaskModal.classList.remove('show');bindTaskModal.setAttribute('aria-hidden','true')}
+function bindSelectedTask(){const id=Number(bindTaskSelect.value);if(!Number.isFinite(id))return false;state.boundTodoId=id;setTodoStatus(id,'in_progress');renderTodos();renderBoundTask();updateStats();saveState();return true}
+function switchMode(id){const mode=getModeConfig(id);stopTimer();state.mode=mode.id;state.totalDuration=mode.minutes*60;state.timeLeft=state.totalDuration;startBtn.textContent=isFocusMode(mode.id)?'开始专注':'开始休息';renderModes();updateTimerDisplay();saveState()}
+function playIntroChime(){if(introChimePlayed)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;introChimePlayed=true;const ctx=new C();[{f:659.25,s:0,d:1.02,g:.052},{f:880,s:.28,d:1.18,g:.048},{f:1046.5,s:.62,d:1.42,g:.046}].forEach(n=>{const mg=ctx.createGain();mg.connect(ctx.destination);mg.gain.setValueAtTime(.0001,ctx.currentTime+n.s);mg.gain.exponentialRampToValueAtTime(n.g,ctx.currentTime+n.s+.035);mg.gain.exponentialRampToValueAtTime(n.g*.42,ctx.currentTime+n.s+n.d*.28);mg.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+n.s+n.d);[{t:'sine',det:0,g:1},{t:'sine',det:12,g:.2},{t:'triangle',det:24,g:.06}].forEach(p=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=p.t;o.frequency.setValueAtTime(n.f,ctx.currentTime+n.s);o.detune.setValueAtTime(p.det,ctx.currentTime+n.s);g.gain.setValueAtTime(p.g,ctx.currentTime+n.s);o.connect(g);g.connect(mg);o.start(ctx.currentTime+n.s);o.stop(ctx.currentTime+n.s+n.d+.04)})});setTimeout(()=>{if(ctx.state!=='closed')ctx.close().catch(()=>{})},2400)}
+function revealBlock(block){if(!block||block.classList.contains('visible'))return;block.classList.add('visible');block.classList.remove('armed')}
+function setupReveal(){revealBlocks.forEach(block=>{block.classList.add('armed');const r=()=>revealBlock(block);block.addEventListener('mouseenter',r,{once:true});block.addEventListener('touchstart',r,{once:true,passive:true});block.addEventListener('click',r,{once:true})})}
+function revealHome(){introOverlayEl.classList.add('hidden');pageShellEl.classList.add('ready');setupReveal()}function runIntroAnimation(){if(introStarted)return;introStarted=true;playIntroChime();introHintEl.textContent='Sound on. Entering Daymori...';introOverlayEl.classList.add('exit');setTimeout(revealHome,800)}
+function playDoneSound(){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C();[880,1174.66,1567.98].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,ctx.currentTime+i*.18);g.gain.exponentialRampToValueAtTime(.16,ctx.currentTime+i*.18+.03);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+i*.18+.18);o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+i*.18);o.stop(ctx.currentTime+i*.18+.2)});setTimeout(()=>ctx.close().catch(()=>{}),1200)}
+function celebrateWishCompletion(){playDoneSound();new Audio(GOOD_JOB_AUDIO_SRC).play().catch(()=>new Audio(DREAM_AUDIO_SRC).play().catch(()=>{}))}
+function completeSession(){const c=getModeConfig(state.mode);stopTimer();if(isFocusMode(c.id))state.sessionsCompleted+=1;if(isFocusMode(c.id)&&state.boundTodoId){const bound=getBoundTodo();if(bound)setTodoStatus(bound.id,'done');state.boundTodoId=null;renderTodos();renderBoundTask()}playDoneSound();const n=getModeConfig(getNextMode(state.mode));alert(`${c.label}结束了，已为你切换到${n.label}。`);state.mode=n.id;state.totalDuration=n.minutes*60;state.timeLeft=state.totalDuration;startBtn.textContent=isFocusMode(n.id)?'开始专注':'开始休息';updateStats();renderModes();updateTimerDisplay();saveState()}
+function toggleTimer(){if(state.timerInterval){stopTimer();startBtn.textContent='继续';return}startBtn.textContent='暂停';state.timerInterval=setInterval(()=>{state.timeLeft-=1;if(state.timeLeft<=0){completeSession();return}updateTimerDisplay();saveState()},1000)}
+function handleStartClick(){if(state.timerInterval){toggleTimer();return}if(!isFocusMode(state.mode)){toggleTimer();return}if(state.boundTodoId){setTodoStatus(state.boundTodoId,'in_progress');renderTodos();renderBoundTask();updateStats();saveState();toggleTimer();return}if(state.todos.some(t=>!t.done)){openBindTaskModal(true);return}toggleTimer()}
+function resetTimer(){const c=getModeConfig(state.mode);stopTimer();state.totalDuration=c.minutes*60;state.timeLeft=state.totalDuration;startBtn.textContent=isFocusMode(c.id)?'开始专注':'开始休息';updateTimerDisplay();saveState()}
+function priorityLabel(p){return({high:'高',medium:'中',low:'低'})[p]||'中'}function priorityWeight(p){return({high:0,medium:1,low:2})[p]??1}function formatDate(s){if(!s)return'';const[y,m,d]=s.split('-');return `${y}.${m}.${d}`}function isOverdue(todo){if(!todo.deadline||todo.done)return false;const t=new Date();t.setHours(0,0,0,0);return new Date(`${todo.deadline}T00:00:00`)<t}
+function sortedTodos(){const list=[...state.todos];const statusRank=t=>getTodoStatus(t)==='in_progress'?0:1;if(state.sortBy==='priority')return list.sort((a,b)=>{const s=statusRank(a)-statusRank(b);if(s!==0)return s;const d=priorityWeight(a.priority)-priorityWeight(b.priority);return d!==0?d:b.id-a.id});if(state.sortBy==='deadline')return list.sort((a,b)=>{const s=statusRank(a)-statusRank(b);if(s!==0)return s;if(!a.deadline&&!b.deadline)return b.id-a.id;if(!a.deadline)return 1;if(!b.deadline)return -1;const d=new Date(a.deadline)-new Date(b.deadline);return d!==0?d:priorityWeight(a.priority)-priorityWeight(b.priority)});return list.sort((a,b)=>{const s=statusRank(a)-statusRank(b);return s!==0?s:b.id-a.id})}
+function todoItem(todo){const li=document.createElement('li');li.dataset.todoId=String(todo.id);li.className=`item${todo.done?' done':''}${isOverdue(todo)?' overdue':''}`;const cb=document.createElement('input');cb.type='checkbox';cb.className='checkbox';cb.checked=todo.done;cb.addEventListener('change',()=>toggleTodo(todo.id));const main=document.createElement('div');main.className='main';const text=document.createElement('span');text.className='text';text.textContent=todo.text;const tags=document.createElement('div');tags.className='tags';const p=document.createElement('span');p.className=`tag priority-${todo.priority}`;p.textContent=`${priorityLabel(todo.priority)}优先级`;const d=document.createElement('span');d.className='tag';d.textContent=todo.deadline?`截止：${formatDate(todo.deadline)}`:'未设截止日期';const st=getTodoStatus(todo);const s=document.createElement('span');s.className=`tag task-status status-${st}`;s.textContent=getTodoStatusLabel(st);tags.append(p,d,s);main.append(text,tags);const del=document.createElement('button');del.type='button';del.textContent='删除';del.addEventListener('click',()=>removeTodo(todo.id));li.append(cb,main,del);return li}
+function renderTodos(){todoListEl.innerHTML='';const todos=sortedTodos();if(!todos.length){const e=document.createElement('li');e.className='empty';e.textContent='先写下一件想完成的小任务，开始会比想象中更轻松。';todoListEl.appendChild(e)}else todos.forEach(t=>todoListEl.appendChild(todoItem(t)));const pending=state.todos.filter(t=>!t.done).length;todoSummaryEl.textContent=pending>0?`还有 ${pending} 件事在等你完成。`:'清单很干净，可以开始下一轮专注。';if(state.boundTodoId&&!state.todos.some(t=>t.id===state.boundTodoId&&!t.done))state.boundTodoId=null;renderBoundTask()}
+function updateStats(){completedSessionsEl.textContent=String(state.sessionsCompleted);completedTasksEl.textContent=String(state.todos.filter(t=>t.done).length)}
+function addTodo(){const text=todoInput.value.trim();if(!text)return;state.todos.unshift({id:Date.now(),text,done:false,status:'todo',priority:priorityInput.value,deadline:deadlineInput.value||''});todoInput.value='';priorityInput.value='medium';deadlineInput.value='';renderTodos();updateStats();saveState()}
+function toggleTodo(id){state.todos=state.todos.map(t=>t.id===id?{...t,done:!t.done,status:!t.done?'done':'todo'}:t);renderTodos();updateStats();saveState()}
+function removeTodo(id){const row=todoListEl.querySelector('[data-todo-id="'+id+'"]');if(!row){state.todos=state.todos.filter(t=>t.id!==id);if(state.boundTodoId===id)state.boundTodoId=null;renderTodos();updateStats();saveState();return}row.classList.add('removing');window.setTimeout(()=>{state.todos=state.todos.filter(t=>t.id!==id);if(state.boundTodoId===id)state.boundTodoId=null;renderTodos();updateStats();saveState()},320)}
+function clearDone(){state.todos=state.todos.filter(t=>!t.done);if(state.boundTodoId&&!state.todos.some(t=>t.id===state.boundTodoId))state.boundTodoId=null;renderTodos();updateStats();saveState()}
+function setRandomQuote(shouldSave=true){const q=quotes[Math.floor(Math.random()*quotes.length)];state.quote=q;quoteEl.textContent=q;if(shouldSave)saveState()}function renderQuote(){quoteEl.textContent=state.quote}
+function wishTime(s){const d=new Date(s);if(Number.isNaN(d.getTime()))return'刚刚';return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`}
+function wishItem(w){const li=document.createElement('li');li.dataset.wishId=String(w.id);li.className=`item${w.done?' done':''}`;const cb=document.createElement('input');cb.type='checkbox';cb.className='checkbox';cb.checked=w.done;cb.addEventListener('change',()=>toggleWish(w.id));const main=document.createElement('div');main.className='main';const text=document.createElement('span');text.className='text';text.textContent=w.text;const meta=document.createElement('div');meta.className='tags';const tag=document.createElement('span');tag.className='tag';tag.textContent=`写下于 ${wishTime(w.createdAt)}`;meta.appendChild(tag);main.append(text,meta);const del=document.createElement('button');del.type='button';del.textContent='移除';del.addEventListener('click',()=>removeWish(w.id));li.append(cb,main,del);return li}
+function renderWishes(){wishListEl.innerHTML='';if(!state.wishes.length){const e=document.createElement('li');e.className='empty';e.textContent='愿望墙还空着，写下第一条想实现的目标吧。';wishListEl.appendChild(e)}else state.wishes.forEach(w=>wishListEl.appendChild(wishItem(w)));wishEncourageEl.textContent=state.wishMessage}
+function showMoment(d){momentCopyEl.textContent=`你刚刚完成了“${d.wishText}”，这一刻已经被收进 Dream。`;lightningMomentEl.classList.add('show')}function createDreamMoment(w){const d={wishText:w.text,wishedAt:w.createdAt,completedAt:new Date().toISOString(),completedTasks:state.todos.filter(t=>t.done).length,sessionsCompleted:state.sessionsCompleted,visitCount:state.visitCount};localStorage.setItem(DREAM_MOMENT_KEY,JSON.stringify(d));showMoment(d)}
+function addWish(){const text=wishInput.value.trim();if(!text)return;state.wishes.unshift({id:Date.now(),text,done:false,createdAt:new Date().toISOString()});state.wishMessage=quotes[Math.floor(Math.random()*quotes.length)];wishInput.value='';renderWishes();saveState()}function toggleWish(id){let now=false,chosen=null;state.wishes=state.wishes.map(w=>{if(w.id!==id)return w;const n={...w,done:!w.done};now=n.done;chosen=n;return n});if(now&&chosen){state.wishMessage='Good job，你又完成了一个写下来的愿望。';celebrateWishCompletion();createDreamMoment(chosen)}renderWishes();saveState()}function removeWish(id){const row=wishListEl.querySelector('[data-wish-id="'+id+'"]');if(!row){state.wishes=state.wishes.filter(w=>w.id!==id);renderWishes();saveState();return}row.classList.add('removing');window.setTimeout(()=>{state.wishes=state.wishes.filter(w=>w.id!==id);renderWishes();saveState()},320)}
+function openDream(e){if(e)e.preventDefault();const a=new Audio(DREAM_AUDIO_SRC);sessionStorage.setItem('focus-buddy-dream-audio','play');a.play().catch(()=>{});const dreamUrl=new URL('./dream.html',window.location.href).toString();setTimeout(()=>{window.location.href=dreamUrl},180)}
+function setupPwa(){if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}))}window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;installBtn.classList.add('show');installNote.textContent='点击 Install Daymori，就可以把它装到电脑端或手机主屏幕。';});window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;installBtn.classList.remove('show');installNote.textContent='Daymori 已安装完成，现在它会像独立应用一样打开。';});installBtn.addEventListener('click',async()=>{if(!deferredInstallPrompt){installNote.textContent='如果按钮没有弹出安装框，可以用浏览器菜单中的“安装应用”或“添加到主屏幕”。';return;}deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice.catch(()=>null)})}
+function clampNum(v,min,max){const n=Number.parseInt(v,10);if(!Number.isFinite(n))return min;return Math.min(max,Math.max(min,n))}
+function renderSuperTimer(){const h=Math.floor(superState.left/3600),m=Math.floor((superState.left%3600)/60),s=superState.left%60;sfTimer.textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function setSuperDuration(sec){superState.total=Math.max(1,sec);superState.left=superState.total;sfHour.value=String(Math.floor(sec/3600));sfMinute.value=String(Math.floor((sec%3600)/60));sfSecond.value=String(sec%60);renderSuperTimer()}
+function stopSuperTimer(){if(superState.interval){clearInterval(superState.interval);superState.interval=null}}
+async function requestImmersive(){if(document.documentElement.requestFullscreen&&!document.fullscreenElement){await document.documentElement.requestFullscreen().catch(()=>{})}if('wakeLock' in navigator){superState.wakeLock=await navigator.wakeLock.request('screen').catch(()=>null)}}
+async function enterSuperFocus(){if(document.body.classList.contains('super-focus-active')||document.body.classList.contains('super-focus-entering'))return;sidebarEl.classList.remove('show');document.body.classList.add('super-focus-entering');superFocusLayer.classList.remove('closing');superFocusLayer.classList.add('active','entering');superFocusLayer.setAttribute('aria-hidden','false');window.setTimeout(()=>{superFocusLayer.classList.remove('entering');document.body.classList.remove('super-focus-entering');document.body.classList.add('super-focus-active')},520);await requestImmersive()}
+function exitSuperFocus(){document.body.classList.remove('super-focus-entering');document.body.classList.remove('super-focus-active');superFocusLayer.classList.add('closing');superFocusLayer.classList.remove('entering');window.setTimeout(()=>{superFocusLayer.classList.remove('active','closing');superFocusLayer.setAttribute('aria-hidden','true')},320);stopSuperTimer();stopSuperNoise();sfNoiseToggle.checked=false;if(superState.wakeLock){superState.wakeLock.release().catch(()=>{});superState.wakeLock=null}if(document.fullscreenElement&&document.exitFullscreen){document.exitFullscreen().catch(()=>{})}}
+function startSuperTimer(){if(superState.interval||superState.left<=0)return;superState.interval=setInterval(()=>{superState.left-=1;renderSuperTimer();if(superState.left<=0){stopSuperTimer();sfTimer.textContent='00:00:00';playDoneSound();alert('Super 专注完成，做得很好。')}},1000)}
+function applySuperCustom(){const h=clampNum(sfHour.value,0,23),m=clampNum(sfMinute.value,0,59),s=clampNum(sfSecond.value,0,59);setSuperDuration(h*3600+m*60+s||1500)}
+function applySuperLevel(level){const lv=['normal','cinematic','extreme'].includes(level)?level:'cinematic';superState.level=lv;superFocusLayer.classList.remove('level-normal','level-cinematic','level-extreme');superFocusLayer.classList.add(`level-${lv}`);sfLevelButtons.forEach(btn=>btn.classList.toggle('active',btn.dataset.sfLevel===lv));localStorage.setItem('superAnimLevel',lv)}
+function updateNoiseTip(on){sfNoiseTip.textContent=on?'白噪音已开启，带上耳机，效果更佳！':'开启后，带上耳机，效果更佳！'}
+function createNoiseBuffer(ctx,type){const size=ctx.sampleRate*2;const buffer=ctx.createBuffer(1,size,ctx.sampleRate);const data=buffer.getChannelData(0);if(type==='pink'){let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<size;i+=1){const w=Math.random()*2-1;b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.969*b2+w*.153852;b3=.8665*b3+w*.3104856;b4=.55*b4+w*.5329522;b5=-.7616*b5-w*.016898;data[i]=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11;b6=w*.115926}}else if(type==='brown'){let last=0;for(let i=0;i<size;i+=1){const w=Math.random()*2-1;last=(last+.02*w)/1.02;data[i]=last*3.5}}else{for(let i=0;i<size;i+=1){data[i]=Math.random()*2-1}}return buffer}
+async function startSuperNoise(){if(superState.noiseContext&&superState.noiseSource)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C();const source=ctx.createBufferSource();source.buffer=createNoiseBuffer(ctx,sfNoiseType.value);source.loop=true;const gain=ctx.createGain();gain.gain.value=0.025;source.connect(gain);gain.connect(ctx.destination);source.start(0);superState.noiseContext=ctx;superState.noiseSource=source;superState.noiseGain=gain;updateNoiseTip(true)}
+function stopSuperNoise(){if(superState.noiseSource){try{superState.noiseSource.stop(0)}catch{}}if(superState.noiseContext){superState.noiseContext.close().catch(()=>{})}superState.noiseSource=null;superState.noiseGain=null;superState.noiseContext=null;updateNoiseTip(false)}
+startBtn.addEventListener('click',handleStartClick);bindTaskBtn.addEventListener('click',()=>openBindTaskModal(false));bindTaskConfirm.addEventListener('click',()=>{if(bindSelectedTask()){closeBindTaskModal();if(shouldAutoStartAfterBind)toggleTimer();shouldAutoStartAfterBind=false}});bindTaskSkip.addEventListener('click',()=>{closeBindTaskModal();if(shouldAutoStartAfterBind)toggleTimer();shouldAutoStartAfterBind=false});bindTaskCancel.addEventListener('click',()=>{closeBindTaskModal();shouldAutoStartAfterBind=false});bindTaskModal.addEventListener('click',e=>{if(e.target===bindTaskModal){closeBindTaskModal();shouldAutoStartAfterBind=false}});resetBtn.addEventListener('click',resetTimer);nextQuoteBtn.addEventListener('click',()=>setRandomQuote(true));addTodoBtn.addEventListener('click',addTodo);clearDoneBtn.addEventListener('click',clearDone);addWishBtn.addEventListener('click',addWish);momentLinkEl.addEventListener('click',openDream);sortInput.addEventListener('change',e=>{state.sortBy=e.target.value;renderTodos();saveState()});todoInput.addEventListener('keydown',e=>{if(e.key==='Enter')addTodo()});wishInput.addEventListener('keydown',e=>{if(e.key==='Enter')addWish()});introOverlayEl.addEventListener('click',runIntroAnimation);introOverlayEl.addEventListener('touchstart',runIntroAnimation,{passive:true});window.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')runIntroAnimation()});
+loadState();trackVisit();sortInput.value=state.sortBy;renderModes();renderTodos();renderQuote();renderWishes();updateStats();updateTimerDisplay();setupPwa();document.querySelectorAll('a[href="dream.html"]').forEach(link=>link.setAttribute('href',new URL('./dream.html',window.location.href).toString()));
+
+window.addEventListener('storage',e=>{
+  if(e.key!==STORAGE_KEY&&e.key!==DREAM_MOMENT_KEY)return;
+  loadState();
+  sortInput.value=state.sortBy;
+  renderModes();
+  renderTodos();
+  renderQuote();
+  renderWishes();
+  updateStats();
+  updateTimerDisplay();
+  renderBoundTask();
+});
+
+// 设置按钮打开侧边栏
+settingsBtn.addEventListener('click',e=>{
+  e.stopPropagation();
+  sidebarEl.classList.toggle('show');
+});
+// 点击主内容区域自动收起侧边栏
+document.addEventListener('click',e=>{
+  if(sidebarEl.classList.contains('show')&&!sidebarEl.contains(e.target)&&e.target!==settingsBtn){
+    sidebarEl.classList.remove('show');
+  }
+});
+
+// 深色/护眼模式逻辑
+function loadDarkMode(){
+  const isDark=localStorage.getItem('darkMode')==='true';
+  if(isDark){
+    document.body.classList.add('dark-mode');
+  }
+  darkModeToggle.checked=isDark;
+  updateDarkModeHint();
+}
+function updateDarkModeHint(){
+  const isDark=document.body.classList.contains('dark-mode');
+  eyeCareHint.textContent=isDark?'开启：暖色深色护眼模式，已降低蓝光刺激感。':'关闭：标准明亮模式。';
+}
+darkModeToggle.addEventListener('change',()=>{
+  const isDark=darkModeToggle.checked;
+  document.body.classList.toggle('dark-mode',isDark);
+  localStorage.setItem('darkMode',isDark);
+  updateDarkModeHint();
+});
+
+// ────── 功能圆盘配置 ──────
+const FEATURE_MENU_ITEMS=[
+  {id:'feature1',label:'功能1',icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'},
+  {id:'feature2',label:'功能2',icon:'<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'},
+  {id:'feature3',label:'功能3',icon:'<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11z"/></svg>'},
+  {id:'feature4',label:'功能4',icon:'<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'},
+  {id:'feature5',label:'功能5',icon:'<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'},
+  {id:'feature6',label:'功能6',icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>'},
+];
+
+function renderFeatureDisk(){
+  featureItems.innerHTML='';
+  const itemCount=FEATURE_MENU_ITEMS.length;
+  const angleStep=360/itemCount;
+  const radius=130;
+  
+  FEATURE_MENU_ITEMS.forEach((item,index)=>{
+    const angle=angleStep*index;
+    const radian=angle*Math.PI/180;
+    const x=radius*Math.cos(radian);
+    const y=radius*Math.sin(radian);
+    
+    const itemEl=document.createElement('button');
+    itemEl.className='feature-item';
+    itemEl.type='button';
+    itemEl.style.setProperty('--angle',`${angle}deg`);
+    itemEl.style.left=`calc(50% + ${x}px)`;
+    itemEl.style.top=`calc(50% + ${y}px)`;
+    itemEl.title=item.label;
+    itemEl.innerHTML=item.icon;
+    
+    itemEl.addEventListener('click',e=>{
+      e.stopPropagation();
+      console.log(`点击了: ${item.label} (${item.id})`);
+      // TODO: 在此处添加具体功能逻辑
+      toggleFeatureDisk();
+    });
+    
+    featureItems.appendChild(itemEl);
+  });
+}
+
+function toggleFeatureDisk(){
+  featureDisk.classList.toggle('show');
+}
+
+// 功能按钮事件
+featureBtn.addEventListener('click',e=>{
+  e.stopPropagation();
+  toggleFeatureDisk();
+});
+
+// 点击圆盘背景关闭
+featureDisk.addEventListener('click',e=>{
+  if(e.target===featureDisk){
+    toggleFeatureDisk();
+  }
+});
+
+// 按 Escape 关闭圆盘
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&featureDisk.classList.contains('show')){
+    featureDisk.classList.remove('show');
+  }
+});
+
+// 初始化功能圆盘
+renderFeatureDisk();
+sfApply.addEventListener('click',applySuperCustom);
+sfPreset25.addEventListener('click',()=>setSuperDuration(25*60));
+sfPreset50.addEventListener('click',()=>setSuperDuration(50*60));
+sfPreset90.addEventListener('click',()=>setSuperDuration(90*60));
+sfStart.addEventListener('click',startSuperTimer);
+sfPause.addEventListener('click',stopSuperTimer);
+sfReset.addEventListener('click',()=>setSuperDuration(superState.total));
+sfLevelButtons.forEach(btn=>btn.addEventListener('click',()=>applySuperLevel(btn.dataset.sfLevel)));
+sfNoiseToggle.addEventListener('change',()=>{if(sfNoiseToggle.checked){startSuperNoise().catch(()=>{sfNoiseToggle.checked=false;updateNoiseTip(false)})}else stopSuperNoise()});
+sfNoiseType.addEventListener('change',()=>{if(sfNoiseToggle.checked){stopSuperNoise();startSuperNoise().catch(()=>{sfNoiseToggle.checked=false;updateNoiseTip(false)})}});
+window.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('super-focus-active'))exitSuperFocus()});
+
+// 初始化深色模式
+loadDarkMode();
+setSuperDuration(25*60);
+applySuperLevel(localStorage.getItem('superAnimLevel')||'cinematic');
+updateNoiseTip(false);
+renderBoundTask();
+</script>
+</body>
+</html>
