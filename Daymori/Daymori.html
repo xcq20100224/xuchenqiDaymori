@@ -79,6 +79,8 @@ body.dark-mode .feature-item svg{stroke:#d8ba86}
 .feature-center-icon svg{width:24px;height:24px;fill:none;stroke:#5a7da8;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 body.dark-mode .feature-center-icon svg{stroke:#d8ba86}
 .dev-letter-btn{width:100%;border:1px solid rgba(109,149,203,.22);background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(232,242,255,.9));color:#416792;font-weight:500}
+.repair-app-btn{width:100%;border:1px dashed rgba(67,129,195,.38);background:rgba(255,255,255,.86);color:#3a628e}
+.repair-app-btn:hover{border-style:solid;background:rgba(224,239,255,.9)}
 .dev-letter-overlay{position:fixed;inset:0;z-index:120;display:flex;align-items:flex-start;justify-content:center;padding:4vh 16px;background:radial-gradient(circle at 16% 8%,rgba(238,248,255,.62),transparent 34%),radial-gradient(circle at 82% 10%,rgba(194,223,255,.48),transparent 32%),linear-gradient(180deg,rgba(226,240,255,.95),rgba(212,233,255,.92));opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s ease,visibility .45s ease}
 .dev-letter-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
 .dev-letter-wrap{position:relative;width:min(760px,96vw);height:min(90vh,920px);display:flex;align-items:flex-start;justify-content:center}
@@ -93,6 +95,7 @@ body.dark-mode .dev-letter-paper{background:linear-gradient(180deg,rgba(71,79,92
 body.dark-mode .dev-letter-title{color:#d3e5ff}
 body.dark-mode .dev-letter-content{color:#deebfb}
 body.dark-mode .dev-letter-close{background:rgba(33,42,56,.9);border-color:rgba(152,178,210,.35);color:#deebfb}
+body.dark-mode .repair-app-btn{background:rgba(35,45,59,.9);border-color:rgba(143,170,204,.42);color:#d5e8ff}
 .super-btn{width:100%}
 .super-focus{position:fixed;inset:0;z-index:70;overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;transform:translate3d(0,30px,0) scale(1.03);transition:opacity .52s cubic-bezier(.16,.84,.2,1),transform .52s cubic-bezier(.16,.84,.2,1),visibility .52s;background:radial-gradient(circle at 18% 16%,rgba(238,255,246,.62),transparent 34%),radial-gradient(circle at 80% 10%,rgba(230,255,241,.38),transparent 28%),linear-gradient(160deg,#f2fff7,#e8fdf1 42%,#d9f6e7);will-change:transform,opacity}
 .super-focus.active{opacity:1;visibility:visible;pointer-events:auto;transform:translate3d(0,0,0) scale(1)}
@@ -296,6 +299,7 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
     <h3>快捷设置</h3>
     <div class="setting-row"><span class="setting-title">护眼模式</span><label class="switch" for="darkModeToggle"><input id="darkModeToggle" type="checkbox" role="switch" aria-label="切换护眼模式"><span class="switch-slider"></span></label></div><p class="eye-care-hint" id="eyeCareHint">关闭：标准明亮模式。</p>
     <button id="openDevLetterBtn" class="dev-letter-btn" type="button">来自开发者的一封信</button>
+    <button id="repairAppBtn" class="repair-app-btn" type="button">应用修复（清缓存）</button>
     <button class="primary super-btn" id="superFocusBtn" type="button">进入 Super 专注模式</button>
   </div>
 </div>
@@ -349,7 +353,7 @@ const STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment
 const timerModes=[{id:'focus',label:'专注',minutes:25,button:'25 分钟专注'},{id:'focus40',label:'深度专注',minutes:40,button:'40 分钟专注'},{id:'focus50',label:'深度专注',minutes:50,button:'50 分钟专注'},{id:'short',label:'短休息',minutes:5,button:'5 分钟休息'},{id:'long',label:'长休息',minutes:15,button:'15 分钟休息'},{id:'rest30',label:'休息',minutes:30,button:'30 分钟休息'}];
 const quotes=['每一个不曾起舞的日子，都是对生命的辜负。','自律不是苛待自己，而是温柔地兑现承诺。','慢慢来，比较快。','你的努力，时间一直看得见。','先完成眼前这一小步，路就会继续亮起来。','种一棵树最好的时间是十年前，其次是现在。'];
 const state={mode:'focus',timeLeft:1500,totalDuration:1500,timerInterval:null,sessionsCompleted:0,todos:[],quote:'',sortBy:'manual',wishes:[],wishMessage:'写下一个愿望后，这里会随机送你一句鼓励。',visitCount:0,boundTodoId:null};
-const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel');const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null};
+const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel');const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null};
 const DEV_LETTER_TEXT=`感谢您使用这一软件，首先，不知您是否觉得很好用呢？super专注模式好用吗，这是否帮助您更加地专注于学习和生活了呢？护眼模式是否满足您在晚自习使用时的需求了呢？活动圆盘是否让您耳目一新呢？
 
 当然，如果您觉得可以改进的话，请及时通知我哈！那么，话说回来，我为什么要做这个软件呢？也许是兴趣使然吧，这得益于我对AI编码的热情，不过，最重要的还是这一点：我想要做出真正有益于人们的产品，我想要创造出价值非凡的事物，我想要世界因为它而变得更好！在阅读完《埃隆·马斯克传》后，我就下定了决心，我要成为他那样的人，所以我要创造出一个伟大的产品，尽管就目前来说，远远算不上伟大，但总得先迈出一步吧，不是吗！无论是后续的游戏企划，还是当前的Daymori制作，我都想把这个产品做得富有价值！在后续，我会继续努力完善这个软件的！！！
@@ -555,6 +559,31 @@ function closeDevLetter(){
   }
 }
 
+async function repairInstalledApp(){
+  const ok=window.confirm('将执行应用修复：清除旧缓存与离线文件，然后自动刷新到最新版本。是否继续？');
+  if(!ok)return;
+  const logs=[];
+  try{
+    if('serviceWorker' in navigator){
+      const regs=await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(reg=>reg.unregister()));
+      logs.push(`已移除 ${regs.length} 个 Service Worker`);
+    }
+  }catch{logs.push('Service Worker 清理失败（可忽略，已继续）')}
+  try{
+    if('caches' in window){
+      const keys=await caches.keys();
+      await Promise.all(keys.map(k=>caches.delete(k)));
+      logs.push(`已清理 ${keys.length} 个缓存分区`);
+    }
+  }catch{logs.push('缓存清理失败（可忽略，已继续）')}
+  sidebarEl.classList.remove('show');
+  alert(`${logs.join('\n')}\n\n即将刷新并重新加载最新版本。`);
+  const next=new URL(window.location.href);
+  next.searchParams.set('repair',String(Date.now()));
+  window.location.replace(next.toString());
+}
+
 // 功能按钮事件
 if(featureBtn&&featureDisk&&featureItems){
   featureBtn.addEventListener('click',e=>{
@@ -584,6 +613,9 @@ if(openDevLetterBtn&&closeDevLetterBtn&&devLetterOverlay){
   openDevLetterBtn.addEventListener('click',openDevLetter);
   closeDevLetterBtn.addEventListener('click',closeDevLetter);
   devLetterOverlay.addEventListener('click',e=>{if(e.target===devLetterOverlay)closeDevLetter()});
+}
+if(repairAppBtn){
+  repairAppBtn.addEventListener('click',()=>{repairInstalledApp().catch(()=>alert('修复遇到异常，请手动刷新后重试。'))});
 }
 sfApply.addEventListener('click',applySuperCustom);
 sfPreset25.addEventListener('click',()=>setSuperDuration(25*60));
