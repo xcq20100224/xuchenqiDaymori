@@ -496,6 +496,8 @@ document.addEventListener('keydown',e=>{
 
 // 初始化功能圆盘
 renderFeatureDisk();
+superFocusBtn.addEventListener('click',enterSuperFocus);
+sfExitBtn.addEventListener('click',exitSuperFocus);
 sfApply.addEventListener('click',applySuperCustom);
 sfPreset25.addEventListener('click',()=>setSuperDuration(25*60));
 sfPreset50.addEventListener('click',()=>setSuperDuration(50*60));
