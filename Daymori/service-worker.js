@@ -1,4 +1,4 @@
-const CACHE_NAME = 'daymori-pwa-v14';
+const CACHE_NAME = 'daymori-pwa-v15';
 const APP_SHELL = [
   './',
   './Daymori.html',
@@ -27,6 +27,22 @@ self.addEventListener('fetch', event => {
   const isNavigateRequest = event.request.mode === 'navigate';
   const requestUrl = new URL(event.request.url);
   const isDreamNavigate = requestUrl.pathname.endsWith('/dream.html') || requestUrl.pathname.endsWith('/dream');
+
+  if (isNavigateRequest) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          if (response && response.status === 200 && response.type !== 'opaque') {
+            const cloned = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, cloned));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request).then(cached => cached || caches.match(isDreamNavigate ? './dream.html' : './Daymori.html')))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;
