@@ -20,14 +20,15 @@
 </main>
 <audio class="audio" id="dreamAudio" preload="auto" src="./Andrew.m4a"></audio>
 <script>
-const DREAM_MOMENT_KEY='focus-buddy-dream-moment',STORAGE_KEY='focus-buddy-state',DREAM_AUDIO_SRC='./Andrew.m4a';
+const APP_VERSION=new URL(window.location.href).searchParams.get('v')||'pomo-v20260416-2',DREAM_MOMENT_KEY='focus-buddy-dream-moment',STORAGE_KEY='focus-buddy-state',DREAM_AUDIO_SRC='./Andrew.m4a';
+function withAppVersion(pathname){const url=new URL(pathname,window.location.href);url.searchParams.set('v',APP_VERSION);return url.toString()}
 function formatDateTime(s){const d=new Date(s);if(Number.isNaN(d.getTime()))return'某个认真开始的时刻';return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`}
 function readState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}}catch{return {}}}
 function readDreamMoment(){try{return JSON.parse(localStorage.getItem(DREAM_MOMENT_KEY))||{}}catch{return {}}}
 function getCompletedTaskCount(savedState,dreamMoment){if(Number.isFinite(dreamMoment.completedTasks))return dreamMoment.completedTasks;if(Array.isArray(savedState.todos))return savedState.todos.filter(t=>t.done||t.completed).length;return 0}
 function playDreamAudio(){const audio=document.getElementById('dreamAudio'),fallback=document.getElementById('audioFallback');audio.src=DREAM_AUDIO_SRC;audio.currentTime=0;document.body.classList.add('playing');audio.addEventListener('ended',()=>document.body.classList.remove('playing'),{once:true});audio.play().then(()=>fallback.classList.remove('show')).catch(()=>fallback.classList.add('show'))}
 function renderDreamData(){const savedState=readState(),dreamMoment=readDreamMoment();document.getElementById('wishText').textContent=dreamMoment.wishText||'你刚刚完成了一个重要愿望。';document.getElementById('wishTime').textContent=formatDateTime(dreamMoment.wishedAt);document.getElementById('tasksCount').textContent=`${getCompletedTaskCount(savedState,dreamMoment)} 次`;document.getElementById('visitCount').textContent=`${dreamMoment.visitCount ?? savedState.visitCount ?? 0} 次`}
-document.querySelector('.actions .button').setAttribute('href',new URL('./Daymori.html',window.location.href).toString());
+document.querySelector('.actions .button').setAttribute('href',withAppVersion('./Daymori.html'));
 document.getElementById('audioResumeBtn').addEventListener('click',playDreamAudio);
 window.addEventListener('storage',e=>{if(e.key===STORAGE_KEY||e.key===DREAM_MOMENT_KEY)renderDreamData()});
 renderDreamData();

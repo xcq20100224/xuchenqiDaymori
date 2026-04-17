@@ -109,12 +109,29 @@ body.dark-mode .feature-center-icon svg{stroke:#d8ba86}
 .super-report-item b{display:block;font-size:1.14rem;color:#1f6a40}
 .super-report-item span{color:#4e7e62;font-size:.88rem}
 .super-report-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.super-resume-overlay{position:fixed;inset:0;z-index:127;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(8,24,17,.52);backdrop-filter:blur(6px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility .25s ease}
+.super-resume-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
+.super-resume-card{width:min(520px,96vw);padding:22px;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(232,249,238,.96));border:1px solid rgba(63,140,91,.3);box-shadow:0 26px 62px rgba(25,84,48,.25)}
+.super-resume-title{margin:0 0 8px;font-size:1.18rem;color:#1d5d39}
+.super-resume-sub{margin:0 0 14px;color:#3f7f5d}
+.super-reason-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.super-reason-btn{padding:10px 12px;border-radius:14px;border:1px solid rgba(63,140,91,.24);background:rgba(255,255,255,.84);color:#225b3b;cursor:pointer}
+.super-reason-btn.active{background:rgba(189,236,205,.7);border-color:rgba(63,140,91,.45)}
+.super-resume-countdown{margin-top:14px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.82);border:1px solid rgba(63,140,91,.2);color:#296946}
+.super-resume-countdown b{font-size:1.16rem;color:#1f633e}
 body.dark-mode .super-report-card{background:linear-gradient(180deg,rgba(41,59,52,.98),rgba(33,49,43,.96));border-color:rgba(134,191,158,.34)}
 body.dark-mode .super-report-title{color:#c9f1da}
 body.dark-mode .super-report-sub{color:#b7e4c9}
 body.dark-mode .super-report-item{background:rgba(32,49,42,.84);border-color:rgba(134,191,158,.28)}
 body.dark-mode .super-report-item b{color:#c9f1da}
 body.dark-mode .super-report-item span{color:#b7e4c9}
+body.dark-mode .super-resume-card{background:linear-gradient(180deg,rgba(38,58,49,.98),rgba(31,49,40,.96));border-color:rgba(134,191,158,.34)}
+body.dark-mode .super-resume-title{color:#c9f1da}
+body.dark-mode .super-resume-sub{color:#b7e4c9}
+body.dark-mode .super-reason-btn{background:rgba(34,50,43,.86);border-color:rgba(134,191,158,.28);color:#c9f1da}
+body.dark-mode .super-reason-btn.active{background:rgba(76,126,98,.55)}
+body.dark-mode .super-resume-countdown{background:rgba(33,49,42,.84);border-color:rgba(134,191,158,.24);color:#b7e4c9}
+body.dark-mode .super-resume-countdown b{color:#c9f1da}
 body.dark-mode .onboarding-card{background:linear-gradient(180deg,rgba(43,55,70,.98),rgba(36,48,62,.96));border-color:rgba(136,162,193,.34)}
 body.dark-mode .onboarding-tag{background:rgba(32,42,56,.86);border-color:rgba(136,162,193,.34);color:#d4e6ff}
 body.dark-mode .onboarding-title{color:#d4e6ff}
@@ -189,9 +206,64 @@ body.super-focus-active .super-focus.level-extreme .panel-wrap{animation:cameraD
 @keyframes letterDropOpen{0%{transform:perspective(900px) rotateX(-16deg) scaleY(0);opacity:0}45%{transform:perspective(900px) rotateX(-8deg) scaleY(.58);opacity:.95}100%{transform:perspective(900px) rotateX(0deg) scaleY(1);opacity:1}}
 /* ── 字体体系统一 ── */h1,h2,h3,.panel h2,.super-head h3{font-weight:600}.mode-btn,.pill,.tag,.stat span,button,select,input[type=text],input[type=date],.sort-select,.super-level-btn{font-weight:400}.hero small,.hero p,.quote-foot,.note,.super-hint,.noise-tip,.eye-care-hint,.install-note,.empty,.moment p,.encourage,.orb-time{font-weight:300}/* ── 专注计时模块：强化层级 ── */
 #timerBlock{
+  grid-column:1/-1;
   border:1.5px solid rgba(16,185,129,.24);
   box-shadow:0 28px 70px rgba(16,185,129,.14),0 4px 18px rgba(16,185,129,.08);
 }
+.pomodoro-setup{
+  display:grid;
+  gap:12px;
+  margin-bottom:14px;
+  padding:14px;
+  border-radius:18px;
+  background:rgba(255,255,255,.62);
+  border:1px solid rgba(92,146,207,.16);
+}
+.pomodoro-setup h3{
+  margin:0;
+  color:#3f6593;
+  font-size:.98rem;
+}
+.task-choice-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+}
+.quick-task-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.quick-task-btn{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(86,145,209,.24);
+  background:rgba(255,255,255,.86);
+  color:#3d6999;
+  cursor:pointer;
+}
+.quick-task-btn.active{
+  background:rgba(187,221,255,.66);
+  border-color:rgba(86,145,209,.46);
+}
+.pomodoro-banner{
+  margin:0;
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.75);
+  border:1px solid rgba(86,145,209,.2);
+  color:#3a638f;
+}
+.tomato-merged-title{
+  margin:14px 0 10px;
+  font-size:1rem;
+}
+.merged-divider{
+  height:1px;
+  background:linear-gradient(90deg,rgba(109,149,203,.0),rgba(109,149,203,.32),rgba(109,149,203,.0));
+  margin:16px 0;
+}
+.todo-hidden{display:none !important}
 /* 开始专注 / 开始休息 / 继续 → 实色青绿主按钮 */
 #startBtn{
   background:#10b981;
@@ -227,6 +299,22 @@ body.dark-mode #todoBlock{
   background:rgba(32,29,24,.78);
   border-color:rgba(178,148,98,.10);
   box-shadow:0 8px 28px rgba(0,0,0,.18);
+}
+body.dark-mode .pomodoro-setup{
+  background:rgba(36,47,60,.82);
+  border-color:rgba(135,167,202,.28);
+}
+body.dark-mode .pomodoro-setup h3{color:#d7e6ff}
+body.dark-mode .quick-task-btn{
+  background:rgba(39,52,67,.88);
+  border-color:rgba(135,167,202,.32);
+  color:#d2e5ff;
+}
+body.dark-mode .quick-task-btn.active{background:rgba(74,107,146,.56)}
+body.dark-mode .pomodoro-banner{
+  background:rgba(33,46,60,.86);
+  border-color:rgba(135,167,202,.32);
+  color:#d7e6ff;
 }
 /* ── 交互反馈与过渡 ── */
 body,.card,.panel,.stat,.pill,.tag,input,select,button,a.button,.item,.sidebar,.super-focus,.super-focus .panel-wrap{
@@ -356,7 +444,7 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
     </div>
   </div>
 </div>
-<div class="intro" id="introOverlay"><div class="intro-card"><div class="logo"><span></span></div><h2>Daymori</h2><p>Gentle discipline for everyday growth.</p><p id="introHint">Click to play the chime and enter Daymori.</p></div></div>
+<div class="intro" id="introOverlay"><div class="intro-card"><div class="logo"><span></span></div><h2>Daymori</h2><p>Gentle discipline for everyday growth.</p><p id="introHint"></p></div></div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-content panel card">
     <h3>快捷设置</h3>
@@ -368,7 +456,58 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
 </div>
 <main class="page" id="pageShell">
 <section class="hero card reveal" id="heroBlock"><small>Patience is the key in life</small><h1>Daymori</h1><p class="hero-copy">Gentle discipline for everyday growth.</p><div class="hero-actions"><button class="primary install-btn" id="installBtn" type="button">Install Daymori</button><a class="button" href="dream.html">Open Dream</a></div><div class="install-note" id="installNote">Daymori 现在可以被浏览器安装成独立应用。</div></section>
-<section class="grid"><article class="panel card reveal" id="timerBlock"><h2>专注计时</h2><div class="mode-switcher" id="modeSwitcher"></div><div class="pill" id="timerStage">当前阶段：专注 25 分钟</div><div class="timer-display" id="timer">25:00</div><div class="progress-task-row"><div class="progress"><div id="progressBar"></div></div><span class="progress-bound-task" id="progressBoundTask">任务：未绑定</span></div><div class="timer-actions"><button id="bindTaskBtn" class="bind-task-btn" type="button">绑定当前任务</button><button class="primary" id="startBtn" type="button">开始专注</button><button id="resetBtn" type="button">重置</button><button id="nextQuoteBtn" type="button">换一句鼓励</button></div><div class="bound-task-chip" id="currentBoundTask">当前绑定任务：未绑定</div><div class="stats"><div class="stat"><strong id="completedSessions">0</strong><span>完成番茄</span></div><div class="stat"><strong id="completedTasks">0</strong><span>已完成任务</span></div><div class="stat"><strong id="focusModeLabel">专注</strong><span>当前节奏</span></div></div></article><article class="panel card reveal" id="todoBlock"><h2>学习清单</h2><div class="todo-input-group"><div class="float-field"><input type="text" id="todoInput" placeholder=" "><label for="todoInput">写下你现在最重要的一件事</label></div><button class="primary" id="addTodoBtn" type="button">添加</button></div><div class="todo-extra-group"><select id="priorityInput"><option value="high">高优先级</option><option value="medium" selected>中优先级</option><option value="low">低优先级</option></select><input type="date" id="deadlineInput"></div><div class="todo-meta"><span id="todoSummary">今天先完成 1 件小事也很好。</span><div class="todo-tools"><select id="sortInput" class="sort-select"><option value="manual">默认顺序</option><option value="priority">按优先级排序</option><option value="deadline">按截止时间排序</option></select><button id="clearDoneBtn" type="button">清除已完成</button></div></div><ul class="list" id="todoList"></ul></article></section>
+<section class="grid">
+  <article class="panel card reveal" id="timerBlock">
+    <h2>番茄钟</h2>
+    <div class="pomodoro-setup">
+      <h3>先选择任务，再进入 25 分钟专注</h3>
+      <div class="task-choice-row">
+        <select id="pomodoroTaskSelect">
+          <option value="">从学习清单中选择任务</option>
+        </select>
+        <button id="pomodoroConfirmTask" class="primary" type="button">开始番茄钟</button>
+      </div>
+      <div class="quick-task-row" id="quickTaskRow">
+        <button class="quick-task-btn" type="button" data-task="复习错题">复习错题</button>
+        <button class="quick-task-btn" type="button" data-task="背单词">背单词</button>
+        <button class="quick-task-btn" type="button" data-task="阅读 20 页">阅读 20 页</button>
+        <button class="quick-task-btn" type="button" data-task="整理笔记">整理笔记</button>
+      </div>
+      <div class="float-field">
+        <input type="text" id="pomodoroCustomTask" placeholder=" ">
+        <label for="pomodoroCustomTask">也可以自己填写任务</label>
+      </div>
+      <p class="pomodoro-banner" id="pomodoroBanner">请选择一个任务，然后点击“开始番茄钟”。</p>
+    </div>
+    <div class="pill" id="timerStage">当前阶段：待开始</div>
+    <div class="timer-display" id="timer">25:00</div>
+    <div class="progress-task-row">
+      <div class="progress"><div id="progressBar"></div></div>
+      <span class="progress-bound-task" id="progressBoundTask">任务：未选择</span>
+    </div>
+    <div class="timer-actions">
+      <button class="primary" id="startBtn" type="button" disabled>暂停</button>
+      <button id="resetBtn" type="button">重新选择任务</button>
+      <button id="nextQuoteBtn" type="button">换一句鼓励</button>
+      <button id="bindTaskBtn" class="bind-task-btn" type="button" style="display:none">绑定当前任务</button>
+    </div>
+    <div class="bound-task-chip" id="currentBoundTask">当前任务：未选择</div>
+    <div class="stats">
+      <div class="stat"><strong id="completedSessions">0</strong><span>完成番茄</span></div>
+      <div class="stat"><strong id="completedTasks">0</strong><span>已完成任务</span></div>
+      <div class="stat"><strong id="focusModeLabel">番茄钟</strong><span>当前节奏</span></div>
+    </div>
+
+    <div class="merged-divider"></div>
+    <h3 class="tomato-merged-title">番茄钟模式（25+5）x4+20</h3>
+    <div id="todoBlock">
+      <div class="todo-input-group todo-hidden"><div class="float-field"><input type="text" id="todoInput" placeholder=" "><label for="todoInput">写下你现在最重要的一件事</label></div><button class="primary" id="addTodoBtn" type="button">添加</button></div>
+      <div class="todo-extra-group todo-hidden"><select id="priorityInput"><option value="high">高优先级</option><option value="medium" selected>中优先级</option><option value="low">低优先级</option></select><input type="date" id="deadlineInput"></div>
+      <div class="todo-meta"><span id="todoSummary">先写下一件想完成的小任务，开始会比想象中更轻松。</span><div class="todo-tools todo-hidden"><select id="sortInput" class="sort-select"><option value="manual">默认顺序</option><option value="priority">按优先级排序</option><option value="deadline">按截止时间排序</option></select><button id="clearDoneBtn" type="button">清除已完成</button></div></div>
+      <ul class="list todo-hidden" id="todoList"></ul>
+    </div>
+  </article>
+</section>
 <section class="panel card reveal" id="quoteBlock"><h2>今日一句</h2><p class="quote-text" id="quote">正在为你挑一句适合现在的话...</p><div class="quote-foot">慢一点没关系，方向对了就会靠近。</div></section>
 <section class="panel card reveal" id="wishBlock"><h2>愿望墙</h2><div class="wish-layout"><div><p class="note">把你想完成的学习目标、工作愿望，或者一个正在靠近的小计划写下来。写下它，本身就是一种开始。</p><div class="float-field"><input type="text" id="wishInput" placeholder=" "><label for="wishInput">例如：这周完成课程第 3 章，或者做完项目初稿</label></div><div style="height:10px"></div><button class="primary" id="addWishBtn" type="button">加入愿望墙</button><div class="encourage" id="wishEncourage">写下一个愿望后，这里会随机送你一句鼓励。</div></div><div><ul class="list" id="wishList"></ul></div></div></section>
 <aside class="moment" id="lightningMoment"><small>Lightning Moment</small><h3>这一刻值得被记住。</h3><p id="momentCopy">当你完成一个愿望，这里会出现通往 Dream 的入口。</p><a class="button primary" id="momentLink" href="dream.html">进入 Dream</a></aside>
@@ -455,12 +594,30 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
     </div>
   </div>
 </section>
+<section class="super-resume-overlay" id="superResumeOverlay" aria-hidden="true">
+  <div class="super-resume-card">
+    <h3 class="super-resume-title">检测到专注中断</h3>
+    <p class="super-resume-sub">请选择刚才的中断原因，系统将引导你在 10 秒后回到专注。</p>
+    <div class="super-reason-grid" id="superReasonGrid">
+      <button class="super-reason-btn" data-reason="消息提醒" type="button">消息提醒</button>
+      <button class="super-reason-btn" data-reason="临时离开" type="button">临时离开</button>
+      <button class="super-reason-btn" data-reason="注意力走神" type="button">注意力走神</button>
+      <button class="super-reason-btn" data-reason="其他原因" type="button">其他原因</button>
+    </div>
+    <div class="super-resume-countdown" id="superResumeCountdown">请选择中断原因后开始恢复</div>
+  </div>
+</section>
 <script>
-const STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
+const APP_VERSION='pomo-v20260416-2',STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
 const timerModes=[{id:'focus',label:'专注',minutes:25,button:'25 分钟专注'},{id:'focus40',label:'深度专注',minutes:40,button:'40 分钟专注'},{id:'focus50',label:'深度专注',minutes:50,button:'50 分钟专注'},{id:'short',label:'短休息',minutes:5,button:'5 分钟休息'},{id:'long',label:'长休息',minutes:15,button:'15 分钟休息'},{id:'rest30',label:'休息',minutes:30,button:'30 分钟休息'}];
 const quotes=['每一个不曾起舞的日子，都是对生命的辜负。','自律不是苛待自己，而是温柔地兑现承诺。','慢慢来，比较快。','你的努力，时间一直看得见。','先完成眼前这一小步，路就会继续亮起来。','种一棵树最好的时间是十年前，其次是现在。'];
 const state={mode:'focus',timeLeft:1500,totalDuration:1500,timerInterval:null,sessionsCompleted:0,todos:[],quote:'',sortBy:'manual',wishes:[],wishMessage:'写下一个愿望后，这里会随机送你一句鼓励。',visitCount:0,boundTodoId:null};
-const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel');const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,startCompletedTasks:0};
+const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel');const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,interruptCount:0,startCompletedTasks:0,awaitingRecovery:false,recoveryReason:'',recoveryTimer:null,recoveryCountdown:10};
+const superResumeOverlay=$('superResumeOverlay'),superReasonGrid=$('superReasonGrid'),superResumeCountdown=$('superResumeCountdown');
+const pomodoroTaskSelect=$('pomodoroTaskSelect'),pomodoroConfirmTask=$('pomodoroConfirmTask'),pomodoroCustomTask=$('pomodoroCustomTask'),pomodoroBanner=$('pomodoroBanner');
+const quickTaskButtons=Array.from(document.querySelectorAll('[data-task]'));
+const POMODORO_FOCUS_SECONDS=25*60,POMODORO_SHORT_BREAK_SECONDS=5*60,POMODORO_LONG_BREAK_SECONDS=20*60,POMODORO_CYCLES_PER_ROUND=4;
+const pomodoroState={phase:'idle',completedCycles:0,currentTask:'',roundFinished:false,selectedQuickTask:''};
 const DEV_LETTER_TEXT=`感谢您使用这一软件，首先，不知您是否觉得很好用呢？super专注模式好用吗，这是否帮助您更加地专注于学习和生活了呢？护眼模式是否满足您在晚自习使用时的需求了呢？活动圆盘是否让您耳目一新呢？
 
 当然，如果您觉得可以改进的话，请及时通知我哈！那么，话说回来，我为什么要做这个软件呢？也许是兴趣使然吧，这得益于我对AI编码的热情，不过，最重要的还是这一点：我想要做出真正有益于人们的产品，我想要创造出价值非凡的事物，我想要世界因为它而变得更好！在阅读完《埃隆·马斯克传》后，我就下定了决心，我要成为他那样的人，所以我要创造出一个伟大的产品，尽管就目前来说，远远算不上伟大，但总得先迈出一步吧，不是吗！无论是后续的游戏企划，还是当前的Daymori制作，我都想把这个产品做得富有价值！在后续，我会继续努力完善这个软件的！！！
@@ -476,35 +633,195 @@ const ONBOARDING_STEPS=[
   {title:'如何添加桌面快捷方式',desc:'在 Chrome/Edge 打开菜单，选择“安装应用”或“创建快捷方式（作为窗口）”。\n手机可用“添加到主屏幕”，下次可像 App 一样直接打开。'}
 ];
 let onboardingStepIndex=0;
+let onboardingTimer=null,onboardingScheduled=false,onboardingOpened=false,introTypeTimer=null;
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify({mode:state.mode,timeLeft:state.timeLeft,totalDuration:state.totalDuration,sessionsCompleted:state.sessionsCompleted,todos:state.todos,quote:state.quote,sortBy:state.sortBy,wishes:state.wishes,wishMessage:state.wishMessage,visitCount:state.visitCount,boundTodoId:state.boundTodoId}))}
 function loadState(){try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');state.mode=s.mode||'focus';state.timeLeft=Number.isFinite(s.timeLeft)?s.timeLeft:1500;state.totalDuration=Number.isFinite(s.totalDuration)?s.totalDuration:state.timeLeft;state.sessionsCompleted=Number.isFinite(s.sessionsCompleted)?s.sessionsCompleted:0;state.todos=Array.isArray(s.todos)?s.todos.map(t=>({...t,status:t.status||(t.done?'done':'todo')})):[];state.quote=s.quote||'';state.sortBy=s.sortBy||'manual';state.wishes=Array.isArray(s.wishes)?s.wishes:[];state.wishMessage=s.wishMessage||state.wishMessage;state.visitCount=Number.isFinite(s.visitCount)?s.visitCount:0;state.boundTodoId=s.boundTodoId??null}catch{}if(!state.quote)setRandomQuote(false)}
-function trackVisit(){state.visitCount+=1;saveState()}function getModeConfig(id){return timerModes.find(m=>m.id===id)||timerModes[0]}function isFocusMode(id){return id==='focus'||id==='focus40'||id==='focus50'}function getNextMode(id){return isFocusMode(id)?'short':'focus'}function formatTime(sec){const m=Math.floor(sec/60),r=sec%60;return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`}
-function renderModes(){modeSwitcherEl.innerHTML='';timerModes.forEach(m=>{const b=document.createElement('button');b.type='button';b.className=`mode-btn${state.mode===m.id?' active':''}`;b.textContent=m.button;b.addEventListener('click',()=>switchMode(m.id));modeSwitcherEl.appendChild(b)})}
-function updateTimerDisplay(){const mode=getModeConfig(state.mode);timerEl.textContent=formatTime(state.timeLeft);timerStageEl.textContent=`当前阶段：${mode.label} ${mode.minutes} 分钟`;focusModeLabelEl.textContent=mode.label;const p=((state.totalDuration-state.timeLeft)/state.totalDuration)*100;progressBarEl.style.width=`${Math.max(0,Math.min(100,p))}%`}
+function trackVisit(){state.visitCount+=1;saveState()}function formatTime(sec){const m=Math.floor(sec/60),r=sec%60;return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`}
+function renderModes(){if(modeSwitcherEl)modeSwitcherEl.innerHTML=''}
+function getPhaseLabel(){if(pomodoroState.phase==='focus')return `专注 25 分钟（第 ${Math.min(POMODORO_CYCLES_PER_ROUND,pomodoroState.completedCycles+1)} 轮）`;if(pomodoroState.phase==='short_break')return '短休息 5 分钟';if(pomodoroState.phase==='long_break')return '长休息 20 分钟';return '待开始'}
+function updateTimerDisplay(){timerEl.textContent=formatTime(state.timeLeft);timerStageEl.textContent=`当前阶段：${getPhaseLabel()}`;focusModeLabelEl.textContent='番茄钟';const total=Math.max(1,state.totalDuration);const p=((total-state.timeLeft)/total)*100;progressBarEl.style.width=`${Math.max(0,Math.min(100,p))}%`}
 function stopTimer(){if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}}
 function getTodoStatus(todo){return todo.status||(todo.done?'done':'todo')}
 function getTodoStatusLabel(status){return({todo:'待开始',in_progress:'进行中',done:'已完成'})[status]||'待开始'}
 function setTodoStatus(id,status){state.todos=state.todos.map(t=>t.id===id?{...t,status,done:status==='done'}:t)}
 function getBoundTodo(){return state.todos.find(t=>t.id===state.boundTodoId)||null}
-function renderBoundTask(){const task=getBoundTodo();if(!task||task.done){state.boundTodoId=null;currentBoundTaskEl.textContent='当前绑定任务：未绑定';progressBoundTaskEl.textContent='任务：未绑定';return}const status=getTodoStatusLabel(getTodoStatus(task));currentBoundTaskEl.innerHTML=`当前绑定任务：<strong>${task.text}</strong> · ${status}`;progressBoundTaskEl.textContent=`任务：${task.text}（${status}）`}
+function renderBoundTask(){const label=pomodoroState.currentTask||'未选择';currentBoundTaskEl.textContent=`当前任务：${label}`;progressBoundTaskEl.textContent=`任务：${label}`}
 function openBindTaskModal(autoStart){const pending=state.todos.filter(t=>!t.done);if(!pending.length){alert('学习清单暂无可绑定任务，先添加任务吧。');return}bindTaskSelect.innerHTML='';pending.forEach(t=>{const op=document.createElement('option');op.value=String(t.id);op.textContent=t.text;bindTaskSelect.appendChild(op)});shouldAutoStartAfterBind=autoStart;bindTaskModal.classList.add('show');bindTaskModal.setAttribute('aria-hidden','false')}
 function closeBindTaskModal(){bindTaskModal.classList.remove('show');bindTaskModal.setAttribute('aria-hidden','true')}
 function bindSelectedTask(){const id=Number(bindTaskSelect.value);if(!Number.isFinite(id))return false;state.boundTodoId=id;setTodoStatus(id,'in_progress');renderTodos();renderBoundTask();updateStats();saveState();return true}
-function switchMode(id){const mode=getModeConfig(id);stopTimer();state.mode=mode.id;state.totalDuration=mode.minutes*60;state.timeLeft=state.totalDuration;startBtn.textContent=isFocusMode(mode.id)?'开始专注':'开始休息';renderModes();updateTimerDisplay();saveState()}
+function setPomodoroPhase(phase,seconds){pomodoroState.phase=phase;state.totalDuration=seconds;state.timeLeft=seconds;updateTimerDisplay();saveState()}
+function updatePomodoroBanner(text){if(pomodoroBanner)pomodoroBanner.textContent=text}
+function playPomodoroChime(){
+  const C=window.AudioContext||window.webkitAudioContext;
+  if(!C)return;
+  const ctx=new C();
+  const notes=[{f:783.99,t:0},{f:987.77,t:.16},{f:1174.66,t:.34}];
+  notes.forEach(note=>{
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.type='triangle';
+    osc.frequency.setValueAtTime(note.f,ctx.currentTime+note.t);
+    gain.gain.setValueAtTime(.0001,ctx.currentTime+note.t);
+    gain.gain.exponentialRampToValueAtTime(.11,ctx.currentTime+note.t+.03);
+    gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+note.t+.24);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime+note.t);
+    osc.stop(ctx.currentTime+note.t+.26);
+  });
+  setTimeout(()=>ctx.close().catch(()=>{}),1200);
+}
+function onPomodoroPhaseComplete(){
+  stopTimer();
+  if(pomodoroState.phase==='focus'){
+    state.sessionsCompleted+=1;
+    pomodoroState.completedCycles+=1;
+    logFocusSeconds(POMODORO_FOCUS_SECONDS);
+    updateStats();
+    playPomodoroChime();
+    if(pomodoroState.completedCycles>=POMODORO_CYCLES_PER_ROUND){
+      setPomodoroPhase('long_break',POMODORO_LONG_BREAK_SECONDS);
+      updatePomodoroBanner('做得真棒！4 个番茄钟已完成，休息 20 分钟吧！');
+      pomodoroState.roundFinished=true;
+    }else{
+      setPomodoroPhase('short_break',POMODORO_SHORT_BREAK_SECONDS);
+      updatePomodoroBanner('做得真棒！休息5分钟吧！');
+    }
+    startBtn.textContent='暂停';
+    startTimer();
+    return;
+  }
+  if(pomodoroState.phase==='short_break'){
+    playPomodoroChime();
+    setPomodoroPhase('focus',POMODORO_FOCUS_SECONDS);
+    updatePomodoroBanner('好啦！让我们继续专注吧！');
+    startBtn.textContent='暂停';
+    startTimer();
+    return;
+  }
+  if(pomodoroState.phase==='long_break'){
+    playPomodoroChime();
+    updatePomodoroBanner('一整轮完成，太棒了！请选择任务开始下一轮番茄钟。');
+    startBtn.textContent='暂停';
+    startBtn.disabled=true;
+    pomodoroState.phase='idle';
+    pomodoroState.completedCycles=0;
+    pomodoroState.roundFinished=false;
+    state.timeLeft=POMODORO_FOCUS_SECONDS;
+    state.totalDuration=POMODORO_FOCUS_SECONDS;
+    updateTimerDisplay();
+  }
+}
+function startTimer(){
+  stopTimer();
+  state.timerInterval=setInterval(()=>{
+    state.timeLeft-=1;
+    if(state.timeLeft<=0){
+      state.timeLeft=0;
+      updateTimerDisplay();
+      onPomodoroPhaseComplete();
+      return;
+    }
+    updateTimerDisplay();
+    saveState();
+  },1000);
+}
+function pickPomodoroTask(){
+  const selected=(pomodoroTaskSelect&&pomodoroTaskSelect.value?pomodoroTaskSelect.value.trim():'')||(pomodoroCustomTask&&pomodoroCustomTask.value?pomodoroCustomTask.value.trim():'')||pomodoroState.selectedQuickTask;
+  if(!selected){
+    alert('请先选择任务或填写自定义任务。');
+    return;
+  }
+  pomodoroState.currentTask=selected;
+  pomodoroState.phase='focus';
+  pomodoroState.completedCycles=0;
+  pomodoroState.roundFinished=false;
+  state.boundTodoId=null;
+  setPomodoroPhase('focus',POMODORO_FOCUS_SECONDS);
+  updatePomodoroBanner('进入专注模式了，请全身心投入工作哦！');
+  renderBoundTask();
+  startBtn.disabled=false;
+  startBtn.textContent='暂停';
+  startTimer();
+}
+function toggleTimer(){
+  if(pomodoroState.phase==='idle'){
+    pickPomodoroTask();
+    return;
+  }
+  if(state.timerInterval){
+    stopTimer();
+    startBtn.textContent='继续';
+    updatePomodoroBanner('已暂停，准备好后点击“继续”。');
+    return;
+  }
+  startBtn.textContent='暂停';
+  startTimer();
+}
+function handleStartClick(){toggleTimer()}
+function resetTimer(){
+  stopTimer();
+  pomodoroState.phase='idle';
+  pomodoroState.currentTask='';
+  pomodoroState.completedCycles=0;
+  pomodoroState.roundFinished=false;
+  pomodoroState.selectedQuickTask='';
+  quickTaskButtons.forEach(btn=>btn.classList.remove('active'));
+  state.totalDuration=POMODORO_FOCUS_SECONDS;
+  state.timeLeft=POMODORO_FOCUS_SECONDS;
+  startBtn.textContent='暂停';
+  startBtn.disabled=true;
+  if(pomodoroCustomTask)pomodoroCustomTask.value='';
+  if(pomodoroTaskSelect)pomodoroTaskSelect.value='';
+  updatePomodoroBanner('请选择一个任务，然后点击“开始番茄钟”。');
+  renderBoundTask();
+  updateTimerDisplay();
+  saveState();
+}
 function playIntroChime(){if(introChimePlayed)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;introChimePlayed=true;const ctx=new C();[{f:659.25,s:0,d:1.02,g:.052},{f:880,s:.28,d:1.18,g:.048},{f:1046.5,s:.62,d:1.42,g:.046}].forEach(n=>{const mg=ctx.createGain();mg.connect(ctx.destination);mg.gain.setValueAtTime(.0001,ctx.currentTime+n.s);mg.gain.exponentialRampToValueAtTime(n.g,ctx.currentTime+n.s+.035);mg.gain.exponentialRampToValueAtTime(n.g*.42,ctx.currentTime+n.s+n.d*.28);mg.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+n.s+n.d);[{t:'sine',det:0,g:1},{t:'sine',det:12,g:.2},{t:'triangle',det:24,g:.06}].forEach(p=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=p.t;o.frequency.setValueAtTime(n.f,ctx.currentTime+n.s);o.detune.setValueAtTime(p.det,ctx.currentTime+n.s);g.gain.setValueAtTime(p.g,ctx.currentTime+n.s);o.connect(g);g.connect(mg);o.start(ctx.currentTime+n.s);o.stop(ctx.currentTime+n.s+n.d+.04)})});setTimeout(()=>{if(ctx.state!=='closed')ctx.close().catch(()=>{})},2400)}
 function revealBlock(block){if(!block||block.classList.contains('visible'))return;block.classList.add('visible');block.classList.remove('armed')}
-function setupReveal(){revealBlocks.forEach(block=>{block.classList.add('armed');const r=()=>revealBlock(block);block.addEventListener('mouseenter',r,{once:true});block.addEventListener('touchstart',r,{once:true,passive:true});block.addEventListener('click',r,{once:true})})}
+function setupReveal(){revealBlocks.forEach((block,index)=>{if(!block)return;block.classList.remove('armed');window.setTimeout(()=>revealBlock(block),120+index*90)})}
 function maybeOpenOnboarding(){
   if(localStorage.getItem(ONBOARDING_KEY)==='done')return;
-  window.setTimeout(()=>openOnboarding(),260);
+  if(onboardingOpened||onboardingScheduled)return;
+  onboardingScheduled=true;
+  onboardingTimer=window.setTimeout(()=>{onboardingScheduled=false;openOnboarding()},260);
 }
 function revealHome(){
   introOverlayEl.classList.add('hidden');
   pageShellEl.classList.add('ready');
+  try{sessionStorage.setItem('daymori-intro-seen','1')}catch{}
   setupReveal();
   maybeOpenOnboarding();
 }
 function runIntroAnimation(){if(introStarted)return;introStarted=true;playIntroChime();introHintEl.textContent='Sound on. Entering Daymori...';introOverlayEl.classList.add('exit');setTimeout(revealHome,800)}
+function typeIntroHint(text){
+  if(!introHintEl)return;
+  if(introTypeTimer){
+    clearInterval(introTypeTimer);
+    introTypeTimer=null;
+  }
+  introHintEl.textContent='';
+  const chars=Array.from(text);
+  let idx=0;
+  introTypeTimer=setInterval(()=>{
+    idx+=1;
+    introHintEl.textContent=chars.slice(0,idx).join('');
+    if(idx>=chars.length){
+      clearInterval(introTypeTimer);
+      introTypeTimer=null;
+    }
+  },36);
+}
+function runIntroAnimationSilent(){
+  if(introStarted)return;
+  introStarted=true;
+  typeIntroHint('Entering Daymori...');
+  window.setTimeout(()=>{
+    introOverlayEl.classList.add('exit');
+    window.setTimeout(revealHome,820);
+  },1600);
+}
 function playDoneSound(){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C();[880,1174.66,1567.98].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,ctx.currentTime+i*.18);g.gain.exponentialRampToValueAtTime(.16,ctx.currentTime+i*.18+.03);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+i*.18+.18);o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+i*.18);o.stop(ctx.currentTime+i*.18+.2)});setTimeout(()=>ctx.close().catch(()=>{}),1200)}
 function celebrateWishCompletion(){playDoneSound();new Audio(GOOD_JOB_AUDIO_SRC).play().catch(()=>new Audio(DREAM_AUDIO_SRC).play().catch(()=>{}))}
 function logFocusSeconds(sec){if(sec<=0)return;try{const data=JSON.parse(localStorage.getItem(DAILY_FOCUS_KEY)||'{}');const key=todayYMD();data[key]=(data[key]||0)+sec;localStorage.setItem(DAILY_FOCUS_KEY,JSON.stringify(data))}catch{}}
@@ -515,14 +832,22 @@ function getWeekDailyMinutes(){const d=getDailyFocusData();const result=[];const
 function openAnalytics(){const loading=$('analyticsLoading');if(!loading)return;loading.classList.add('show');loading.setAttribute('aria-hidden','false');setTimeout(()=>{loading.classList.remove('show');loading.setAttribute('aria-hidden','true');renderAnalyticsDashboard();const page=$('analyticsPage');if(page){page.classList.add('show');page.setAttribute('aria-hidden','false')}},3000)}
 function closeAnalytics(){const page=$('analyticsPage');if(page){page.classList.remove('show');page.setAttribute('aria-hidden','true')}}
 function renderAnalyticsDashboard(){const todayEl=$('analyticsTodayFocus'),weekEl=$('analyticsWeekFocus'),taskEl=$('analyticsTaskCount'),usageEl=$('analyticsUsageTime'),barsEl=$('analyticsStreakBars');if(todayEl)todayEl.textContent=`${getTodayFocusMins()} 分钟`;if(weekEl)weekEl.textContent=`${getWeekFocusMins()} 分钟`;if(taskEl)taskEl.textContent=String(state.todos.filter(t=>t.done).length);if(usageEl)usageEl.textContent=`${state.visitCount} 次访问`;if(barsEl){barsEl.innerHTML='';const week=getWeekDailyMinutes();const maxM=Math.max(1,...week.map(d=>d.mins));week.forEach(d=>{const bar=document.createElement('div');bar.className='analytics-streak-bar';bar.style.height=`${Math.max(4,(d.mins/maxM)*100)}px`;bar.innerHTML=`<span>${d.label}</span>`;barsEl.appendChild(bar)})}}
-function completeSession(){const c=getModeConfig(state.mode);stopTimer();if(isFocusMode(c.id)){state.sessionsCompleted+=1;logFocusSeconds(state.totalDuration-state.timeLeft>0?state.totalDuration:state.totalDuration)}if(isFocusMode(c.id)&&state.boundTodoId){const bound=getBoundTodo();if(bound)setTodoStatus(bound.id,'done');state.boundTodoId=null;renderTodos();renderBoundTask()}playDoneSound();const n=getModeConfig(getNextMode(state.mode));alert(`${c.label}结束了，已为你切换到${n.label}。`);state.mode=n.id;state.totalDuration=n.minutes*60;state.timeLeft=state.totalDuration;startBtn.textContent=isFocusMode(n.id)?'开始专注':'开始休息';updateStats();renderModes();updateTimerDisplay();saveState()}
-function toggleTimer(){if(state.timerInterval){stopTimer();startBtn.textContent='继续';return}startBtn.textContent='暂停';state.timerInterval=setInterval(()=>{state.timeLeft-=1;if(state.timeLeft<=0){completeSession();return}updateTimerDisplay();saveState()},1000)}
-function handleStartClick(){if(state.timerInterval){toggleTimer();return}if(!isFocusMode(state.mode)){toggleTimer();return}if(state.boundTodoId){setTodoStatus(state.boundTodoId,'in_progress');renderTodos();renderBoundTask();updateStats();saveState();toggleTimer();return}if(state.todos.some(t=>!t.done)){openBindTaskModal(true);return}toggleTimer()}
-function resetTimer(){const c=getModeConfig(state.mode);stopTimer();state.totalDuration=c.minutes*60;state.timeLeft=state.totalDuration;startBtn.textContent=isFocusMode(c.id)?'开始专注':'开始休息';updateTimerDisplay();saveState()}
 function priorityLabel(p){return({high:'高',medium:'中',low:'低'})[p]||'中'}function priorityWeight(p){return({high:0,medium:1,low:2})[p]??1}function formatDate(s){if(!s)return'';const[y,m,d]=s.split('-');return `${y}.${m}.${d}`}function isOverdue(todo){if(!todo.deadline||todo.done)return false;const t=new Date();t.setHours(0,0,0,0);return new Date(`${todo.deadline}T00:00:00`)<t}
 function sortedTodos(){const list=[...state.todos];const statusRank=t=>getTodoStatus(t)==='in_progress'?0:1;if(state.sortBy==='priority')return list.sort((a,b)=>{const s=statusRank(a)-statusRank(b);if(s!==0)return s;const d=priorityWeight(a.priority)-priorityWeight(b.priority);return d!==0?d:b.id-a.id});if(state.sortBy==='deadline')return list.sort((a,b)=>{const s=statusRank(a)-statusRank(b);if(s!==0)return s;if(!a.deadline&&!b.deadline)return b.id-a.id;if(!a.deadline)return 1;if(!b.deadline)return -1;const d=new Date(a.deadline)-new Date(b.deadline);return d!==0?d:priorityWeight(a.priority)-priorityWeight(b.priority)});return list.sort((a,b)=>{const s=statusRank(a)-statusRank(b);return s!==0?s:b.id-a.id})}
+function populatePomodoroTaskSelect(){
+  if(!pomodoroTaskSelect)return;
+  const previous=pomodoroTaskSelect.value;
+  pomodoroTaskSelect.innerHTML='<option value="">从学习清单中选择任务</option>';
+  state.todos.filter(t=>!t.done).forEach(t=>{
+    const option=document.createElement('option');
+    option.value=t.text;
+    option.textContent=t.text;
+    pomodoroTaskSelect.appendChild(option);
+  });
+  if(previous&&Array.from(pomodoroTaskSelect.options).some(op=>op.value===previous))pomodoroTaskSelect.value=previous;
+}
 function todoItem(todo){const li=document.createElement('li');li.dataset.todoId=String(todo.id);li.className=`item${todo.done?' done':''}${isOverdue(todo)?' overdue':''}`;const cb=document.createElement('input');cb.type='checkbox';cb.className='checkbox';cb.checked=todo.done;cb.addEventListener('change',()=>toggleTodo(todo.id));const main=document.createElement('div');main.className='main';const text=document.createElement('span');text.className='text';text.textContent=todo.text;const tags=document.createElement('div');tags.className='tags';const p=document.createElement('span');p.className=`tag priority-${todo.priority}`;p.textContent=`${priorityLabel(todo.priority)}优先级`;const d=document.createElement('span');d.className='tag';d.textContent=todo.deadline?`截止：${formatDate(todo.deadline)}`:'未设截止日期';const st=getTodoStatus(todo);const s=document.createElement('span');s.className=`tag task-status status-${st}`;s.textContent=getTodoStatusLabel(st);tags.append(p,d,s);main.append(text,tags);const del=document.createElement('button');del.type='button';del.textContent='删除';del.addEventListener('click',()=>removeTodo(todo.id));li.append(cb,main,del);return li}
-function renderTodos(){todoListEl.innerHTML='';const todos=sortedTodos();if(!todos.length){const e=document.createElement('li');e.className='empty';e.textContent='先写下一件想完成的小任务，开始会比想象中更轻松。';todoListEl.appendChild(e)}else todos.forEach(t=>todoListEl.appendChild(todoItem(t)));const pending=state.todos.filter(t=>!t.done).length;todoSummaryEl.textContent=pending>0?`还有 ${pending} 件事在等你完成。`:'清单很干净，可以开始下一轮专注。';if(state.boundTodoId&&!state.todos.some(t=>t.id===state.boundTodoId&&!t.done))state.boundTodoId=null;renderBoundTask()}
+function renderTodos(){todoListEl.innerHTML='';const todos=sortedTodos();if(!todos.length){const e=document.createElement('li');e.className='empty';e.textContent='先写下一件想完成的小任务，开始会比想象中更轻松。';todoListEl.appendChild(e)}else todos.forEach(t=>todoListEl.appendChild(todoItem(t)));todoSummaryEl.textContent='先写下一件想完成的小任务，开始会比想象中更轻松。';if(state.boundTodoId&&!state.todos.some(t=>t.id===state.boundTodoId&&!t.done))state.boundTodoId=null;populatePomodoroTaskSelect();renderBoundTask()}
 function updateStats(){completedSessionsEl.textContent=String(state.sessionsCompleted);completedTasksEl.textContent=String(state.todos.filter(t=>t.done).length)}
 function addTodo(){const text=todoInput.value.trim();if(!text)return;state.todos.unshift({id:Date.now(),text,done:false,status:'todo',priority:priorityInput.value,deadline:deadlineInput.value||''});todoInput.value='';priorityInput.value='medium';deadlineInput.value='';renderTodos();updateStats();saveState()}
 function toggleTodo(id){state.todos=state.todos.map(t=>t.id===id?{...t,done:!t.done,status:!t.done?'done':'todo'}:t);renderTodos();updateStats();saveState()}
@@ -534,22 +859,72 @@ function wishItem(w){const li=document.createElement('li');li.dataset.wishId=Str
 function renderWishes(){wishListEl.innerHTML='';if(!state.wishes.length){const e=document.createElement('li');e.className='empty';e.textContent='愿望墙还空着，写下第一条想实现的目标吧。';wishListEl.appendChild(e)}else state.wishes.forEach(w=>wishListEl.appendChild(wishItem(w)));wishEncourageEl.textContent=state.wishMessage}
 function showMoment(d){momentCopyEl.textContent=`你刚刚完成了“${d.wishText}”，这一刻已经被收进 Dream。`;lightningMomentEl.classList.add('show')}function createDreamMoment(w){const d={wishText:w.text,wishedAt:w.createdAt,completedAt:new Date().toISOString(),completedTasks:state.todos.filter(t=>t.done).length,sessionsCompleted:state.sessionsCompleted,visitCount:state.visitCount};localStorage.setItem(DREAM_MOMENT_KEY,JSON.stringify(d));showMoment(d)}
 function addWish(){const text=wishInput.value.trim();if(!text)return;state.wishes.unshift({id:Date.now(),text,done:false,createdAt:new Date().toISOString()});state.wishMessage=quotes[Math.floor(Math.random()*quotes.length)];wishInput.value='';renderWishes();saveState()}function toggleWish(id){let now=false,chosen=null;state.wishes=state.wishes.map(w=>{if(w.id!==id)return w;const n={...w,done:!w.done};now=n.done;chosen=n;return n});if(now&&chosen){state.wishMessage='Good job，你又完成了一个写下来的愿望。';celebrateWishCompletion();createDreamMoment(chosen)}renderWishes();saveState()}function removeWish(id){const row=wishListEl.querySelector('[data-wish-id="'+id+'"]');if(!row){state.wishes=state.wishes.filter(w=>w.id!==id);renderWishes();saveState();return}row.classList.add('removing');window.setTimeout(()=>{state.wishes=state.wishes.filter(w=>w.id!==id);renderWishes();saveState()},320)}
-function openDream(e){if(e)e.preventDefault();const a=new Audio(DREAM_AUDIO_SRC);sessionStorage.setItem('focus-buddy-dream-audio','play');a.play().catch(()=>{});const dreamUrl=new URL('./dream.html',window.location.href).toString();setTimeout(()=>{window.location.href=dreamUrl},180)}
-function setupPwa(){if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}))}window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;installBtn.classList.add('show');installNote.textContent='点击 Install Daymori，就可以把它装到电脑端或手机主屏幕。';});window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;installBtn.classList.remove('show');installNote.textContent='Daymori 已安装完成，现在它会像独立应用一样打开。';});installBtn.addEventListener('click',async()=>{if(!deferredInstallPrompt){installNote.textContent='如果按钮没有弹出安装框，可以用浏览器菜单中的“安装应用”或“添加到主屏幕”。';return;}deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice.catch(()=>null)})}
+function withAppVersion(pathname){const url=new URL(pathname,window.location.href);url.searchParams.set('v',APP_VERSION);return url.toString()}
+function normalizeCurrentUrlVersion(){const current=new URL(window.location.href);if(current.pathname.endsWith('/Daymori.html')||current.pathname.endsWith('/Daymori/')||current.pathname==='/'){if(current.searchParams.get('v')!==APP_VERSION){current.searchParams.set('v',APP_VERSION);history.replaceState(null,'',current.toString())}}}
+function forceLatestOnRestore(){window.addEventListener('pageshow',event=>{if(event.persisted){window.location.replace(withAppVersion('./Daymori.html'))}})}
+function openDream(e){if(e)e.preventDefault();const a=new Audio(DREAM_AUDIO_SRC);sessionStorage.setItem('focus-buddy-dream-audio','play');a.play().catch(()=>{});const dreamUrl=withAppVersion('./dream.html');setTimeout(()=>{window.location.href=dreamUrl},180)}
+function setupPwa(){if('serviceWorker' in navigator){let refreshing=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(refreshing)return;refreshing=true;window.location.reload()});window.addEventListener('load',()=>{navigator.serviceWorker.register('./service-worker.js').then(reg=>{if(reg.waiting)reg.waiting.postMessage({type:'SKIP_WAITING'});reg.addEventListener('updatefound',()=>{const sw=reg.installing;if(!sw)return;sw.addEventListener('statechange',()=>{if(sw.state==='installed'&&navigator.serviceWorker.controller)sw.postMessage({type:'SKIP_WAITING'})})});return reg.update().catch(()=>{})}).catch(()=>{})})}window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;installBtn.classList.add('show');installNote.textContent='点击 Install Daymori，就可以把它装到电脑端或手机主屏幕。';});window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;installBtn.classList.remove('show');installNote.textContent='Daymori 已安装完成，现在它会像独立应用一样打开。';});installBtn.addEventListener('click',async()=>{if(!deferredInstallPrompt){installNote.textContent='如果按钮没有弹出安装框，可以用浏览器菜单中的“安装应用”或“添加到主屏幕”。';return;}deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice.catch(()=>null)})}
 function clampNum(v,min,max){const n=Number.parseInt(v,10);if(!Number.isFinite(n))return min;return Math.min(max,Math.max(min,n))}
 function renderSuperTimer(){const h=Math.floor(superState.left/3600),m=Math.floor((superState.left%3600)/60),s=superState.left%60;sfTimer.textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
-function resetSuperSessionMeta(){superState.sessionStarted=false;superState.pauseCount=0;superState.startCompletedTasks=state.todos.filter(t=>t.done).length}
+function resetSuperSessionMeta(){superState.sessionStarted=false;superState.pauseCount=0;superState.interruptCount=0;superState.awaitingRecovery=false;superState.recoveryReason='';superState.startCompletedTasks=state.todos.filter(t=>t.done).length;clearRecoveryCountdown();hideSuperRecoveryOverlay()}
 function setSuperDuration(sec){stopSuperTimer();superState.total=Math.max(1,sec);superState.left=superState.total;sfHour.value=String(Math.floor(sec/3600));sfMinute.value=String(Math.floor((sec%3600)/60));sfSecond.value=String(sec%60);resetSuperSessionMeta();renderSuperTimer()}
 function stopSuperTimer(){if(superState.interval){clearInterval(superState.interval);superState.interval=null}}
 function pauseSuperTimer(){if(!superState.interval)return;stopSuperTimer();superState.pauseCount+=1}
+function clearRecoveryCountdown(){
+  if(superState.recoveryTimer){
+    clearInterval(superState.recoveryTimer);
+    superState.recoveryTimer=null;
+  }
+}
+function hideSuperRecoveryOverlay(){
+  if(!superResumeOverlay)return;
+  superResumeOverlay.classList.remove('show');
+  superResumeOverlay.setAttribute('aria-hidden','true');
+}
+function showSuperRecoveryOverlay(){
+  if(!superResumeOverlay||!document.body.classList.contains('super-focus-active'))return;
+  if(superReasonGrid){
+    Array.from(superReasonGrid.querySelectorAll('[data-reason]')).forEach(el=>el.classList.remove('active'));
+  }
+  superResumeOverlay.classList.add('show');
+  superResumeOverlay.setAttribute('aria-hidden','false');
+  if(superResumeCountdown)superResumeCountdown.textContent='请选择中断原因后开始恢复';
+}
+function beginRecoveryCountdown(){
+  if(!superResumeCountdown)return;
+  clearRecoveryCountdown();
+  superState.recoveryCountdown=10;
+  superResumeCountdown.innerHTML=`已记录原因：<b>${superState.recoveryReason}</b>，${superState.recoveryCountdown} 秒后自动恢复`;
+  superState.recoveryTimer=setInterval(()=>{
+    superState.recoveryCountdown-=1;
+    if(superState.recoveryCountdown<=0){
+      clearRecoveryCountdown();
+      hideSuperRecoveryOverlay();
+      superState.awaitingRecovery=false;
+      superResumeCountdown.textContent='请选择中断原因后开始恢复';
+      startSuperTimer();
+      return;
+    }
+    superResumeCountdown.innerHTML=`已记录原因：<b>${superState.recoveryReason}</b>，${superState.recoveryCountdown} 秒后自动恢复`;
+  },1000);
+}
+function handleSuperInterruption(){
+  if(!document.body.classList.contains('super-focus-active')||!superState.interval)return;
+  stopSuperTimer();
+  superState.awaitingRecovery=true;
+  superState.interruptCount+=1;
+  superState.recoveryReason='';
+  clearRecoveryCountdown();
+  if(document.visibilityState==='visible')showSuperRecoveryOverlay();
+}
 function formatSuperDuration(sec){const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;if(h>0)return `${h}时${m}分${s}秒`;return `${m}分${s}秒`}
 function todayYMD(){const d=new Date();const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
 function calcStreak(){const today=todayYMD();let data={lastDate:'',streak:0};try{data={...data,...JSON.parse(localStorage.getItem(SUPER_REPORT_KEY)||'{}')}}catch{}if(data.lastDate===today)return data.streak||1;let next=1;if(data.lastDate){const prev=new Date(`${data.lastDate}T00:00:00`),cur=new Date(`${today}T00:00:00`);const diff=Math.round((cur-prev)/86400000);next=diff===1?(Number(data.streak)||0)+1:1}localStorage.setItem(SUPER_REPORT_KEY,JSON.stringify({lastDate:today,streak:next}));return next}
-function showSuperSessionReport(){const durationEl=$('superReportDuration'),interruptEl=$('superReportInterruptions'),tasksEl=$('superReportTasks'),streakEl=$('superReportStreak'),overlay=$('superReportOverlay');if(!durationEl||!interruptEl||!tasksEl||!streakEl||!overlay)return;const completedNow=state.todos.filter(t=>t.done).length;const completedDiff=Math.max(0,completedNow-superState.startCompletedTasks);durationEl.textContent=formatSuperDuration(superState.total);interruptEl.textContent=String(superState.pauseCount);tasksEl.textContent=String(completedDiff);streakEl.textContent=String(calcStreak());overlay.classList.add('show');overlay.setAttribute('aria-hidden','false')}
+function showSuperSessionReport(){const durationEl=$('superReportDuration'),interruptEl=$('superReportInterruptions'),tasksEl=$('superReportTasks'),streakEl=$('superReportStreak'),overlay=$('superReportOverlay');if(!durationEl||!interruptEl||!tasksEl||!streakEl||!overlay)return;const completedNow=state.todos.filter(t=>t.done).length;const completedDiff=Math.max(0,completedNow-superState.startCompletedTasks);durationEl.textContent=formatSuperDuration(superState.total);interruptEl.textContent=String(superState.pauseCount+superState.interruptCount);tasksEl.textContent=String(completedDiff);streakEl.textContent=String(calcStreak());overlay.classList.add('show');overlay.setAttribute('aria-hidden','false')}
 function closeSuperSessionReport(){const overlay=$('superReportOverlay');if(!overlay)return;overlay.classList.remove('show');overlay.setAttribute('aria-hidden','true')}
 async function requestImmersive(){if(document.documentElement.requestFullscreen&&!document.fullscreenElement){await document.documentElement.requestFullscreen().catch(()=>{})}if('wakeLock' in navigator){superState.wakeLock=await navigator.wakeLock.request('screen').catch(()=>null)}}
 async function enterSuperFocus(){if(document.body.classList.contains('super-focus-active')||document.body.classList.contains('super-focus-entering'))return;sidebarEl.classList.remove('show');document.body.classList.add('super-focus-entering');superFocusLayer.classList.remove('closing');superFocusLayer.classList.add('active','entering');superFocusLayer.setAttribute('aria-hidden','false');window.setTimeout(()=>{superFocusLayer.classList.remove('entering');document.body.classList.remove('super-focus-entering');document.body.classList.add('super-focus-active')},520);await requestImmersive()}
-function exitSuperFocus(){document.body.classList.remove('super-focus-entering');document.body.classList.remove('super-focus-active');superFocusLayer.classList.add('closing');superFocusLayer.classList.remove('entering');window.setTimeout(()=>{superFocusLayer.classList.remove('active','closing');superFocusLayer.setAttribute('aria-hidden','true')},320);stopSuperTimer();stopSuperNoise();sfNoiseToggle.checked=false;resetSuperSessionMeta();if(superState.wakeLock){superState.wakeLock.release().catch(()=>{});superState.wakeLock=null}if(document.fullscreenElement&&document.exitFullscreen){document.exitFullscreen().catch(()=>{})}}
+function exitSuperFocus(){document.body.classList.remove('super-focus-entering');document.body.classList.remove('super-focus-active');superFocusLayer.classList.add('closing');superFocusLayer.classList.remove('entering');window.setTimeout(()=>{superFocusLayer.classList.remove('active','closing');superFocusLayer.setAttribute('aria-hidden','true')},320);stopSuperTimer();stopSuperNoise();sfNoiseToggle.checked=false;clearRecoveryCountdown();hideSuperRecoveryOverlay();resetSuperSessionMeta();if(superState.wakeLock){superState.wakeLock.release().catch(()=>{});superState.wakeLock=null}if(document.fullscreenElement&&document.exitFullscreen){document.exitFullscreen().catch(()=>{})}}
 function startSuperTimer(){if(superState.interval||superState.left<=0)return;if(!superState.sessionStarted){superState.sessionStarted=true;superState.pauseCount=0;superState.startCompletedTasks=state.todos.filter(t=>t.done).length}superState.interval=setInterval(()=>{superState.left-=1;renderSuperTimer();if(superState.left<=0){stopSuperTimer();superState.left=0;sfTimer.textContent='00:00:00';logFocusSeconds(superState.total);playDoneSound();showSuperSessionReport();resetSuperSessionMeta()}},1000)}
 function applySuperCustom(){const h=clampNum(sfHour.value,0,23),m=clampNum(sfMinute.value,0,59),s=clampNum(sfSecond.value,0,59);setSuperDuration(h*3600+m*60+s||1500)}
 function applySuperLevel(level){const lv=['normal','cinematic','extreme'].includes(level)?level:'cinematic';superState.level=lv;superFocusLayer.classList.remove('level-normal','level-cinematic','level-extreme');superFocusLayer.classList.add(`level-${lv}`);sfLevelButtons.forEach(btn=>btn.classList.toggle('active',btn.dataset.sfLevel===lv));localStorage.setItem('superAnimLevel',lv)}
@@ -558,7 +933,36 @@ function createNoiseBuffer(ctx,type){const size=ctx.sampleRate*2;const buffer=ct
 async function startSuperNoise(){if(superState.noiseContext&&superState.noiseSource)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C();const source=ctx.createBufferSource();source.buffer=createNoiseBuffer(ctx,sfNoiseType.value);source.loop=true;const gain=ctx.createGain();gain.gain.value=0.025;source.connect(gain);gain.connect(ctx.destination);source.start(0);superState.noiseContext=ctx;superState.noiseSource=source;superState.noiseGain=gain;updateNoiseTip(true)}
 function stopSuperNoise(){if(superState.noiseSource){try{superState.noiseSource.stop(0)}catch{}}if(superState.noiseContext){superState.noiseContext.close().catch(()=>{})}superState.noiseSource=null;superState.noiseGain=null;superState.noiseContext=null;updateNoiseTip(false)}
 startBtn.addEventListener('click',handleStartClick);bindTaskBtn.addEventListener('click',()=>openBindTaskModal(false));bindTaskConfirm.addEventListener('click',()=>{if(bindSelectedTask()){closeBindTaskModal();if(shouldAutoStartAfterBind)toggleTimer();shouldAutoStartAfterBind=false}});bindTaskSkip.addEventListener('click',()=>{closeBindTaskModal();if(shouldAutoStartAfterBind)toggleTimer();shouldAutoStartAfterBind=false});bindTaskCancel.addEventListener('click',()=>{closeBindTaskModal();shouldAutoStartAfterBind=false});bindTaskModal.addEventListener('click',e=>{if(e.target===bindTaskModal){closeBindTaskModal();shouldAutoStartAfterBind=false}});resetBtn.addEventListener('click',resetTimer);nextQuoteBtn.addEventListener('click',()=>setRandomQuote(true));addTodoBtn.addEventListener('click',addTodo);clearDoneBtn.addEventListener('click',clearDone);addWishBtn.addEventListener('click',addWish);momentLinkEl.addEventListener('click',openDream);sortInput.addEventListener('change',e=>{state.sortBy=e.target.value;renderTodos();saveState()});todoInput.addEventListener('keydown',e=>{if(e.key==='Enter')addTodo()});wishInput.addEventListener('keydown',e=>{if(e.key==='Enter')addWish()});introOverlayEl.addEventListener('click',runIntroAnimation);introOverlayEl.addEventListener('touchstart',runIntroAnimation,{passive:true});window.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')runIntroAnimation()});
-loadState();trackVisit();sortInput.value=state.sortBy;renderModes();renderTodos();renderQuote();renderWishes();updateStats();updateTimerDisplay();setupPwa();document.querySelectorAll('a[href="dream.html"]').forEach(link=>link.setAttribute('href',new URL('./dream.html',window.location.href).toString()));
+if(pomodoroConfirmTask)pomodoroConfirmTask.addEventListener('click',pickPomodoroTask);
+if(pomodoroTaskSelect)pomodoroTaskSelect.addEventListener('change',()=>{
+  if(!pomodoroTaskSelect.value)return;
+  pomodoroState.selectedQuickTask='';
+  quickTaskButtons.forEach(btn=>btn.classList.remove('active'));
+  if(pomodoroCustomTask)pomodoroCustomTask.value='';
+});
+if(pomodoroCustomTask){
+  pomodoroCustomTask.addEventListener('input',()=>{
+    if(!pomodoroCustomTask.value.trim())return;
+    pomodoroState.selectedQuickTask='';
+    quickTaskButtons.forEach(btn=>btn.classList.remove('active'));
+    if(pomodoroTaskSelect)pomodoroTaskSelect.value='';
+  });
+  pomodoroCustomTask.addEventListener('keydown',e=>{if(e.key==='Enter')pickPomodoroTask()});
+}
+quickTaskButtons.forEach(btn=>btn.addEventListener('click',()=>{
+  quickTaskButtons.forEach(item=>item.classList.toggle('active',item===btn));
+  pomodoroState.selectedQuickTask=btn.dataset.task||'';
+  if(pomodoroTaskSelect)pomodoroTaskSelect.value='';
+  if(pomodoroCustomTask)pomodoroCustomTask.value='';
+}));
+normalizeCurrentUrlVersion();
+forceLatestOnRestore();
+loadState();trackVisit();sortInput.value=state.sortBy;renderModes();renderTodos();renderQuote();renderWishes();updateStats();updateTimerDisplay();setupPwa();document.querySelectorAll('a[href="dream.html"]').forEach(link=>link.setAttribute('href',withAppVersion('./dream.html')));
+state.totalDuration=POMODORO_FOCUS_SECONDS;
+state.timeLeft=POMODORO_FOCUS_SECONDS;
+updateTimerDisplay();
+renderBoundTask();
+runIntroAnimationSilent()
 
 window.addEventListener('storage',e=>{
   if(e.key!==STORAGE_KEY&&e.key!==DREAM_MOMENT_KEY)return;
@@ -711,6 +1115,7 @@ function renderOnboardingStep(){
 function openOnboarding(){
   const overlay=$('onboardingOverlay');
   if(!overlay)return;
+  onboardingOpened=true;
   onboardingStepIndex=0;
   renderOnboardingStep();
   overlay.classList.add('show');
@@ -807,6 +1212,17 @@ if(superReportClose&&superReportAgain&&superReportOverlay){
   superReportAgain.addEventListener('click',()=>{closeSuperSessionReport();setSuperDuration(superState.total);startSuperTimer()});
   superReportOverlay.addEventListener('click',e=>{if(e.target===superReportOverlay)closeSuperSessionReport()});
 }
+if(superReasonGrid&&superResumeCountdown){
+  superReasonGrid.addEventListener('click',e=>{
+    const btn=e.target.closest('[data-reason]');
+    if(!btn)return;
+    const reason=btn.dataset.reason||'';
+    if(!reason)return;
+    Array.from(superReasonGrid.querySelectorAll('[data-reason]')).forEach(el=>el.classList.toggle('active',el===btn));
+    superState.recoveryReason=reason;
+    beginRecoveryCountdown();
+  });
+}
 sfApply.addEventListener('click',applySuperCustom);
 sfPreset25.addEventListener('click',()=>setSuperDuration(25*60));
 sfPreset50.addEventListener('click',()=>setSuperDuration(50*60));
@@ -817,6 +1233,14 @@ sfReset.addEventListener('click',()=>setSuperDuration(superState.total));
 sfLevelButtons.forEach(btn=>btn.addEventListener('click',()=>applySuperLevel(btn.dataset.sfLevel)));
 sfNoiseToggle.addEventListener('change',()=>{if(sfNoiseToggle.checked){startSuperNoise().catch(()=>{sfNoiseToggle.checked=false;updateNoiseTip(false)})}else stopSuperNoise()});
 sfNoiseType.addEventListener('change',()=>{if(sfNoiseToggle.checked){stopSuperNoise();startSuperNoise().catch(()=>{sfNoiseToggle.checked=false;updateNoiseTip(false)})}});
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden'){
+    handleSuperInterruption();
+    return;
+  }
+  if(superState.awaitingRecovery&&document.body.classList.contains('super-focus-active'))showSuperRecoveryOverlay();
+});
+window.addEventListener('blur',()=>{if(document.visibilityState==='visible')handleSuperInterruption()});
 window.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&document.body.classList.contains('super-focus-active'))exitSuperFocus();
   if(e.key==='Escape'&&devLetterOverlay&&devLetterOverlay.classList.contains('show'))closeDevLetter();

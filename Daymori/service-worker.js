@@ -1,4 +1,4 @@
-const CACHE_NAME = 'daymori-pwa-v15';
+const CACHE_NAME = 'daymori-pwa-v17';
 const APP_SHELL = [
   './',
   './Daymori.html',
@@ -20,6 +20,12 @@ self.addEventListener('activate', event => {
       keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
     )).then(() => self.clients.claim())
   );
+});
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('fetch', event => {
