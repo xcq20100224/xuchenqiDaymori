@@ -891,7 +891,7 @@ function typeIntroHint(text){
 function runIntroAnimationSilent(){
   if(introStarted)return;
   introStarted=true;
-  window.setTimeout(playIntroChime,800);
+  window.setTimeout(playIntroChime,1300);
   typeIntroHint('Entering Daymori...');
   window.setTimeout(()=>{
     introOverlayEl.classList.add('exit');
