@@ -3,7 +3,7 @@
   "short_name": "Daymori",
   "description": "Gentle discipline for everyday growth.",
   "lang": "zh-CN",
-  "start_url": "./Daymori.html",
+  "start_url": "./Daymori.html?v=pomo-v20260417-8",
   "scope": "./",
   "display": "standalone",
   "background_color": "#edf5ff",
@@ -21,7 +21,7 @@
     {
       "name": "Open Dream",
       "short_name": "Dream",
-      "url": "./dream.html"
+      "url": "./dream.html?v=pomo-v20260417-8"
     }
   ]
 }

@@ -60,21 +60,21 @@ body.dark-mode .feature-btn{background:rgba(45,39,30,.82);border-color:rgba(178,
 body.dark-mode .feature-btn svg{stroke:#d8ba86}
 .feature-disk{position:fixed;inset:0;z-index:49;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease,visibility .35s ease;background:rgba(0,0,0,.0)}
 .feature-disk.show{opacity:1;visibility:visible;pointer-events:auto}
-.feature-disk-container{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.85);width:360px;height:360px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .35s ease,transform .35s ease}
+.feature-disk-container{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.85);width:min(88vw,360px);height:min(88vw,360px);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .35s ease,transform .35s ease}
 .feature-disk.show .feature-disk-container{opacity:1;transform:translate(-50%,-50%) scale(1)}
-.feature-disk-center{position:absolute;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-.feature-disk-circle{position:absolute;width:100%;height:100%;border-radius:50%;border:2px solid rgba(109,149,203,.22);background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),rgba(232,242,255,.88) 45%,rgba(200,222,255,.76));box-shadow:0 0 60px rgba(109,149,203,.18),inset 0 0 40px rgba(255,255,255,.4)}
+.feature-disk-center{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.feature-disk-circle{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(109,149,203,.22);background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),rgba(232,242,255,.88) 45%,rgba(200,222,255,.76));box-shadow:0 0 60px rgba(109,149,203,.18),inset 0 0 40px rgba(255,255,255,.4)}
 body.dark-mode .feature-disk-circle{border-color:rgba(178,148,98,.28);background:radial-gradient(circle at 30% 30%,rgba(45,39,30,.92),rgba(32,28,20,.88) 45%,rgba(25,20,14,.85))}
-.feature-items{position:absolute;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-.feature-item{position:absolute;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,255,255,.88);border:1.5px solid rgba(109,149,203,.24);box-shadow:0 4px 12px rgba(109,149,203,.15);transition:all .25s ease;opacity:0;transform:scale(.4) rotate(0deg)}
+.feature-items{position:absolute;inset:0}
+.feature-item{position:absolute;left:50%;top:50%;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,255,255,.88);border:1.5px solid rgba(109,149,203,.24);box-shadow:0 4px 12px rgba(109,149,203,.15);transition:opacity .25s ease,transform .25s ease,left .28s ease,top .28s ease;opacity:0;transform:translate(-50%,-50%) scale(.4)}
 .feature-item:hover{background:rgba(109,149,203,.12);border-color:rgba(109,149,203,.45);box-shadow:0 6px 16px rgba(109,149,203,.28)}
-.feature-disk.show .feature-item{opacity:1;transform:scale(1) rotate(var(--angle))}
+.feature-disk.show .feature-item{opacity:1;transform:translate(-50%,-50%) scale(1)}
 body.dark-mode .feature-item{background:rgba(45,39,30,.88);border-color:rgba(178,148,98,.32)}
 body.dark-mode .feature-item:hover{background:rgba(178,148,98,.18);border-color:rgba(178,148,98,.55)}
 .feature-item svg{width:22px;height:22px;fill:none;stroke:#5a7da8;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}
 body.dark-mode .feature-item svg{stroke:#d8ba86}
 .feature-item:hover svg{transform:scale(1.15)}
-.feature-center-icon{position:absolute;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(109,149,203,.15),rgba(109,149,203,.06));border:1.5px solid rgba(109,149,203,.3);box-shadow:0 0 30px rgba(109,149,203,.12);transition:all .25s ease}
+.feature-center-icon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(109,149,203,.15),rgba(109,149,203,.06));border:1.5px solid rgba(109,149,203,.3);box-shadow:0 0 30px rgba(109,149,203,.12);transition:all .25s ease}
 .feature-disk.show .feature-center-icon{background:linear-gradient(135deg,rgba(109,149,203,.25),rgba(109,149,203,.12))}
 .feature-center-icon svg{width:24px;height:24px;fill:none;stroke:#5a7da8;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 body.dark-mode .feature-center-icon svg{stroke:#d8ba86}
@@ -426,6 +426,17 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
 .analytics-streak-bars{display:flex;align-items:flex-end;gap:6px;height:100px;margin-top:12px}
 .analytics-streak-bar{flex:1;border-radius:6px 6px 0 0;background:rgba(255,255,255,.45);min-height:4px;position:relative;transition:height .4s ease}
 .analytics-streak-bar span{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.68rem;color:rgba(61,26,0,.5);white-space:nowrap}
+.focus-trend-wrap{margin-top:8px}
+.focus-trend-head{display:flex;justify-content:space-between;align-items:center;gap:10px;color:rgba(61,26,0,.75);font-size:.84rem}
+.focus-trend-bars{display:flex;align-items:flex-end;gap:5px;height:110px;margin-top:10px}
+.focus-trend-bar{flex:1;min-width:6px;border-radius:7px 7px 0 0;background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(255,255,255,.36));position:relative;min-height:5px;transition:height .35s ease,opacity .25s ease}
+.focus-trend-bar:hover{opacity:.86}
+.focus-trend-bar b{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:.62rem;font-weight:500;color:rgba(61,26,0,.72);white-space:nowrap}
+.focus-trend-bar span{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.62rem;color:rgba(61,26,0,.5);white-space:nowrap}
+.completion-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.completion-kpis .kpi{padding:10px;border-radius:12px;background:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.34)}
+.completion-kpis .kpi b{display:block;font-size:1.05rem;color:#3d1a00}
+.completion-kpis .kpi span{font-size:.74rem;color:rgba(61,26,0,.68)}
 @media (max-width:760px){.analytics-grid{grid-template-columns:1fr}
 .grid,.wish-layout,.todo-extra-group,.todo-input-group,.stats{grid-template-columns:1fr}.hero-actions,.timer-actions,.mode-switcher,.todo-tools{flex-direction:column}.page{padding-top:16px;gap:16px}.panel,.hero{padding:18px}.moment{right:14px;bottom:14px;width:calc(100vw - 28px)}button,a.button{width:100%}.sidebar{width:calc(100vw - 60px)}.progress-task-row{flex-direction:column;align-items:stretch}.progress-bound-task{max-width:100%;text-align:center}}
 </style>
@@ -438,7 +449,12 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
     <div class="feature-disk-center">
       <div class="feature-disk-circle"></div>
       <div class="feature-items" id="featureItems">
-        <!-- 功能项动态生成 -->
+        <button class="feature-item pos-0" type="button" data-feature="analytics" title="自律分析"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 5 5-6"/></svg></button>
+        <button class="feature-item pos-1" type="button" data-feature="feature2" title="功能2"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+        <button class="feature-item pos-2" type="button" data-feature="feature3" title="功能3"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11z"/></svg></button>
+        <button class="feature-item pos-3" type="button" data-feature="feature4" title="功能4"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></button>
+        <button class="feature-item pos-4" type="button" data-feature="feature5" title="功能5"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+        <button class="feature-item pos-5" type="button" data-feature="feature6" title="功能6"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></button>
       </div>
       <div class="feature-center-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></div>
     </div>
@@ -575,7 +591,9 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
     <div class="analytics-card"><h3>本周专注时长</h3><div class="analytics-value" id="analyticsWeekFocus">0 分钟</div></div>
     <div class="analytics-card"><h3>完成任务数量</h3><div class="analytics-value" id="analyticsTaskCount">0</div></div>
     <div class="analytics-card"><h3>使用时间</h3><div class="analytics-value" id="analyticsUsageTime">0 次访问</div></div>
-    <div class="analytics-card wide"><h3>连续天数曲线（近 7 天）</h3><div class="analytics-streak-bars" id="analyticsStreakBars"></div></div>
+    <div class="analytics-card wide"><h3>周趋势（近 7 天）</h3><div class="focus-trend-wrap"><div class="focus-trend-head"><span id="analyticsWeekTrendHint">0 分钟 / 7 天</span><span id="analyticsWeekTrendDelta">较上周 0%</span></div><div class="focus-trend-bars" id="analyticsWeekTrendBars"></div></div></div>
+    <div class="analytics-card wide"><h3>月趋势（近 30 天）</h3><div class="focus-trend-wrap"><div class="focus-trend-head"><span id="analyticsMonthTrendHint">0 分钟 / 30 天</span><span id="analyticsMonthActiveDays">活跃 0 天</span></div><div class="focus-trend-bars" id="analyticsMonthTrendBars"></div></div></div>
+    <div class="analytics-card wide"><h3>番茄完成率</h3><div class="analytics-value" id="analyticsPomodoroRate">0%</div><div class="completion-kpis"><div class="kpi"><b id="analyticsPomodoroStarted">0</b><span>已开始</span></div><div class="kpi"><b id="analyticsPomodoroDone">0</b><span>已完成</span></div><div class="kpi"><b id="analyticsPomodoroMonthRate">0%</b><span>30天完成率</span></div></div></div>
   </div>
 </section>
 <section class="super-report-overlay" id="superReportOverlay" aria-hidden="true">
@@ -608,11 +626,11 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
   </div>
 </section>
 <script>
-const APP_VERSION='pomo-v20260416-2',STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
+const APP_VERSION='pomo-v20260417-8',STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',POMODORO_METRICS_KEY='daymori-pomodoro-metrics',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
 const timerModes=[{id:'focus',label:'专注',minutes:25,button:'25 分钟专注'},{id:'focus40',label:'深度专注',minutes:40,button:'40 分钟专注'},{id:'focus50',label:'深度专注',minutes:50,button:'50 分钟专注'},{id:'short',label:'短休息',minutes:5,button:'5 分钟休息'},{id:'long',label:'长休息',minutes:15,button:'15 分钟休息'},{id:'rest30',label:'休息',minutes:30,button:'30 分钟休息'}];
 const quotes=['每一个不曾起舞的日子，都是对生命的辜负。','自律不是苛待自己，而是温柔地兑现承诺。','慢慢来，比较快。','你的努力，时间一直看得见。','先完成眼前这一小步，路就会继续亮起来。','种一棵树最好的时间是十年前，其次是现在。'];
 const state={mode:'focus',timeLeft:1500,totalDuration:1500,timerInterval:null,sessionsCompleted:0,todos:[],quote:'',sortBy:'manual',wishes:[],wishMessage:'写下一个愿望后，这里会随机送你一句鼓励。',visitCount:0,boundTodoId:null};
-const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel');const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,interruptCount:0,startCompletedTasks:0,awaitingRecovery:false,recoveryReason:'',recoveryTimer:null,recoveryCountdown:10};
+const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel');const featureCenterIcon=featureDisk?featureDisk.querySelector('.feature-center-icon'):null;const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,introChimePrimed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,interruptCount:0,startCompletedTasks:0,awaitingRecovery:false,recoveryReason:'',recoveryTimer:null,recoveryCountdown:10};
 const superResumeOverlay=$('superResumeOverlay'),superReasonGrid=$('superReasonGrid'),superResumeCountdown=$('superResumeCountdown');
 const pomodoroTaskSelect=$('pomodoroTaskSelect'),pomodoroConfirmTask=$('pomodoroConfirmTask'),pomodoroCustomTask=$('pomodoroCustomTask'),pomodoroBanner=$('pomodoroBanner');
 const quickTaskButtons=Array.from(document.querySelectorAll('[data-task]'));
@@ -676,6 +694,7 @@ function onPomodoroPhaseComplete(){
   if(pomodoroState.phase==='focus'){
     state.sessionsCompleted+=1;
     pomodoroState.completedCycles+=1;
+    logPomodoroMetric('completed');
     logFocusSeconds(POMODORO_FOCUS_SECONDS);
     updateStats();
     playPomodoroChime();
@@ -694,6 +713,7 @@ function onPomodoroPhaseComplete(){
   if(pomodoroState.phase==='short_break'){
     playPomodoroChime();
     setPomodoroPhase('focus',POMODORO_FOCUS_SECONDS);
+    logPomodoroMetric('started');
     updatePomodoroBanner('好啦！让我们继续专注吧！');
     startBtn.textContent='暂停';
     startTimer();
@@ -738,6 +758,7 @@ function pickPomodoroTask(){
   pomodoroState.roundFinished=false;
   state.boundTodoId=null;
   setPomodoroPhase('focus',POMODORO_FOCUS_SECONDS);
+  logPomodoroMetric('started');
   updatePomodoroBanner('进入专注模式了，请全身心投入工作哦！');
   renderBoundTask();
   startBtn.disabled=false;
@@ -778,7 +799,61 @@ function resetTimer(){
   updateTimerDisplay();
   saveState();
 }
-function playIntroChime(){if(introChimePlayed)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;introChimePlayed=true;const ctx=new C();[{f:659.25,s:0,d:1.02,g:.052},{f:880,s:.28,d:1.18,g:.048},{f:1046.5,s:.62,d:1.42,g:.046}].forEach(n=>{const mg=ctx.createGain();mg.connect(ctx.destination);mg.gain.setValueAtTime(.0001,ctx.currentTime+n.s);mg.gain.exponentialRampToValueAtTime(n.g,ctx.currentTime+n.s+.035);mg.gain.exponentialRampToValueAtTime(n.g*.42,ctx.currentTime+n.s+n.d*.28);mg.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+n.s+n.d);[{t:'sine',det:0,g:1},{t:'sine',det:12,g:.2},{t:'triangle',det:24,g:.06}].forEach(p=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=p.t;o.frequency.setValueAtTime(n.f,ctx.currentTime+n.s);o.detune.setValueAtTime(p.det,ctx.currentTime+n.s);g.gain.setValueAtTime(p.g,ctx.currentTime+n.s);o.connect(g);g.connect(mg);o.start(ctx.currentTime+n.s);o.stop(ctx.currentTime+n.s+n.d+.04)})});setTimeout(()=>{if(ctx.state!=='closed')ctx.close().catch(()=>{})},2400)}
+function playIntroChime(){
+  if(introChimePlayed)return;
+  const C=window.AudioContext||window.webkitAudioContext;
+  if(!C)return;
+  const ctx=new C();
+  const start=()=>{
+    if(introChimePlayed)return;
+    introChimePlayed=true;
+    [{f:659.25,s:0,d:1.02,g:.052},{f:880,s:.28,d:1.18,g:.048},{f:1046.5,s:.62,d:1.42,g:.046}].forEach(n=>{
+      const mg=ctx.createGain();
+      mg.connect(ctx.destination);
+      mg.gain.setValueAtTime(.0001,ctx.currentTime+n.s);
+      mg.gain.exponentialRampToValueAtTime(n.g,ctx.currentTime+n.s+.035);
+      mg.gain.exponentialRampToValueAtTime(n.g*.42,ctx.currentTime+n.s+n.d*.28);
+      mg.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+n.s+n.d);
+      [{t:'sine',det:0,g:1},{t:'sine',det:12,g:.2},{t:'triangle',det:24,g:.06}].forEach(p=>{
+        const o=ctx.createOscillator(),g=ctx.createGain();
+        o.type=p.t;
+        o.frequency.setValueAtTime(n.f,ctx.currentTime+n.s);
+        o.detune.setValueAtTime(p.det,ctx.currentTime+n.s);
+        g.gain.setValueAtTime(p.g,ctx.currentTime+n.s);
+        o.connect(g);
+        g.connect(mg);
+        o.start(ctx.currentTime+n.s);
+        o.stop(ctx.currentTime+n.s+n.d+.04);
+      });
+    });
+    setTimeout(()=>{if(ctx.state!=='closed')ctx.close().catch(()=>{})},2400);
+  };
+  if(ctx.state==='suspended'){
+    ctx.resume().then(start).catch(()=>{ctx.close().catch(()=>{})});
+    return;
+  }
+  start();
+}
+
+function primeIntroChimeOnFirstGesture(){
+  if(introChimePlayed||introChimePrimed)return;
+  introChimePrimed=true;
+  const cleanup=()=>{
+    window.removeEventListener('pointerdown',onFirstGesture,true);
+    window.removeEventListener('keydown',onFirstGesture,true);
+    window.removeEventListener('touchstart',onFirstGesture,true);
+    introChimePrimed=false;
+  };
+  const onFirstGesture=()=>{
+    playIntroChime();
+    window.setTimeout(()=>{
+      if(introChimePlayed)cleanup();
+    },120);
+  };
+  window.addEventListener('pointerdown',onFirstGesture,true);
+  window.addEventListener('keydown',onFirstGesture,true);
+  window.addEventListener('touchstart',onFirstGesture,true);
+}
 function revealBlock(block){if(!block||block.classList.contains('visible'))return;block.classList.add('visible');block.classList.remove('armed')}
 function setupReveal(){revealBlocks.forEach((block,index)=>{if(!block)return;block.classList.remove('armed');window.setTimeout(()=>revealBlock(block),120+index*90)})}
 function maybeOpenOnboarding(){
@@ -829,9 +904,17 @@ function getDailyFocusData(){try{return JSON.parse(localStorage.getItem(DAILY_FO
 function getTodayFocusMins(){const d=getDailyFocusData();return Math.round((d[todayYMD()]||0)/60)}
 function getWeekFocusMins(){const d=getDailyFocusData();let sum=0;const now=new Date();for(let i=0;i<7;i++){const dt=new Date(now);dt.setDate(dt.getDate()-i);const key=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;sum+=(d[key]||0)}return Math.round(sum/60)}
 function getWeekDailyMinutes(){const d=getDailyFocusData();const result=[];const now=new Date();for(let i=6;i>=0;i--){const dt=new Date(now);dt.setDate(dt.getDate()-i);const key=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;const dayLabel=['日','一','二','三','四','五','六'][dt.getDay()];result.push({label:dayLabel,mins:Math.round((d[key]||0)/60)})}return result}
+function getPomodoroMetricsData(){try{return JSON.parse(localStorage.getItem(POMODORO_METRICS_KEY)||'{}')}catch{return{}}}
+function ymdFromDate(dt){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`}
+function logPomodoroMetric(type){if(type!=='started'&&type!=='completed')return;try{const data=getPomodoroMetricsData();const key=todayYMD();const row=data[key]||{started:0,completed:0};row[type]=(row[type]||0)+1;data[key]=row;localStorage.setItem(POMODORO_METRICS_KEY,JSON.stringify(data))}catch{}}
+function getDailyFocusMinutesRange(days){const d=getDailyFocusData();const result=[];const now=new Date();for(let i=days-1;i>=0;i--){const dt=new Date(now);dt.setDate(dt.getDate()-i);const key=ymdFromDate(dt);result.push({label:days===7?['日','一','二','三','四','五','六'][dt.getDay()]:String(dt.getDate()),mins:Math.round((d[key]||0)/60),dateKey:key})}return result}
+function sumFocusMinutes(days,offsetDays=0){const d=getDailyFocusData();let sum=0;const now=new Date();for(let i=offsetDays;i<offsetDays+days;i++){const dt=new Date(now);dt.setDate(dt.getDate()-i);sum+=(d[ymdFromDate(dt)]||0)}return Math.round(sum/60)}
+function getPomodoroRate(days){const data=getPomodoroMetricsData();let started=0,completed=0;const now=new Date();for(let i=0;i<days;i++){const dt=new Date(now);dt.setDate(dt.getDate()-i);const row=data[ymdFromDate(dt)]||{};started+=Number(row.started)||0;completed+=Number(row.completed)||0}started=Math.max(started,completed);const rate=started?Math.round((completed/started)*100):0;return{started,completed,rate}}
+function renderTrendBars(containerId,data){const el=$(containerId);if(!el)return;el.innerHTML='';const maxM=Math.max(1,...data.map(item=>item.mins));data.forEach((item,index)=>{const bar=document.createElement('div');bar.className='focus-trend-bar';bar.style.height=`${Math.max(5,(item.mins/maxM)*100)}px`;const labelNeeded=data.length<=10||(index%5===0)||index===data.length-1;bar.innerHTML=`<b>${item.mins}</b><span>${labelNeeded?item.label:''}</span>`;el.appendChild(bar)})}
+function renderPomodoroKpis(){const week=getPomodoroRate(7),month=getPomodoroRate(30);const mainRateEl=$('analyticsPomodoroRate'),startedEl=$('analyticsPomodoroStarted'),doneEl=$('analyticsPomodoroDone'),monthRateEl=$('analyticsPomodoroMonthRate');if(mainRateEl)mainRateEl.textContent=`${week.rate}%`;if(startedEl)startedEl.textContent=String(week.started);if(doneEl)doneEl.textContent=String(week.completed);if(monthRateEl)monthRateEl.textContent=`${month.rate}%`}
 function openAnalytics(){const loading=$('analyticsLoading');if(!loading)return;loading.classList.add('show');loading.setAttribute('aria-hidden','false');setTimeout(()=>{loading.classList.remove('show');loading.setAttribute('aria-hidden','true');renderAnalyticsDashboard();const page=$('analyticsPage');if(page){page.classList.add('show');page.setAttribute('aria-hidden','false')}},3000)}
 function closeAnalytics(){const page=$('analyticsPage');if(page){page.classList.remove('show');page.setAttribute('aria-hidden','true')}}
-function renderAnalyticsDashboard(){const todayEl=$('analyticsTodayFocus'),weekEl=$('analyticsWeekFocus'),taskEl=$('analyticsTaskCount'),usageEl=$('analyticsUsageTime'),barsEl=$('analyticsStreakBars');if(todayEl)todayEl.textContent=`${getTodayFocusMins()} 分钟`;if(weekEl)weekEl.textContent=`${getWeekFocusMins()} 分钟`;if(taskEl)taskEl.textContent=String(state.todos.filter(t=>t.done).length);if(usageEl)usageEl.textContent=`${state.visitCount} 次访问`;if(barsEl){barsEl.innerHTML='';const week=getWeekDailyMinutes();const maxM=Math.max(1,...week.map(d=>d.mins));week.forEach(d=>{const bar=document.createElement('div');bar.className='analytics-streak-bar';bar.style.height=`${Math.max(4,(d.mins/maxM)*100)}px`;bar.innerHTML=`<span>${d.label}</span>`;barsEl.appendChild(bar)})}}
+function renderAnalyticsDashboard(){const todayEl=$('analyticsTodayFocus'),weekEl=$('analyticsWeekFocus'),taskEl=$('analyticsTaskCount'),usageEl=$('analyticsUsageTime'),weekHintEl=$('analyticsWeekTrendHint'),weekDeltaEl=$('analyticsWeekTrendDelta'),monthHintEl=$('analyticsMonthTrendHint'),monthActiveDaysEl=$('analyticsMonthActiveDays');const currentWeekMinutes=sumFocusMinutes(7),previousWeekMinutes=sumFocusMinutes(7,7),weekDelta=previousWeekMinutes?Math.round(((currentWeekMinutes-previousWeekMinutes)/previousWeekMinutes)*100):(currentWeekMinutes>0?100:0);const weekData=getDailyFocusMinutesRange(7),monthData=getDailyFocusMinutesRange(30);if(todayEl)todayEl.textContent=`${getTodayFocusMins()} 分钟`;if(weekEl)weekEl.textContent=`${getWeekFocusMins()} 分钟`;if(taskEl)taskEl.textContent=String(state.todos.filter(t=>t.done).length);if(usageEl)usageEl.textContent=`${state.visitCount} 次访问`;if(weekHintEl)weekHintEl.textContent=`${currentWeekMinutes} 分钟 / 7 天`;if(weekDeltaEl)weekDeltaEl.textContent=`较上周 ${weekDelta>=0?'+':''}${weekDelta}%`;if(monthHintEl)monthHintEl.textContent=`${sumFocusMinutes(30)} 分钟 / 30 天`;if(monthActiveDaysEl)monthActiveDaysEl.textContent=`活跃 ${monthData.filter(d=>d.mins>0).length} 天`;renderTrendBars('analyticsWeekTrendBars',weekData);renderTrendBars('analyticsMonthTrendBars',monthData);renderPomodoroKpis()}
 function priorityLabel(p){return({high:'高',medium:'中',low:'低'})[p]||'中'}function priorityWeight(p){return({high:0,medium:1,low:2})[p]??1}function formatDate(s){if(!s)return'';const[y,m,d]=s.split('-');return `${y}.${m}.${d}`}function isOverdue(todo){if(!todo.deadline||todo.done)return false;const t=new Date();t.setHours(0,0,0,0);return new Date(`${todo.deadline}T00:00:00`)<t}
 function sortedTodos(){const list=[...state.todos];const statusRank=t=>getTodoStatus(t)==='in_progress'?0:1;if(state.sortBy==='priority')return list.sort((a,b)=>{const s=statusRank(a)-statusRank(b);if(s!==0)return s;const d=priorityWeight(a.priority)-priorityWeight(b.priority);return d!==0?d:b.id-a.id});if(state.sortBy==='deadline')return list.sort((a,b)=>{const s=statusRank(a)-statusRank(b);if(s!==0)return s;if(!a.deadline&&!b.deadline)return b.id-a.id;if(!a.deadline)return 1;if(!b.deadline)return -1;const d=new Date(a.deadline)-new Date(b.deadline);return d!==0?d:priorityWeight(a.priority)-priorityWeight(b.priority)});return list.sort((a,b)=>{const s=statusRank(a)-statusRank(b);return s!==0?s:b.id-a.id})}
 function populatePomodoroTaskSelect(){
@@ -962,6 +1045,7 @@ state.totalDuration=POMODORO_FOCUS_SECONDS;
 state.timeLeft=POMODORO_FOCUS_SECONDS;
 updateTimerDisplay();
 renderBoundTask();
+primeIntroChimeOnFirstGesture();
 runIntroAnimationSilent()
 
 window.addEventListener('storage',e=>{
@@ -1013,49 +1097,50 @@ darkModeToggle.addEventListener('change',()=>{
 superFocusBtn.addEventListener('click',enterSuperFocus);
 sfExitBtn.addEventListener('click',exitSuperFocus);
 
-// ────── 功能圆盘配置 ──────
-const FEATURE_MENU_ITEMS=[
-  {id:'analytics',label:'自律分析',icon:'<svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 5 5-6"/></svg>'},
-  {id:'feature2',label:'功能2',icon:'<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'},
-  {id:'feature3',label:'功能3',icon:'<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11z"/></svg>'},
-  {id:'feature4',label:'功能4',icon:'<svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'},
-  {id:'feature5',label:'功能5',icon:'<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'},
-  {id:'feature6',label:'功能6',icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>'},
-];
-
-function renderFeatureDisk(){
-  featureItems.innerHTML='';
-  const itemCount=FEATURE_MENU_ITEMS.length;
-  const angleStep=360/itemCount;
-  const radius=130;
-  
-  FEATURE_MENU_ITEMS.forEach((item,index)=>{
-    const angle=angleStep*index;
-    const radian=angle*Math.PI/180;
-    const x=radius*Math.cos(radian);
-    const y=radius*Math.sin(radian);
-    
-    const itemEl=document.createElement('button');
-    itemEl.className='feature-item';
-    itemEl.type='button';
-    itemEl.style.setProperty('--angle',`${angle}deg`);
-    itemEl.style.left=`calc(50% + ${x}px)`;
-    itemEl.style.top=`calc(50% + ${y}px)`;
-    itemEl.title=item.label;
-    itemEl.innerHTML=item.icon;
-    
-    itemEl.addEventListener('click',e=>{
-      e.stopPropagation();
-      if(item.id==='analytics'){openAnalytics()}
-      toggleFeatureDisk();
+function toggleFeatureDisk(){
+  const willOpen=!featureDisk.classList.contains('show');
+  featureDisk.classList.toggle('show',willOpen);
+  if(willOpen){
+    requestAnimationFrame(()=>{
+      layoutFeatureItems();
+      // Re-layout once more after opening transition starts to avoid stale geometry.
+      setTimeout(layoutFeatureItems,220);
     });
-    
-    featureItems.appendChild(itemEl);
-  });
+  }
 }
 
-function toggleFeatureDisk(){
-  featureDisk.classList.toggle('show');
+function layoutFeatureItems(){
+  if(!featureItems)return;
+  const items=Array.from(featureItems.querySelectorAll('.feature-item'));
+  if(!items.length)return;
+  const hostWidth=featureItems.clientWidth;
+  const hostHeight=featureItems.clientHeight;
+  if(!hostWidth||!hostHeight)return;
+  let centerX=hostWidth/2;
+  let centerY=hostHeight/2;
+  let centerDiameter=60;
+  if(featureCenterIcon){
+    const cWidth=featureCenterIcon.offsetWidth;
+    const cHeight=featureCenterIcon.offsetHeight;
+    if(cWidth&&cHeight){
+      centerX=featureCenterIcon.offsetLeft+cWidth/2;
+      centerY=featureCenterIcon.offsetTop+cHeight/2;
+      centerDiameter=Math.max(cWidth,cHeight);
+    }
+  }
+  const itemDiameter=Math.max(items[0].offsetWidth||0,items[0].offsetHeight||0,52);
+  const preferredOrbit=Math.min(hostWidth,hostHeight)*0.39;
+  const minOrbit=centerDiameter/2+itemDiameter/2+18;
+  const maxOrbit=Math.min(hostWidth,hostHeight)/2-itemDiameter/2-8;
+  const orbit=Math.max(minOrbit,Math.min(maxOrbit,preferredOrbit));
+  const startAngleDeg=-90;
+  items.forEach((item,index)=>{
+    const angle=((startAngleDeg+index*60)*Math.PI)/180;
+    const left=centerX+Math.cos(angle)*orbit;
+    const top=centerY+Math.sin(angle)*orbit;
+    item.style.left=`${left}px`;
+    item.style.top=`${top}px`;
+  });
 }
 
 function playDevLetterText(){
@@ -1162,6 +1247,14 @@ if(featureBtn&&featureDisk&&featureItems){
     toggleFeatureDisk();
   });
 
+  featureItems.addEventListener('click',e=>{
+    const item=e.target.closest('[data-feature]');
+    if(!item)return;
+    e.stopPropagation();
+    if(item.dataset.feature==='analytics')openAnalytics();
+    toggleFeatureDisk();
+  });
+
   // 点击圆盘背景关闭
   featureDisk.addEventListener('click',e=>{
     if(e.target===featureDisk){
@@ -1176,8 +1269,16 @@ if(featureBtn&&featureDisk&&featureItems){
     }
   });
 
-  // 初始化功能圆盘
-  renderFeatureDisk();
+  window.addEventListener('resize',()=>{
+    layoutFeatureItems();
+  });
+
+  const diskContainer=featureDisk.querySelector('.feature-disk-container');
+  if(diskContainer){
+    diskContainer.addEventListener('transitionend',e=>{
+      if(e.propertyName==='transform'&&featureDisk.classList.contains('show'))layoutFeatureItems();
+    });
+  }
 }
 const openDevLetterBtn=$('openDevLetterBtn'),closeDevLetterBtn=$('closeDevLetterBtn'),devLetterOverlay=$('devLetterOverlay');
 if(openDevLetterBtn&&closeDevLetterBtn&&devLetterOverlay){
@@ -1206,6 +1307,7 @@ if(onboardingOverlay&&onboardingSkip&&onboardingPrev&&onboardingNext){
 if(repairAppBtn){
   repairAppBtn.addEventListener('click',()=>{repairInstalledApp().catch(()=>alert('修复遇到异常，请手动刷新后重试。'))});
 }
+layoutFeatureItems();
 const superReportClose=$('superReportClose'),superReportAgain=$('superReportAgain'),superReportOverlay=$('superReportOverlay');
 if(superReportClose&&superReportAgain&&superReportOverlay){
   superReportClose.addEventListener('click',closeSuperSessionReport);
