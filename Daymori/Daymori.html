@@ -388,10 +388,10 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
 .daily-plan-modal-note{margin:0 0 14px;color:var(--muted);line-height:1.7}
 .daily-plan-fields{display:grid;gap:10px}
 .daily-plan-save{margin-top:14px}
-.progress-task-row{display:flex;align-items:center;gap:10px}
-.progress-task-row .progress{flex:1}
-.progress-bound-task{white-space:nowrap;max-width:42%;overflow:hidden;text-overflow:ellipsis;padding:5px 10px;border-radius:999px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.22);color:#1e5f44;font-size:.78rem}
-
+ .pomodoro-review-card{width:min(92vw,480px)}
+ .pomodoro-review-title{margin:0 0 10px;font-size:1.18rem;color:#2f5c94}
+ .pomodoro-review-text{margin:0;color:var(--muted);line-height:1.85;font-size:1rem}
+ .pomodoro-review-text strong{color:#416792}
 /* Super 弹窗右侧滑入/滑出 */
 .super-focus{transform:none}
 .super-focus .panel-wrap{
@@ -569,6 +569,15 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
     </div>
   </div>
 </div>
+<div class="bind-modal" id="pomodoroReviewModal" aria-hidden="true">
+  <div class="bind-modal-card pomodoro-review-card">
+    <h3 class="pomodoro-review-title">番茄结束啦</h3>
+    <p class="pomodoro-review-text" id="pomodoroReviewText">您专注了 25 分钟，很棒哦！现在休息一下吧，5 分钟，别碰手机哦！</p>
+    <div class="bind-modal-actions">
+      <button class="primary" id="pomodoroReviewConfirm" type="button">知道了</button>
+    </div>
+  </div>
+</div>
 <section class="super-focus" id="superFocusLayer" aria-hidden="true">
   <div class="panel-wrap">
     <div class="super-head"><h3>Super 专注模式</h3><button id="sfExitBtn" type="button">退出</button></div>
@@ -655,11 +664,11 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
   </div>
 </section>
 <script>
-const APP_VERSION='pomo-v20260417-9',STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',POMODORO_METRICS_KEY='daymori-pomodoro-metrics',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
+const APP_VERSION='pomo-v20260417-10',STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',POMODORO_METRICS_KEY='daymori-pomodoro-metrics',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
 const timerModes=[{id:'focus',label:'专注',minutes:25,button:'25 分钟专注'},{id:'focus40',label:'深度专注',minutes:40,button:'40 分钟专注'},{id:'focus50',label:'深度专注',minutes:50,button:'50 分钟专注'},{id:'short',label:'短休息',minutes:5,button:'5 分钟休息'},{id:'long',label:'长休息',minutes:15,button:'15 分钟休息'},{id:'rest30',label:'休息',minutes:30,button:'30 分钟休息'}];
 const quotes=['每一个不曾起舞的日子，都是对生命的辜负。','自律不是苛待自己，而是温柔地兑现承诺。','慢慢来，比较快。','你的努力，时间一直看得见。','先完成眼前这一小步，路就会继续亮起来。','种一棵树最好的时间是十年前，其次是现在。'];
 const state={mode:'focus',timeLeft:1500,totalDuration:1500,timerInterval:null,sessionsCompleted:0,todos:[],quote:'',sortBy:'manual',wishes:[],wishMessage:'写下一个愿望后，这里会随机送你一句鼓励。',visitCount:0,boundTodoId:null,dailyTopThreeDate:'',dailyTopThree:['','','']};
-const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel'),dailyTopThreeListEl=$('dailyTopThreeList'),dailyTopThreeEditBtn=$('dailyTopThreeEditBtn'),dailyPlanModal=$('dailyPlanModal'),dailyPlanSaveBtn=$('dailyPlanSaveBtn'),dailyPlanCancelBtn=$('dailyPlanCancelBtn');const dailyPlanInputs=[$('dailyPlanInput1'),$('dailyPlanInput2'),$('dailyPlanInput3')];const featureCenterIcon=featureDisk?featureDisk.querySelector('.feature-center-icon'):null;const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','dailyTopThreeBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,introChimePrimed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,interruptCount:0,startCompletedTasks:0,awaitingRecovery:false,recoveryReason:'',recoveryTimer:null,recoveryCountdown:10};
+const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel'),dailyTopThreeListEl=$('dailyTopThreeList'),dailyTopThreeEditBtn=$('dailyTopThreeEditBtn'),dailyPlanModal=$('dailyPlanModal'),dailyPlanSaveBtn=$('dailyPlanSaveBtn'),dailyPlanCancelBtn=$('dailyPlanCancelBtn'),pomodoroReviewModal=$('pomodoroReviewModal'),pomodoroReviewText=$('pomodoroReviewText'),pomodoroReviewConfirm=$('pomodoroReviewConfirm');const dailyPlanInputs=[$('dailyPlanInput1'),$('dailyPlanInput2'),$('dailyPlanInput3')];const featureCenterIcon=featureDisk?featureDisk.querySelector('.feature-center-icon'):null;const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','dailyTopThreeBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,introChimePrimed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,interruptCount:0,startCompletedTasks:0,awaitingRecovery:false,recoveryReason:'',recoveryTimer:null,recoveryCountdown:10};
 const superResumeOverlay=$('superResumeOverlay'),superReasonGrid=$('superReasonGrid'),superResumeCountdown=$('superResumeCountdown');
 const pomodoroTaskSelect=$('pomodoroTaskSelect'),pomodoroConfirmTask=$('pomodoroConfirmTask'),pomodoroCustomTask=$('pomodoroCustomTask'),pomodoroBanner=$('pomodoroBanner');
 const quickTaskButtons=Array.from(document.querySelectorAll('[data-task]'));
@@ -726,6 +735,19 @@ function playPomodoroChime(){
   });
   setTimeout(()=>ctx.close().catch(()=>{}),1200);
 }
+function openPomodoroReviewModal(focusSeconds,breakSeconds){
+  if(!pomodoroReviewModal||!pomodoroReviewText)return;
+  const focusMinutes=Math.max(1,Math.round(focusSeconds/60));
+  const breakMinutes=Math.max(1,Math.round(breakSeconds/60));
+  pomodoroReviewText.innerHTML=`您专注了 <strong>${focusMinutes}</strong> 分钟，很棒哦！现在休息一下吧，<strong>${breakMinutes}</strong> 分钟，别碰手机哦！`;
+  pomodoroReviewModal.classList.add('show');
+  pomodoroReviewModal.setAttribute('aria-hidden','false');
+}
+function closePomodoroReviewModal(){
+  if(!pomodoroReviewModal)return;
+  pomodoroReviewModal.classList.remove('show');
+  pomodoroReviewModal.setAttribute('aria-hidden','true');
+}
 function onPomodoroPhaseComplete(){
   stopTimer();
   if(pomodoroState.phase==='focus'){
@@ -735,7 +757,9 @@ function onPomodoroPhaseComplete(){
     logFocusSeconds(POMODORO_FOCUS_SECONDS);
     updateStats();
     playPomodoroChime();
+    let breakSeconds=POMODORO_SHORT_BREAK_SECONDS;
     if(pomodoroState.completedCycles>=POMODORO_CYCLES_PER_ROUND){
+      breakSeconds=POMODORO_LONG_BREAK_SECONDS;
       setPomodoroPhase('long_break',POMODORO_LONG_BREAK_SECONDS);
       updatePomodoroBanner('做得真棒！4 个番茄钟已完成，休息 20 分钟吧！');
       pomodoroState.roundFinished=true;
@@ -743,6 +767,7 @@ function onPomodoroPhaseComplete(){
       setPomodoroPhase('short_break',POMODORO_SHORT_BREAK_SECONDS);
       updatePomodoroBanner('做得真棒！休息5分钟吧！');
     }
+    openPomodoroReviewModal(POMODORO_FOCUS_SECONDS,breakSeconds);
     startBtn.textContent='暂停';
     startTimer();
     return;
@@ -1071,6 +1096,8 @@ if(dailyTopThreeEditBtn)dailyTopThreeEditBtn.addEventListener('click',openDailyP
 if(dailyPlanSaveBtn)dailyPlanSaveBtn.addEventListener('click',saveDailyTopThree);
 if(dailyPlanCancelBtn)dailyPlanCancelBtn.addEventListener('click',closeDailyPlanModal);
 if(dailyPlanModal)dailyPlanModal.addEventListener('click',e=>{if(e.target===dailyPlanModal)closeDailyPlanModal()});
+if(pomodoroReviewConfirm)pomodoroReviewConfirm.addEventListener('click',closePomodoroReviewModal);
+if(pomodoroReviewModal)pomodoroReviewModal.addEventListener('click',e=>{if(e.target===pomodoroReviewModal)closePomodoroReviewModal()});
 dailyPlanInputs.forEach(input=>{if(input)input.addEventListener('keydown',e=>{if(e.key==='Enter')saveDailyTopThree()})});
 if(pomodoroTaskSelect)pomodoroTaskSelect.addEventListener('change',()=>{
   if(!pomodoroTaskSelect.value)return;
