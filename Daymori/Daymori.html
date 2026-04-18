@@ -375,6 +375,19 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
 .bind-modal-card{width:min(92vw,460px);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 24px 56px rgba(0,0,0,.2);transform:translateY(12px) scale(.98);transition:transform .22s ease}
 .bind-modal.show .bind-modal-card{transform:translateY(0) scale(1)}
 .bind-modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.daily-top-three{padding:24px}
+.daily-top-three-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.daily-top-three-head h2{margin:0 0 6px}
+.daily-top-three-head p{margin:0;color:var(--muted);line-height:1.7}
+.daily-top-three-edit{white-space:nowrap}
+.daily-top-three-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.daily-top-three-item{padding:16px 14px;border-radius:22px;background:rgba(255,255,255,.88);border:1px solid var(--line);min-height:118px;display:grid;gap:10px;align-content:start}
+.daily-top-three-index{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgba(109,149,203,.12);border:1px solid rgba(109,149,203,.18);color:#416792;font-size:.86rem;font-weight:600}
+.daily-top-three-text{font-size:1rem;line-height:1.65;color:var(--text);word-break:break-word}
+.daily-top-three-empty{color:var(--muted)}
+.daily-plan-modal-note{margin:0 0 14px;color:var(--muted);line-height:1.7}
+.daily-plan-fields{display:grid;gap:10px}
+.daily-plan-save{margin-top:14px}
 .progress-task-row{display:flex;align-items:center;gap:10px}
 .progress-task-row .progress{flex:1}
 .progress-bound-task{white-space:nowrap;max-width:42%;overflow:hidden;text-overflow:ellipsis;padding:5px 10px;border-radius:999px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.22);color:#1e5f44;font-size:.78rem}
@@ -438,7 +451,7 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
 .completion-kpis .kpi b{display:block;font-size:1.05rem;color:#3d1a00}
 .completion-kpis .kpi span{font-size:.74rem;color:rgba(61,26,0,.68)}
 @media (max-width:760px){.analytics-grid{grid-template-columns:1fr}
-.grid,.wish-layout,.todo-extra-group,.todo-input-group,.stats{grid-template-columns:1fr}.hero-actions,.timer-actions,.mode-switcher,.todo-tools{flex-direction:column}.page{padding-top:16px;gap:16px}.panel,.hero{padding:18px}.moment{right:14px;bottom:14px;width:calc(100vw - 28px)}button,a.button{width:100%}.sidebar{width:calc(100vw - 60px)}.progress-task-row{flex-direction:column;align-items:stretch}.progress-bound-task{max-width:100%;text-align:center}}
+.grid,.wish-layout,.todo-extra-group,.todo-input-group,.stats,.daily-top-three-list{grid-template-columns:1fr}.hero-actions,.timer-actions,.mode-switcher,.todo-tools{flex-direction:column}.page{padding-top:16px;gap:16px}.panel,.hero,.daily-top-three{padding:18px}.moment{right:14px;bottom:14px;width:calc(100vw - 28px)}button,a.button{width:100%}.sidebar{width:calc(100vw - 60px)}.progress-task-row{flex-direction:column;align-items:stretch}.progress-bound-task{max-width:100%;text-align:center}.daily-top-three-head{align-items:stretch}}
 </style>
 </head>
 <body>
@@ -472,6 +485,7 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
 </div>
 <main class="page" id="pageShell">
 <section class="hero card reveal" id="heroBlock"><small>Patience is the key in life</small><h1>Daymori</h1><p class="hero-copy">Gentle discipline for everyday growth.</p><div class="hero-actions"><button class="primary install-btn" id="installBtn" type="button">Install Daymori</button><a class="button" href="dream.html">Open Dream</a></div><div class="install-note" id="installNote">Daymori 现在可以被浏览器安装成独立应用。</div></section>
+<section class="card reveal daily-top-three" id="dailyTopThreeBlock"><div class="daily-top-three-head"><div><h2>今日三件事</h2><p>先定下今天最重要的三件事，番茄钟会优先从这里提供选择。</p></div><button class="daily-top-three-edit" id="dailyTopThreeEditBtn" type="button">重新填写</button></div><ul class="daily-top-three-list" id="dailyTopThreeList"><li class="daily-top-three-item"><span class="daily-top-three-index">1</span><div class="daily-top-three-text daily-top-three-empty">今天的第一件事还没填写</div></li><li class="daily-top-three-item"><span class="daily-top-three-index">2</span><div class="daily-top-three-text daily-top-three-empty">今天的第二件事还没填写</div></li><li class="daily-top-three-item"><span class="daily-top-three-index">3</span><div class="daily-top-three-text daily-top-three-empty">今天的第三件事还没填写</div></li></ul></section>
 <section class="grid">
   <article class="panel card reveal" id="timerBlock">
     <h2>番茄钟</h2>
@@ -537,6 +551,21 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
       <button class="primary" id="bindTaskConfirm" type="button">绑定并开始</button>
       <button id="bindTaskSkip" type="button">先不绑定</button>
       <button id="bindTaskCancel" type="button">取消</button>
+    </div>
+  </div>
+</div>
+<div class="bind-modal" id="dailyPlanModal" aria-hidden="true">
+  <div class="bind-modal-card">
+    <h3 style="margin:0 0 8px">先定下今日三件事</h3>
+    <p class="daily-plan-modal-note">你刚进入 Daymori，先写下今天最重要的三件事。保存后，它们会显示在主页，也会优先出现在番茄钟选择里。</p>
+    <div class="daily-plan-fields">
+      <div class="float-field"><input type="text" id="dailyPlanInput1" placeholder=" "><label for="dailyPlanInput1">第一件事</label></div>
+      <div class="float-field"><input type="text" id="dailyPlanInput2" placeholder=" "><label for="dailyPlanInput2">第二件事</label></div>
+      <div class="float-field"><input type="text" id="dailyPlanInput3" placeholder=" "><label for="dailyPlanInput3">第三件事</label></div>
+    </div>
+    <div class="bind-modal-actions daily-plan-save">
+      <button class="primary" id="dailyPlanSaveBtn" type="button">保存今日三件事</button>
+      <button id="dailyPlanCancelBtn" type="button">稍后再填</button>
     </div>
   </div>
 </div>
@@ -626,11 +655,11 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
   </div>
 </section>
 <script>
-const APP_VERSION='pomo-v20260417-8',STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',POMODORO_METRICS_KEY='daymori-pomodoro-metrics',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
+const APP_VERSION='pomo-v20260417-9',STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',POMODORO_METRICS_KEY='daymori-pomodoro-metrics',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
 const timerModes=[{id:'focus',label:'专注',minutes:25,button:'25 分钟专注'},{id:'focus40',label:'深度专注',minutes:40,button:'40 分钟专注'},{id:'focus50',label:'深度专注',minutes:50,button:'50 分钟专注'},{id:'short',label:'短休息',minutes:5,button:'5 分钟休息'},{id:'long',label:'长休息',minutes:15,button:'15 分钟休息'},{id:'rest30',label:'休息',minutes:30,button:'30 分钟休息'}];
 const quotes=['每一个不曾起舞的日子，都是对生命的辜负。','自律不是苛待自己，而是温柔地兑现承诺。','慢慢来，比较快。','你的努力，时间一直看得见。','先完成眼前这一小步，路就会继续亮起来。','种一棵树最好的时间是十年前，其次是现在。'];
-const state={mode:'focus',timeLeft:1500,totalDuration:1500,timerInterval:null,sessionsCompleted:0,todos:[],quote:'',sortBy:'manual',wishes:[],wishMessage:'写下一个愿望后，这里会随机送你一句鼓励。',visitCount:0,boundTodoId:null};
-const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel');const featureCenterIcon=featureDisk?featureDisk.querySelector('.feature-center-icon'):null;const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,introChimePrimed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,interruptCount:0,startCompletedTasks:0,awaitingRecovery:false,recoveryReason:'',recoveryTimer:null,recoveryCountdown:10};
+const state={mode:'focus',timeLeft:1500,totalDuration:1500,timerInterval:null,sessionsCompleted:0,todos:[],quote:'',sortBy:'manual',wishes:[],wishMessage:'写下一个愿望后，这里会随机送你一句鼓励。',visitCount:0,boundTodoId:null,dailyTopThreeDate:'',dailyTopThree:['','','']};
+const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel'),dailyTopThreeListEl=$('dailyTopThreeList'),dailyTopThreeEditBtn=$('dailyTopThreeEditBtn'),dailyPlanModal=$('dailyPlanModal'),dailyPlanSaveBtn=$('dailyPlanSaveBtn'),dailyPlanCancelBtn=$('dailyPlanCancelBtn');const dailyPlanInputs=[$('dailyPlanInput1'),$('dailyPlanInput2'),$('dailyPlanInput3')];const featureCenterIcon=featureDisk?featureDisk.querySelector('.feature-center-icon'):null;const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','dailyTopThreeBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,introChimePrimed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,interruptCount:0,startCompletedTasks:0,awaitingRecovery:false,recoveryReason:'',recoveryTimer:null,recoveryCountdown:10};
 const superResumeOverlay=$('superResumeOverlay'),superReasonGrid=$('superReasonGrid'),superResumeCountdown=$('superResumeCountdown');
 const pomodoroTaskSelect=$('pomodoroTaskSelect'),pomodoroConfirmTask=$('pomodoroConfirmTask'),pomodoroCustomTask=$('pomodoroCustomTask'),pomodoroBanner=$('pomodoroBanner');
 const quickTaskButtons=Array.from(document.querySelectorAll('[data-task]'));
@@ -652,10 +681,18 @@ const ONBOARDING_STEPS=[
 ];
 let onboardingStepIndex=0;
 let onboardingTimer=null,onboardingScheduled=false,onboardingOpened=false,introTypeTimer=null;
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify({mode:state.mode,timeLeft:state.timeLeft,totalDuration:state.totalDuration,sessionsCompleted:state.sessionsCompleted,todos:state.todos,quote:state.quote,sortBy:state.sortBy,wishes:state.wishes,wishMessage:state.wishMessage,visitCount:state.visitCount,boundTodoId:state.boundTodoId}))}
-function loadState(){try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');state.mode=s.mode||'focus';state.timeLeft=Number.isFinite(s.timeLeft)?s.timeLeft:1500;state.totalDuration=Number.isFinite(s.totalDuration)?s.totalDuration:state.timeLeft;state.sessionsCompleted=Number.isFinite(s.sessionsCompleted)?s.sessionsCompleted:0;state.todos=Array.isArray(s.todos)?s.todos.map(t=>({...t,status:t.status||(t.done?'done':'todo')})):[];state.quote=s.quote||'';state.sortBy=s.sortBy||'manual';state.wishes=Array.isArray(s.wishes)?s.wishes:[];state.wishMessage=s.wishMessage||state.wishMessage;state.visitCount=Number.isFinite(s.visitCount)?s.visitCount:0;state.boundTodoId=s.boundTodoId??null}catch{}if(!state.quote)setRandomQuote(false)}
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify({mode:state.mode,timeLeft:state.timeLeft,totalDuration:state.totalDuration,sessionsCompleted:state.sessionsCompleted,todos:state.todos,quote:state.quote,sortBy:state.sortBy,wishes:state.wishes,wishMessage:state.wishMessage,visitCount:state.visitCount,boundTodoId:state.boundTodoId,dailyTopThreeDate:state.dailyTopThreeDate,dailyTopThree:state.dailyTopThree}))}
+function normalizeDailyTopThree(list){const values=Array.isArray(list)?list.slice(0,3):[];while(values.length<3)values.push('');return values.map(item=>typeof item==='string'?item.trim():'')}
+function loadState(){try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');state.mode=s.mode||'focus';state.timeLeft=Number.isFinite(s.timeLeft)?s.timeLeft:1500;state.totalDuration=Number.isFinite(s.totalDuration)?s.totalDuration:state.timeLeft;state.sessionsCompleted=Number.isFinite(s.sessionsCompleted)?s.sessionsCompleted:0;state.todos=Array.isArray(s.todos)?s.todos.map(t=>({...t,status:t.status||(t.done?'done':'todo')})):[];state.quote=s.quote||'';state.sortBy=s.sortBy||'manual';state.wishes=Array.isArray(s.wishes)?s.wishes:[];state.wishMessage=s.wishMessage||state.wishMessage;state.visitCount=Number.isFinite(s.visitCount)?s.visitCount:0;state.boundTodoId=s.boundTodoId??null;state.dailyTopThreeDate=typeof s.dailyTopThreeDate==='string'?s.dailyTopThreeDate:'';state.dailyTopThree=normalizeDailyTopThree(s.dailyTopThree)}catch{}if(!state.quote)setRandomQuote(false)}
 function trackVisit(){state.visitCount+=1;saveState()}function formatTime(sec){const m=Math.floor(sec/60),r=sec%60;return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`}
 function renderModes(){if(modeSwitcherEl)modeSwitcherEl.innerHTML=''}
+function getTodayTopThree(){return state.dailyTopThreeDate===todayYMD()?normalizeDailyTopThree(state.dailyTopThree):['','','']}
+function hasTodayTopThree(){return getTodayTopThree().some(Boolean)}
+function renderDailyTopThree(){if(!dailyTopThreeListEl)return;const items=getTodayTopThree();dailyTopThreeListEl.innerHTML='';items.forEach((item,index)=>{const li=document.createElement('li');li.className='daily-top-three-item';li.innerHTML=`<span class="daily-top-three-index">${index+1}</span><div class="daily-top-three-text${item?'':' daily-top-three-empty'}">${item||`今天的第${index+1}件事还没填写`}</div>`;dailyTopThreeListEl.appendChild(li)})}
+function openDailyPlanModal(){if(!dailyPlanModal)return;const items=getTodayTopThree();dailyPlanInputs.forEach((input,index)=>{if(input)input.value=items[index]||''});dailyPlanModal.classList.add('show');dailyPlanModal.setAttribute('aria-hidden','false');const firstInput=dailyPlanInputs[0];if(firstInput)window.setTimeout(()=>firstInput.focus(),60)}
+function closeDailyPlanModal(){if(!dailyPlanModal)return;dailyPlanModal.classList.remove('show');dailyPlanModal.setAttribute('aria-hidden','true')}
+function saveDailyTopThree(){const items=normalizeDailyTopThree(dailyPlanInputs.map(input=>input?input.value:''));if(!items.some(Boolean)){alert('至少先写下一件今天最重要的事。');return}state.dailyTopThreeDate=todayYMD();state.dailyTopThree=items;renderDailyTopThree();populatePomodoroTaskSelect();saveState();closeDailyPlanModal()}
+function maybeOpenDailyPlan(){if(hasTodayTopThree())return;window.setTimeout(openDailyPlanModal,280)}
 function getPhaseLabel(){if(pomodoroState.phase==='focus')return `专注 25 分钟（第 ${Math.min(POMODORO_CYCLES_PER_ROUND,pomodoroState.completedCycles+1)} 轮）`;if(pomodoroState.phase==='short_break')return '短休息 5 分钟';if(pomodoroState.phase==='long_break')return '长休息 20 分钟';return '待开始'}
 function updateTimerDisplay(){timerEl.textContent=formatTime(state.timeLeft);timerStageEl.textContent=`当前阶段：${getPhaseLabel()}`;focusModeLabelEl.textContent='番茄钟';const total=Math.max(1,state.totalDuration);const p=((total-state.timeLeft)/total)*100;progressBarEl.style.width=`${Math.max(0,Math.min(100,p))}%`}
 function stopTimer(){if(state.timerInterval){clearInterval(state.timerInterval);state.timerInterval=null}}
@@ -867,6 +904,7 @@ function revealHome(){
   pageShellEl.classList.add('ready');
   try{sessionStorage.setItem('daymori-intro-seen','1')}catch{}
   setupReveal();
+  maybeOpenDailyPlan();
   maybeOpenOnboarding();
 }
 function runIntroAnimation(){if(introStarted)return;introStarted=true;playIntroChime();introHintEl.textContent='Sound on. Entering Daymori...';introOverlayEl.classList.add('exit');setTimeout(revealHome,800)}
@@ -922,7 +960,18 @@ function populatePomodoroTaskSelect(){
   if(!pomodoroTaskSelect)return;
   const previous=pomodoroTaskSelect.value;
   pomodoroTaskSelect.innerHTML='<option value="">从学习清单中选择任务</option>';
+  const used=new Set();
+  getTodayTopThree().filter(Boolean).forEach(text=>{
+    if(used.has(text))return;
+    used.add(text);
+    const option=document.createElement('option');
+    option.value=text;
+    option.textContent=`今日三件事优先: ${text}`;
+    pomodoroTaskSelect.appendChild(option);
+  });
   state.todos.filter(t=>!t.done).forEach(t=>{
+    if(used.has(t.text))return;
+    used.add(t.text);
     const option=document.createElement('option');
     option.value=t.text;
     option.textContent=t.text;
@@ -1018,6 +1067,11 @@ async function startSuperNoise(){if(superState.noiseContext&&superState.noiseSou
 function stopSuperNoise(){if(superState.noiseSource){try{superState.noiseSource.stop(0)}catch{}}if(superState.noiseContext){superState.noiseContext.close().catch(()=>{})}superState.noiseSource=null;superState.noiseGain=null;superState.noiseContext=null;updateNoiseTip(false)}
 startBtn.addEventListener('click',handleStartClick);bindTaskBtn.addEventListener('click',()=>openBindTaskModal(false));bindTaskConfirm.addEventListener('click',()=>{if(bindSelectedTask()){closeBindTaskModal();if(shouldAutoStartAfterBind)toggleTimer();shouldAutoStartAfterBind=false}});bindTaskSkip.addEventListener('click',()=>{closeBindTaskModal();if(shouldAutoStartAfterBind)toggleTimer();shouldAutoStartAfterBind=false});bindTaskCancel.addEventListener('click',()=>{closeBindTaskModal();shouldAutoStartAfterBind=false});bindTaskModal.addEventListener('click',e=>{if(e.target===bindTaskModal){closeBindTaskModal();shouldAutoStartAfterBind=false}});resetBtn.addEventListener('click',resetTimer);nextQuoteBtn.addEventListener('click',()=>setRandomQuote(true));addTodoBtn.addEventListener('click',addTodo);clearDoneBtn.addEventListener('click',clearDone);addWishBtn.addEventListener('click',addWish);momentLinkEl.addEventListener('click',openDream);sortInput.addEventListener('change',e=>{state.sortBy=e.target.value;renderTodos();saveState()});todoInput.addEventListener('keydown',e=>{if(e.key==='Enter')addTodo()});wishInput.addEventListener('keydown',e=>{if(e.key==='Enter')addWish()});introOverlayEl.addEventListener('click',runIntroAnimation);introOverlayEl.addEventListener('touchstart',runIntroAnimation,{passive:true});window.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')runIntroAnimation()});
 if(pomodoroConfirmTask)pomodoroConfirmTask.addEventListener('click',pickPomodoroTask);
+if(dailyTopThreeEditBtn)dailyTopThreeEditBtn.addEventListener('click',openDailyPlanModal);
+if(dailyPlanSaveBtn)dailyPlanSaveBtn.addEventListener('click',saveDailyTopThree);
+if(dailyPlanCancelBtn)dailyPlanCancelBtn.addEventListener('click',closeDailyPlanModal);
+if(dailyPlanModal)dailyPlanModal.addEventListener('click',e=>{if(e.target===dailyPlanModal)closeDailyPlanModal()});
+dailyPlanInputs.forEach(input=>{if(input)input.addEventListener('keydown',e=>{if(e.key==='Enter')saveDailyTopThree()})});
 if(pomodoroTaskSelect)pomodoroTaskSelect.addEventListener('change',()=>{
   if(!pomodoroTaskSelect.value)return;
   pomodoroState.selectedQuickTask='';
@@ -1045,6 +1099,7 @@ loadState();trackVisit();sortInput.value=state.sortBy;renderModes();renderTodos(
 state.totalDuration=POMODORO_FOCUS_SECONDS;
 state.timeLeft=POMODORO_FOCUS_SECONDS;
 updateTimerDisplay();
+renderDailyTopThree();
 renderBoundTask();
 primeIntroChimeOnFirstGesture();
 runIntroAnimationSilent()
@@ -1059,6 +1114,7 @@ window.addEventListener('storage',e=>{
   renderWishes();
   updateStats();
   updateTimerDisplay();
+  renderDailyTopThree();
   renderBoundTask();
 });
 
