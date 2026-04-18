@@ -392,6 +392,23 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
  .pomodoro-review-title{margin:0 0 10px;font-size:1.18rem;color:#2f5c94}
  .pomodoro-review-text{margin:0;color:var(--muted);line-height:1.85;font-size:1rem}
  .pomodoro-review-text strong{color:#416792}
+.evening-report-overlay{position:fixed;inset:0;z-index:129;display:flex;align-items:center;justify-content:center;padding:12px;background:radial-gradient(circle at 16% 10%,rgba(255,253,236,.84),transparent 34%),radial-gradient(circle at 82% 8%,rgba(238,227,184,.42),transparent 30%),linear-gradient(180deg,rgba(245,236,204,.9),rgba(228,210,160,.88));opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease,visibility .35s ease}
+.evening-report-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
+.evening-report-envelope{position:relative;width:min(980px,97vw);height:min(93vh,860px);transform:translate3d(0,180px,0) scale(.22) rotate(-8deg);opacity:.12;filter:blur(1.3px)}
+.evening-report-overlay.show .evening-report-envelope{animation:eveningLetterApproach 3s cubic-bezier(.16,.84,.16,1) forwards}
+.evening-report-envelope::before,.evening-report-envelope::after{content:"";position:absolute;left:0;right:0;border-radius:26px;background:linear-gradient(180deg,rgba(247,238,209,.98),rgba(240,227,184,.98));border:1px solid rgba(173,139,63,.35);box-shadow:0 22px 62px rgba(102,77,28,.22)}
+.evening-report-envelope::before{top:0;bottom:0}
+.evening-report-envelope::after{top:-1px;height:38%;clip-path:polygon(0 0,100% 0,50% 92%)}
+.evening-report-card{position:absolute;inset:12px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(252,249,238,.98));border:1px solid rgba(173,139,63,.28);padding:22px 20px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9);opacity:0;transform:translateY(20px) scale(.98);display:flex;flex-direction:column}
+.evening-report-overlay.expanded .evening-report-card{opacity:1;transform:translateY(0) scale(1);transition:opacity .45s ease,transform .45s ease}
+.evening-report-title{margin:0 0 10px;font-size:1.28rem;color:#6c4f16;letter-spacing:.02em}
+.evening-report-body{margin:0;color:#584421;line-height:1.9;white-space:pre-wrap;flex:1;overflow:auto}
+.evening-report-actions{display:flex;justify-content:flex-end;margin-top:12px}
+body.dark-mode .evening-report-overlay{background:radial-gradient(circle at 16% 10%,rgba(83,68,43,.78),transparent 34%),radial-gradient(circle at 82% 8%,rgba(62,50,31,.62),transparent 30%),linear-gradient(180deg,rgba(49,39,24,.9),rgba(37,30,18,.88))}
+body.dark-mode .evening-report-envelope::before,body.dark-mode .evening-report-envelope::after{background:linear-gradient(180deg,rgba(78,63,40,.98),rgba(64,51,33,.98));border-color:rgba(193,162,97,.35)}
+body.dark-mode .evening-report-card{background:linear-gradient(180deg,rgba(67,54,33,.98),rgba(53,43,28,.98));border-color:rgba(193,162,97,.32)}
+body.dark-mode .evening-report-title{color:#f0d49a}
+body.dark-mode .evening-report-body{color:#efdcb4}
 /* Super 弹窗右侧滑入/滑出 */
 .super-focus{transform:none}
 .super-focus .panel-wrap{
@@ -425,6 +442,7 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
 .analytics-notebook::after{content:'自律分析';position:absolute;top:38%;left:0;right:0;text-align:center;font-size:1.1rem;font-weight:600;color:#3d1a00;letter-spacing:.08em}
 @keyframes notebookAppear{from{opacity:0;transform:scale(.7) rotateY(-20deg)}to{opacity:1;transform:scale(1) rotateY(0)}}
 @keyframes notebookFlutter{0%,100%{transform:rotateY(0) rotateZ(0)}25%{transform:rotateY(6deg) rotateZ(1deg)}50%{transform:rotateY(-4deg) rotateZ(-0.5deg)}75%{transform:rotateY(3deg) rotateZ(0.8deg)}}
+@keyframes eveningLetterApproach{0%{transform:translate3d(0,180px,0) scale(.22) rotate(-8deg);opacity:.12;filter:blur(1.3px)}45%{transform:translate3d(0,92px,0) scale(.55) rotate(-3deg);opacity:.9;filter:blur(.6px)}100%{transform:translate3d(0,0,0) scale(1) rotate(0);opacity:1;filter:blur(0)}}
 .analytics-page{position:fixed;inset:0;z-index:131;overflow-y:auto;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s,visibility .4s;background:linear-gradient(160deg,#ff8c00,#ffb347 40%,#ffc96b);color:#3d1a00}
 .analytics-page.show{opacity:1;visibility:visible;pointer-events:auto}
 .analytics-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 0}
@@ -578,6 +596,17 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
     </div>
   </div>
 </div>
+<section class="evening-report-overlay" id="eveningReportOverlay" aria-hidden="true">
+  <div class="evening-report-envelope" id="eveningReportEnvelope">
+    <article class="evening-report-card">
+      <h3 class="evening-report-title" id="eveningReportTitle">晚间日报</h3>
+      <p class="evening-report-body" id="eveningReportText"></p>
+      <div class="evening-report-actions">
+        <button class="primary" id="eveningReportConfirm" type="button">没问题！</button>
+      </div>
+    </article>
+  </div>
+</section>
 <section class="super-focus" id="superFocusLayer" aria-hidden="true">
   <div class="panel-wrap">
     <div class="super-head"><h3>Super 专注模式</h3><button id="sfExitBtn" type="button">退出</button></div>
@@ -664,11 +693,11 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
   </div>
 </section>
 <script>
-const APP_VERSION='pomo-v20260417-10',STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',POMODORO_METRICS_KEY='daymori-pomodoro-metrics',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
+const APP_VERSION='pomo-v20260418-11',STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',POMODORO_METRICS_KEY='daymori-pomodoro-metrics',EVENING_REPORT_KEY='daymori-evening-report-seen',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
 const timerModes=[{id:'focus',label:'专注',minutes:25,button:'25 分钟专注'},{id:'focus40',label:'深度专注',minutes:40,button:'40 分钟专注'},{id:'focus50',label:'深度专注',minutes:50,button:'50 分钟专注'},{id:'short',label:'短休息',minutes:5,button:'5 分钟休息'},{id:'long',label:'长休息',minutes:15,button:'15 分钟休息'},{id:'rest30',label:'休息',minutes:30,button:'30 分钟休息'}];
 const quotes=['每一个不曾起舞的日子，都是对生命的辜负。','自律不是苛待自己，而是温柔地兑现承诺。','慢慢来，比较快。','你的努力，时间一直看得见。','先完成眼前这一小步，路就会继续亮起来。','种一棵树最好的时间是十年前，其次是现在。'];
 const state={mode:'focus',timeLeft:1500,totalDuration:1500,timerInterval:null,sessionsCompleted:0,todos:[],quote:'',sortBy:'manual',wishes:[],wishMessage:'写下一个愿望后，这里会随机送你一句鼓励。',visitCount:0,boundTodoId:null,dailyTopThreeDate:'',dailyTopThree:['','','']};
-const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel'),dailyTopThreeListEl=$('dailyTopThreeList'),dailyTopThreeEditBtn=$('dailyTopThreeEditBtn'),dailyPlanModal=$('dailyPlanModal'),dailyPlanSaveBtn=$('dailyPlanSaveBtn'),dailyPlanCancelBtn=$('dailyPlanCancelBtn'),pomodoroReviewModal=$('pomodoroReviewModal'),pomodoroReviewText=$('pomodoroReviewText'),pomodoroReviewConfirm=$('pomodoroReviewConfirm');const dailyPlanInputs=[$('dailyPlanInput1'),$('dailyPlanInput2'),$('dailyPlanInput3')];const featureCenterIcon=featureDisk?featureDisk.querySelector('.feature-center-icon'):null;const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','dailyTopThreeBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,introChimePrimed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,interruptCount:0,startCompletedTasks:0,awaitingRecovery:false,recoveryReason:'',recoveryTimer:null,recoveryCountdown:10};
+const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel'),dailyTopThreeListEl=$('dailyTopThreeList'),dailyTopThreeEditBtn=$('dailyTopThreeEditBtn'),dailyPlanModal=$('dailyPlanModal'),dailyPlanSaveBtn=$('dailyPlanSaveBtn'),dailyPlanCancelBtn=$('dailyPlanCancelBtn'),pomodoroReviewModal=$('pomodoroReviewModal'),pomodoroReviewText=$('pomodoroReviewText'),pomodoroReviewConfirm=$('pomodoroReviewConfirm'),eveningReportOverlay=$('eveningReportOverlay'),eveningReportEnvelope=$('eveningReportEnvelope'),eveningReportTitle=$('eveningReportTitle'),eveningReportText=$('eveningReportText'),eveningReportConfirm=$('eveningReportConfirm');const dailyPlanInputs=[$('dailyPlanInput1'),$('dailyPlanInput2'),$('dailyPlanInput3')];const featureCenterIcon=featureDisk?featureDisk.querySelector('.feature-center-icon'):null;const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','dailyTopThreeBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,introChimePrimed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false,eveningReportTimer=null;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,interruptCount:0,startCompletedTasks:0,awaitingRecovery:false,recoveryReason:'',recoveryTimer:null,recoveryCountdown:10};
 const superResumeOverlay=$('superResumeOverlay'),superReasonGrid=$('superReasonGrid'),superResumeCountdown=$('superResumeCountdown');
 const pomodoroTaskSelect=$('pomodoroTaskSelect'),pomodoroConfirmTask=$('pomodoroConfirmTask'),pomodoroCustomTask=$('pomodoroCustomTask'),pomodoroBanner=$('pomodoroBanner');
 const quickTaskButtons=Array.from(document.querySelectorAll('[data-task]'));
@@ -924,11 +953,55 @@ function maybeOpenOnboarding(){
   onboardingScheduled=true;
   onboardingTimer=window.setTimeout(()=>{onboardingScheduled=false;openOnboarding()},260);
 }
+function isAfterEveningReportTime(){return new Date().getHours()>=18}
+function getTodayCompletedTasks(){const set=new Set();state.todos.filter(todo=>todo.done).forEach(todo=>{const text=(todo.text||'').trim();if(text)set.add(text)});return Array.from(set)}
+function getTodayEveningReport(){const today=todayYMD();const focusSeconds=Number(getDailyFocusData()[today])||0;const focusMinutes=Math.round(focusSeconds/60);const pomodoroData=getPomodoroMetricsData();const completedPomodoros=Number((pomodoroData[today]||{}).completed)||0;const completedTasks=getTodayCompletedTasks();return{focusMinutes,completedPomodoros,completedTasks}}
+function markEveningReportShownToday(){try{localStorage.setItem(EVENING_REPORT_KEY,todayYMD())}catch{}}
+function hasShownEveningReportToday(){try{return localStorage.getItem(EVENING_REPORT_KEY)===todayYMD()}catch{return false}}
+function buildEveningReportContent(){const report=getTodayEveningReport();const taskLines=report.completedTasks.length?report.completedTasks.map((task,index)=>`${index+1}. ${task}`).join('\n'):'今天还没有在清单中勾选完成任务，明天我们继续冲。';return `今天总共专注了 ${report.focusMinutes} 分钟。\n今天完成了 ${report.completedPomodoros} 个番茄钟。\n\n完成的任务：\n${taskLines}\n\n今天干得真不错，继续朝你的梦想前进吧！`}
+function closeEveningReport(){
+  if(!eveningReportOverlay)return;
+  eveningReportOverlay.classList.remove('show','expanded');
+  eveningReportOverlay.setAttribute('aria-hidden','true');
+  if(eveningReportTimer){
+    clearTimeout(eveningReportTimer);
+    eveningReportTimer=null;
+  }
+}
+function openEveningReport(){
+  if(!eveningReportOverlay||!eveningReportText)return;
+  if(eveningReportTimer){
+    clearTimeout(eveningReportTimer);
+    eveningReportTimer=null;
+  }
+  if(eveningReportTitle)eveningReportTitle.textContent='晚间日报';
+  eveningReportText.textContent=buildEveningReportContent();
+  eveningReportOverlay.classList.remove('expanded');
+  if(eveningReportEnvelope)void eveningReportEnvelope.offsetWidth;
+  eveningReportOverlay.classList.add('show');
+  eveningReportOverlay.setAttribute('aria-hidden','false');
+  eveningReportTimer=window.setTimeout(()=>{
+    eveningReportOverlay.classList.add('expanded');
+    eveningReportTimer=null;
+  },3000);
+  markEveningReportShownToday();
+}
+function maybeOpenEveningReport(){
+  if(!isAfterEveningReportTime())return false;
+  if(hasShownEveningReportToday())return false;
+  openEveningReport();
+  return true;
+}
 function revealHome(){
   introOverlayEl.classList.add('hidden');
   pageShellEl.classList.add('ready');
   try{sessionStorage.setItem('daymori-intro-seen','1')}catch{}
   setupReveal();
+  const openedEveningReport=maybeOpenEveningReport();
+  if(openedEveningReport){
+    window.setTimeout(()=>{maybeOpenDailyPlan();maybeOpenOnboarding()},3300);
+    return;
+  }
   maybeOpenDailyPlan();
   maybeOpenOnboarding();
 }
@@ -1098,6 +1171,7 @@ if(dailyPlanCancelBtn)dailyPlanCancelBtn.addEventListener('click',closeDailyPlan
 if(dailyPlanModal)dailyPlanModal.addEventListener('click',e=>{if(e.target===dailyPlanModal)closeDailyPlanModal()});
 if(pomodoroReviewConfirm)pomodoroReviewConfirm.addEventListener('click',closePomodoroReviewModal);
 if(pomodoroReviewModal)pomodoroReviewModal.addEventListener('click',e=>{if(e.target===pomodoroReviewModal)closePomodoroReviewModal()});
+if(eveningReportConfirm)eveningReportConfirm.addEventListener('click',closeEveningReport);
 dailyPlanInputs.forEach(input=>{if(input)input.addEventListener('keydown',e=>{if(e.key==='Enter')saveDailyTopThree()})});
 if(pomodoroTaskSelect)pomodoroTaskSelect.addEventListener('change',()=>{
   if(!pomodoroTaskSelect.value)return;
