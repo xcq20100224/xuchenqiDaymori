@@ -392,6 +392,15 @@ body.dark-mode .float-field input:not(:placeholder-shown)+label{
  .pomodoro-review-title{margin:0 0 10px;font-size:1.18rem;color:#2f5c94}
  .pomodoro-review-text{margin:0;color:var(--muted);line-height:1.85;font-size:1rem}
  .pomodoro-review-text strong{color:#416792}
+.data-vault-title{margin:0 0 8px}
+.data-vault-note{margin:0;color:var(--muted);line-height:1.7}
+.data-vault-tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.data-vault-hint{margin-top:10px;color:var(--muted);font-size:.9rem}
+.snapshot-list{display:grid;gap:10px;margin-top:12px;max-height:min(45vh,360px);overflow:auto;padding-right:2px}
+.snapshot-item{padding:12px;border-radius:14px;background:rgba(255,255,255,.8);border:1px solid rgba(109,149,203,.16);display:grid;gap:8px}
+.snapshot-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:.86rem}
+.snapshot-actions{display:flex;justify-content:flex-end}
+.snapshot-empty{padding:12px;border:1px dashed rgba(109,149,203,.26);border-radius:12px;color:var(--muted);background:rgba(255,255,255,.54);text-align:center}
 .evening-report-overlay{position:fixed;inset:0;z-index:129;display:flex;align-items:center;justify-content:center;padding:12px;background:radial-gradient(circle at 16% 10%,rgba(255,253,236,.84),transparent 34%),radial-gradient(circle at 82% 8%,rgba(238,227,184,.42),transparent 30%),linear-gradient(180deg,rgba(245,236,204,.9),rgba(228,210,160,.88));opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease,visibility .35s ease}
 .evening-report-overlay.show{opacity:1;visibility:visible;pointer-events:auto}
 .evening-report-envelope{position:relative;width:min(980px,97vw);height:min(93vh,860px);transform:translate3d(0,180px,0) scale(.22) rotate(-8deg);opacity:.12;filter:blur(1.3px)}
@@ -409,6 +418,8 @@ body.dark-mode .evening-report-envelope::before,body.dark-mode .evening-report-e
 body.dark-mode .evening-report-card{background:linear-gradient(180deg,rgba(67,54,33,.98),rgba(53,43,28,.98));border-color:rgba(193,162,97,.32)}
 body.dark-mode .evening-report-title{color:#f0d49a}
 body.dark-mode .evening-report-body{color:#efdcb4}
+body.dark-mode .snapshot-item{background:rgba(45,39,30,.84);border-color:rgba(178,148,98,.24)}
+body.dark-mode .snapshot-empty{background:rgba(35,30,24,.76);border-color:rgba(178,148,98,.28)}
 /* Super 弹窗右侧滑入/滑出 */
 .super-focus{transform:none}
 .super-focus .panel-wrap{
@@ -498,6 +509,7 @@ body.dark-mode .evening-report-body{color:#efdcb4}
     <div class="setting-row"><span class="setting-title">护眼模式</span><label class="switch" for="darkModeToggle"><input id="darkModeToggle" type="checkbox" role="switch" aria-label="切换护眼模式"><span class="switch-slider"></span></label></div><p class="eye-care-hint" id="eyeCareHint">关闭：标准明亮模式。</p>
     <button id="openDevLetterBtn" class="dev-letter-btn" type="button">来自开发者的一封信</button>
     <button id="repairAppBtn" class="repair-app-btn" type="button">应用修复（清缓存）</button>
+    <button id="dataVaultBtn" class="repair-app-btn" type="button">数据备份与恢复</button>
     <button class="primary super-btn" id="superFocusBtn" type="button">进入 Super 专注模式</button>
   </div>
 </div>
@@ -594,6 +606,20 @@ body.dark-mode .evening-report-body{color:#efdcb4}
     <div class="bind-modal-actions">
       <button class="primary" id="pomodoroReviewConfirm" type="button">知道了</button>
     </div>
+  </div>
+</div>
+<div class="bind-modal" id="dataVaultModal" aria-hidden="true">
+  <div class="bind-modal-card" style="width:min(94vw,620px)">
+    <h3 class="data-vault-title">数据备份与恢复</h3>
+    <p class="data-vault-note">自动本地快照会保留最近 3 次。你也可以一键导出备份 JSON，或导入恢复到历史状态。</p>
+    <div class="data-vault-tools">
+      <button class="primary" id="dataExportBtn" type="button">导出备份</button>
+      <button id="dataImportBtn" type="button">导入恢复</button>
+      <button id="dataVaultCloseBtn" type="button">关闭</button>
+    </div>
+    <input id="dataImportInput" type="file" accept="application/json,.json" style="display:none">
+    <p class="data-vault-hint" id="dataVaultHint">加载中...</p>
+    <div class="snapshot-list" id="dataRollbackList"></div>
   </div>
 </div>
 <section class="evening-report-overlay" id="eveningReportOverlay" aria-hidden="true">
@@ -693,11 +719,11 @@ body.dark-mode .evening-report-body{color:#efdcb4}
   </div>
 </section>
 <script>
-const APP_VERSION='pomo-v20260418-11',STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',POMODORO_METRICS_KEY='daymori-pomodoro-metrics',EVENING_REPORT_KEY='daymori-evening-report-seen',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
+const APP_VERSION='pomo-v20260418-12',STORAGE_KEY='focus-buddy-state',DREAM_MOMENT_KEY='focus-buddy-dream-moment',SUPER_REPORT_KEY='daymori-super-report',DAILY_FOCUS_KEY='daymori-daily-focus',POMODORO_METRICS_KEY='daymori-pomodoro-metrics',EVENING_REPORT_KEY='daymori-evening-report-seen',DATA_SNAPSHOT_KEY='daymori-data-snapshots',BACKUP_FORMAT='daymori-backup-v1',GOOD_JOB_AUDIO_SRC='./goodjob.m4a',DREAM_AUDIO_SRC='./Andrew.m4a';
 const timerModes=[{id:'focus',label:'专注',minutes:25,button:'25 分钟专注'},{id:'focus40',label:'深度专注',minutes:40,button:'40 分钟专注'},{id:'focus50',label:'深度专注',minutes:50,button:'50 分钟专注'},{id:'short',label:'短休息',minutes:5,button:'5 分钟休息'},{id:'long',label:'长休息',minutes:15,button:'15 分钟休息'},{id:'rest30',label:'休息',minutes:30,button:'30 分钟休息'}];
 const quotes=['每一个不曾起舞的日子，都是对生命的辜负。','自律不是苛待自己，而是温柔地兑现承诺。','慢慢来，比较快。','你的努力，时间一直看得见。','先完成眼前这一小步，路就会继续亮起来。','种一棵树最好的时间是十年前，其次是现在。'];
 const state={mode:'focus',timeLeft:1500,totalDuration:1500,timerInterval:null,sessionsCompleted:0,todos:[],quote:'',sortBy:'manual',wishes:[],wishMessage:'写下一个愿望后，这里会随机送你一句鼓励。',visitCount:0,boundTodoId:null,dailyTopThreeDate:'',dailyTopThree:['','','']};
-const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel'),dailyTopThreeListEl=$('dailyTopThreeList'),dailyTopThreeEditBtn=$('dailyTopThreeEditBtn'),dailyPlanModal=$('dailyPlanModal'),dailyPlanSaveBtn=$('dailyPlanSaveBtn'),dailyPlanCancelBtn=$('dailyPlanCancelBtn'),pomodoroReviewModal=$('pomodoroReviewModal'),pomodoroReviewText=$('pomodoroReviewText'),pomodoroReviewConfirm=$('pomodoroReviewConfirm'),eveningReportOverlay=$('eveningReportOverlay'),eveningReportEnvelope=$('eveningReportEnvelope'),eveningReportTitle=$('eveningReportTitle'),eveningReportText=$('eveningReportText'),eveningReportConfirm=$('eveningReportConfirm');const dailyPlanInputs=[$('dailyPlanInput1'),$('dailyPlanInput2'),$('dailyPlanInput3')];const featureCenterIcon=featureDisk?featureDisk.querySelector('.feature-center-icon'):null;const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','dailyTopThreeBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,introChimePrimed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false,eveningReportTimer=null;const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,interruptCount:0,startCompletedTasks:0,awaitingRecovery:false,recoveryReason:'',recoveryTimer:null,recoveryCountdown:10};
+const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$('timerStage'),progressBarEl=$('progressBar'),progressBoundTaskEl=$('progressBoundTask'),startBtn=$('startBtn'),resetBtn=$('resetBtn'),nextQuoteBtn=$('nextQuoteBtn'),modeSwitcherEl=$('modeSwitcher'),todoInput=$('todoInput'),priorityInput=$('priorityInput'),deadlineInput=$('deadlineInput'),addTodoBtn=$('addTodoBtn'),todoListEl=$('todoList'),clearDoneBtn=$('clearDoneBtn'),sortInput=$('sortInput'),quoteEl=$('quote'),wishInput=$('wishInput'),addWishBtn=$('addWishBtn'),wishListEl=$('wishList'),wishEncourageEl=$('wishEncourage'),lightningMomentEl=$('lightningMoment'),momentCopyEl=$('momentCopy'),momentLinkEl=$('momentLink'),completedSessionsEl=$('completedSessions'),completedTasksEl=$('completedTasks'),focusModeLabelEl=$('focusModeLabel'),todoSummaryEl=$('todoSummary'),introOverlayEl=$('introOverlay'),introHintEl=$('introHint'),pageShellEl=$('pageShell'),installBtn=$('installBtn'),installNote=$('installNote'),sidebarEl=$('sidebar'),darkModeToggle=$('darkModeToggle'),eyeCareHint=$('eyeCareHint'),settingsBtn=$('settingsBtn'),repairAppBtn=$('repairAppBtn'),dataVaultBtn=$('dataVaultBtn'),superFocusBtn=$('superFocusBtn'),featureBtn=$('featureBtn'),featureDisk=$('featureDisk'),featureItems=$('featureItems'),superFocusLayer=$('superFocusLayer'),sfExitBtn=$('sfExitBtn'),sfTimer=$('sfTimer'),sfHour=$('sfHour'),sfMinute=$('sfMinute'),sfSecond=$('sfSecond'),sfApply=$('sfApply'),sfPreset25=$('sfPreset25'),sfPreset50=$('sfPreset50'),sfPreset90=$('sfPreset90'),sfStart=$('sfStart'),sfPause=$('sfPause'),sfReset=$('sfReset'),sfNoiseToggle=$('sfNoiseToggle'),sfNoiseType=$('sfNoiseType'),sfNoiseTip=$('sfNoiseTip'),bindTaskBtn=$('bindTaskBtn'),currentBoundTaskEl=$('currentBoundTask'),bindTaskModal=$('bindTaskModal'),bindTaskSelect=$('bindTaskSelect'),bindTaskConfirm=$('bindTaskConfirm'),bindTaskSkip=$('bindTaskSkip'),bindTaskCancel=$('bindTaskCancel'),dailyTopThreeListEl=$('dailyTopThreeList'),dailyTopThreeEditBtn=$('dailyTopThreeEditBtn'),dailyPlanModal=$('dailyPlanModal'),dailyPlanSaveBtn=$('dailyPlanSaveBtn'),dailyPlanCancelBtn=$('dailyPlanCancelBtn'),pomodoroReviewModal=$('pomodoroReviewModal'),pomodoroReviewText=$('pomodoroReviewText'),pomodoroReviewConfirm=$('pomodoroReviewConfirm'),dataVaultModal=$('dataVaultModal'),dataExportBtn=$('dataExportBtn'),dataImportBtn=$('dataImportBtn'),dataVaultCloseBtn=$('dataVaultCloseBtn'),dataImportInput=$('dataImportInput'),dataRollbackList=$('dataRollbackList'),dataVaultHint=$('dataVaultHint'),eveningReportOverlay=$('eveningReportOverlay'),eveningReportEnvelope=$('eveningReportEnvelope'),eveningReportTitle=$('eveningReportTitle'),eveningReportText=$('eveningReportText'),eveningReportConfirm=$('eveningReportConfirm');const dailyPlanInputs=[$('dailyPlanInput1'),$('dailyPlanInput2'),$('dailyPlanInput3')];const featureCenterIcon=featureDisk?featureDisk.querySelector('.feature-center-icon'):null;const sfLevelButtons=Array.from(document.querySelectorAll('[data-sf-level]'));const revealBlocks=['heroBlock','dailyTopThreeBlock','timerBlock','todoBlock','quoteBlock','wishBlock'].map($);let introStarted=false,introChimePlayed=false,introChimePrimed=false,deferredInstallPrompt=null,shouldAutoStartAfterBind=false,eveningReportTimer=null,lastAutoSnapshotAt=0,lastAutoSnapshotSignature='';const superState={total:1500,left:1500,interval:null,wakeLock:null,level:'cinematic',noiseContext:null,noiseSource:null,noiseGain:null,sessionStarted:false,pauseCount:0,interruptCount:0,startCompletedTasks:0,awaitingRecovery:false,recoveryReason:'',recoveryTimer:null,recoveryCountdown:10};
 const superResumeOverlay=$('superResumeOverlay'),superReasonGrid=$('superReasonGrid'),superResumeCountdown=$('superResumeCountdown');
 const pomodoroTaskSelect=$('pomodoroTaskSelect'),pomodoroConfirmTask=$('pomodoroConfirmTask'),pomodoroCustomTask=$('pomodoroCustomTask'),pomodoroBanner=$('pomodoroBanner');
 const quickTaskButtons=Array.from(document.querySelectorAll('[data-task]'));
@@ -719,9 +745,61 @@ const ONBOARDING_STEPS=[
 ];
 let onboardingStepIndex=0;
 let onboardingTimer=null,onboardingScheduled=false,onboardingOpened=false,introTypeTimer=null;
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify({mode:state.mode,timeLeft:state.timeLeft,totalDuration:state.totalDuration,sessionsCompleted:state.sessionsCompleted,todos:state.todos,quote:state.quote,sortBy:state.sortBy,wishes:state.wishes,wishMessage:state.wishMessage,visitCount:state.visitCount,boundTodoId:state.boundTodoId,dailyTopThreeDate:state.dailyTopThreeDate,dailyTopThree:state.dailyTopThree}))}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({mode:state.mode,timeLeft:state.timeLeft,totalDuration:state.totalDuration,sessionsCompleted:state.sessionsCompleted,todos:state.todos,quote:state.quote,sortBy:state.sortBy,wishes:state.wishes,wishMessage:state.wishMessage,visitCount:state.visitCount,boundTodoId:state.boundTodoId,dailyTopThreeDate:state.dailyTopThreeDate,dailyTopThree:state.dailyTopThree}));
+  scheduleAutoSnapshot('state-save');
+}
 function normalizeDailyTopThree(list){const values=Array.isArray(list)?list.slice(0,3):[];while(values.length<3)values.push('');return values.map(item=>typeof item==='string'?item.trim():'')}
 function loadState(){try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');state.mode=s.mode||'focus';state.timeLeft=Number.isFinite(s.timeLeft)?s.timeLeft:1500;state.totalDuration=Number.isFinite(s.totalDuration)?s.totalDuration:state.timeLeft;state.sessionsCompleted=Number.isFinite(s.sessionsCompleted)?s.sessionsCompleted:0;state.todos=Array.isArray(s.todos)?s.todos.map(t=>({...t,status:t.status||(t.done?'done':'todo')})):[];state.quote=s.quote||'';state.sortBy=s.sortBy||'manual';state.wishes=Array.isArray(s.wishes)?s.wishes:[];state.wishMessage=s.wishMessage||state.wishMessage;state.visitCount=Number.isFinite(s.visitCount)?s.visitCount:0;state.boundTodoId=s.boundTodoId??null;state.dailyTopThreeDate=typeof s.dailyTopThreeDate==='string'?s.dailyTopThreeDate:'';state.dailyTopThree=normalizeDailyTopThree(s.dailyTopThree)}catch{}if(!state.quote)setRandomQuote(false)}
+function getManagedStorageKeys(){return[STORAGE_KEY,DREAM_MOMENT_KEY,SUPER_REPORT_KEY,DAILY_FOCUS_KEY,POMODORO_METRICS_KEY,EVENING_REPORT_KEY,ONBOARDING_KEY,'darkMode','superAnimLevel']}
+function captureManagedStorage(){const data={};getManagedStorageKeys().forEach(key=>{const value=localStorage.getItem(key);if(value!==null)data[key]=value});return data}
+function applyManagedStorageData(data){if(!data||typeof data!=='object')throw new Error('备份数据格式无效');getManagedStorageKeys().forEach(key=>{if(typeof data[key]==='string')localStorage.setItem(key,data[key]);else localStorage.removeItem(key)})}
+function getSnapshotHistory(){try{const list=JSON.parse(localStorage.getItem(DATA_SNAPSHOT_KEY)||'[]');if(!Array.isArray(list))return[];return list.filter(item=>item&&typeof item==='object'&&item.id&&item.payload&&typeof item.payload==='object').slice(-3)}catch{return[]}}
+function saveSnapshotHistory(list){localStorage.setItem(DATA_SNAPSHOT_KEY,JSON.stringify(Array.isArray(list)?list.slice(-3):[]))}
+function makeSnapshot(reason,payload){return{id:`snap-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,createdAt:new Date().toISOString(),reason:reason||'auto',appVersion:APP_VERSION,payload:payload||captureManagedStorage()}}
+function pushSnapshot(reason,payload){const list=getSnapshotHistory();list.push(makeSnapshot(reason,payload));saveSnapshotHistory(list);renderSnapshotList();return list[list.length-1]}
+function scheduleAutoSnapshot(reason='auto',force=false){const payload=captureManagedStorage();const signature=JSON.stringify(payload);const now=Date.now();if(!force){if(now-lastAutoSnapshotAt<4*60*1000)return;if(signature===lastAutoSnapshotSignature)return;}pushSnapshot(reason,payload);lastAutoSnapshotAt=now;lastAutoSnapshotSignature=signature}
+function formatSnapshotTime(iso){const d=new Date(iso);if(Number.isNaN(d.getTime()))return '未知时间';const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0'),hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0'),ss=String(d.getSeconds()).padStart(2,'0');return `${y}-${m}-${day} ${hh}:${mm}:${ss}`}
+function renderSnapshotList(){
+  if(!dataRollbackList)return;
+  dataRollbackList.innerHTML='';
+  const list=getSnapshotHistory().slice().reverse();
+  if(!list.length){
+    const empty=document.createElement('div');
+    empty.className='snapshot-empty';
+    empty.textContent='暂时还没有快照，系统会自动生成。';
+    dataRollbackList.appendChild(empty);
+    return;
+  }
+  list.forEach((snap,index)=>{
+    const card=document.createElement('article');
+    card.className='snapshot-item';
+    const title=document.createElement('strong');
+    title.textContent=`版本 ${list.length-index}`;
+    const meta=document.createElement('div');
+    meta.className='snapshot-meta';
+    const left=document.createElement('span');
+    left.textContent=`${formatSnapshotTime(snap.createdAt)} · ${snap.reason||'auto'}`;
+    const right=document.createElement('span');
+    right.textContent=snap.appVersion||'unknown';
+    meta.append(left,right);
+    const actions=document.createElement('div');
+    actions.className='snapshot-actions';
+    const restoreBtn=document.createElement('button');
+    restoreBtn.type='button';
+    restoreBtn.dataset.snapshotId=snap.id;
+    restoreBtn.textContent='回滚到此版本';
+    actions.appendChild(restoreBtn);
+    card.append(title,meta,actions);
+    dataRollbackList.appendChild(card);
+  });
+}
+function openDataVaultModal(){if(!dataVaultModal)return;sidebarEl.classList.remove('show');renderSnapshotList();if(dataVaultHint)dataVaultHint.textContent='说明：系统自动保留最近 3 次快照。导入与回滚前会先自动留一份当前快照。';dataVaultModal.classList.add('show');dataVaultModal.setAttribute('aria-hidden','false')}
+function closeDataVaultModal(){if(!dataVaultModal)return;dataVaultModal.classList.remove('show');dataVaultModal.setAttribute('aria-hidden','true')}
+function buildBackupFileName(){const d=new Date();const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0'),hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0'),ss=String(d.getSeconds()).padStart(2,'0');return `daymori-backup-${y}${m}${day}-${hh}${mm}${ss}.json`}
+function exportBackup(){const bundle={format:BACKUP_FORMAT,exportedAt:new Date().toISOString(),appVersion:APP_VERSION,data:captureManagedStorage(),snapshots:getSnapshotHistory()};const blob=new Blob([JSON.stringify(bundle,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=buildBackupFileName();document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);if(dataVaultHint)dataVaultHint.textContent='备份文件已导出。'}
+async function importBackup(file){if(!file)return;const text=await file.text();let bundle;try{bundle=JSON.parse(text)}catch{throw new Error('文件不是有效 JSON')};if(!bundle||typeof bundle!=='object')throw new Error('备份格式无效');const data=bundle.format===BACKUP_FORMAT?bundle.data:bundle.data||bundle;pushSnapshot('pre-import-restore',captureManagedStorage());applyManagedStorageData(data);if(Array.isArray(bundle.snapshots))saveSnapshotHistory(bundle.snapshots);scheduleAutoSnapshot('post-import-restore',true)}
+function restoreSnapshotById(id){const target=getSnapshotHistory().find(snap=>snap.id===id);if(!target){alert('未找到该快照，请重试。');return;}if(!window.confirm('确认回滚到这个版本吗？当前数据会被覆盖。'))return;pushSnapshot('pre-rollback',captureManagedStorage());applyManagedStorageData(target.payload);scheduleAutoSnapshot('post-rollback',true);alert('已恢复到选中版本，页面将刷新。');window.location.reload()}
 function trackVisit(){state.visitCount+=1;saveState()}function formatTime(sec){const m=Math.floor(sec/60),r=sec%60;return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`}
 function renderModes(){if(modeSwitcherEl)modeSwitcherEl.innerHTML=''}
 function getTodayTopThree(){return state.dailyTopThreeDate===todayYMD()?normalizeDailyTopThree(state.dailyTopThree):['','','']}
@@ -1249,6 +1327,7 @@ darkModeToggle.addEventListener('change',()=>{
   document.body.classList.toggle('dark-mode',isDark);
   localStorage.setItem('darkMode',isDark);
   updateDarkModeHint();
+  scheduleAutoSnapshot('theme-change');
 });
 
 // 先绑定 Super 入口，避免后续模块异常影响进入专注模式
@@ -1465,6 +1544,29 @@ if(onboardingOverlay&&onboardingSkip&&onboardingPrev&&onboardingNext){
 if(repairAppBtn){
   repairAppBtn.addEventListener('click',()=>{repairInstalledApp().catch(()=>alert('修复遇到异常，请手动刷新后重试。'))});
 }
+if(dataVaultBtn&&dataVaultModal&&dataExportBtn&&dataImportBtn&&dataImportInput&&dataRollbackList&&dataVaultCloseBtn){
+  dataVaultBtn.addEventListener('click',openDataVaultModal);
+  dataVaultCloseBtn.addEventListener('click',closeDataVaultModal);
+  dataVaultModal.addEventListener('click',e=>{if(e.target===dataVaultModal)closeDataVaultModal()});
+  dataExportBtn.addEventListener('click',exportBackup);
+  dataImportBtn.addEventListener('click',()=>{dataImportInput.value='';dataImportInput.click()});
+  dataImportInput.addEventListener('change',async()=>{
+    const file=dataImportInput.files&&dataImportInput.files[0];
+    if(!file)return;
+    try{
+      await importBackup(file);
+      alert('导入成功，页面将刷新。');
+      window.location.reload();
+    }catch(error){
+      alert(`导入失败：${error&&error.message?error.message:'未知错误'}`);
+    }
+  });
+  dataRollbackList.addEventListener('click',e=>{
+    const btn=e.target.closest('[data-snapshot-id]');
+    if(!btn)return;
+    restoreSnapshotById(btn.dataset.snapshotId||'');
+  });
+}
 layoutFeatureItems();
 const superReportClose=$('superReportClose'),superReportAgain=$('superReportAgain'),superReportOverlay=$('superReportOverlay');
 if(superReportClose&&superReportAgain&&superReportOverlay){
@@ -1504,6 +1606,7 @@ window.addEventListener('blur',()=>{if(document.visibilityState==='visible')hand
 window.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&document.body.classList.contains('super-focus-active'))exitSuperFocus();
   if(e.key==='Escape'&&devLetterOverlay&&devLetterOverlay.classList.contains('show'))closeDevLetter();
+  if(e.key==='Escape'&&dataVaultModal&&dataVaultModal.classList.contains('show'))closeDataVaultModal();
   if(e.key==='Escape'&&onboardingOverlay&&onboardingOverlay.classList.contains('show'))closeOnboarding(true);
   if(e.key==='Escape'&&superReportOverlay&&superReportOverlay.classList.contains('show'))closeSuperSessionReport();
   const analyticsPageEl=$('analyticsPage');if(e.key==='Escape'&&analyticsPageEl&&analyticsPageEl.classList.contains('show'))closeAnalytics();
@@ -1516,6 +1619,9 @@ setSuperDuration(25*60);
 applySuperLevel(localStorage.getItem('superAnimLevel')||'cinematic');
 updateNoiseTip(false);
 renderBoundTask();
+scheduleAutoSnapshot('app-start',true);
+window.setInterval(()=>scheduleAutoSnapshot('interval-auto'),5*60*1000);
+window.addEventListener('beforeunload',()=>scheduleAutoSnapshot('before-unload'));
 </script>
 </body>
 </html>
