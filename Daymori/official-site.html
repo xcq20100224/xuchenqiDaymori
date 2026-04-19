@@ -3,231 +3,747 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daymori 官网</title>
+<title>Daymori Official</title>
 <style>
-:root{
-  --bg-1:#f6fbff;
-  --bg-2:#ddeefe;
-  --ink:#1f3658;
-  --muted:#5f789b;
-  --line:rgba(91,134,186,.24);
-  --bubble:#eef6ff;
-  --accent:#4d78ad;
+:root {
+  --bg: #080b10;
+  --bg-soft: #0f1622;
+  --surface: rgba(255, 255, 255, 0.07);
+  --surface-strong: rgba(255, 255, 255, 0.14);
+  --ink: #f8f9fb;
+  --muted: rgba(248, 249, 251, 0.72);
+  --line: rgba(255, 255, 255, 0.16);
+  --accent: #dfe9ff;
+  --shadow: 0 22px 60px rgba(0, 0, 0, 0.42);
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --container: min(1180px, calc(100vw - 48px));
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{
-  font-family:"Avenir Next","PingFang SC","Microsoft YaHei",sans-serif;
-  color:var(--ink);
-  background:radial-gradient(circle at 16% 16%,#ffffff,transparent 34%),linear-gradient(165deg,var(--bg-1),var(--bg-2));
+
+* {
+  box-sizing: border-box;
 }
-.page{min-height:100vh;overflow:hidden}
-.hero{
-  position:relative;
-  min-height:100vh;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  padding:0 18px 70px;
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
 }
-.bubble-stage{
-  position:absolute;
-  inset:0;
-  overflow:hidden;
+
+body {
+  font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(1100px 700px at 85% -10%, rgba(79, 110, 163, 0.22), transparent 60%),
+    radial-gradient(900px 560px at -8% 42%, rgba(120, 141, 172, 0.18), transparent 62%),
+    linear-gradient(160deg, #070a0f 0%, #0a1119 52%, #0b1320 100%);
+  letter-spacing: 0.01em;
+  overflow-x: hidden;
 }
-.bubble{
-  position:absolute;
-  bottom:-140px;
-  width:136px;
-  height:136px;
-  border-radius:50%;
-  border:1px solid var(--line);
-  background:radial-gradient(circle at 30% 28%,#ffffff,var(--bubble));
-  box-shadow:0 10px 22px rgba(108,150,206,.18),inset 0 2px 7px rgba(255,255,255,.85);
-  animation:riseInitial 3s cubic-bezier(.1,.75,.25,1) forwards;
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
-.symbol-bubble{
-  position:absolute;
-  left:50%;
-  bottom:-220px;
-  transform:translateX(-50%);
-  width:336px;
-  height:336px;
-  border-radius:50%;
-  border:1px solid rgba(91,134,186,.35);
-  background:radial-gradient(circle at 35% 30%,#ffffff,#d9ebff 68%,#c6dfff);
-  box-shadow:0 16px 35px rgba(81,124,178,.3),inset 0 2px 12px rgba(255,255,255,.92);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:1.25rem;
-  letter-spacing:.03em;
-  color:#355f93;
-  font-weight:600;
-  opacity:0;
-  animation:symbolRise 1.45s ease-out 3s forwards;
+
+.container {
+  width: var(--container);
+  margin: 0 auto;
 }
-.hero-content{
-  position:relative;
-  z-index:5;
-  display:grid;
-  justify-items:center;
-  gap:14px;
-  opacity:0;
-  transform:translateY(18px);
-  animation:contentIn .65s ease-out 4.15s forwards;
+
+.navbar {
+  position: fixed;
+  top: 14px;
+  left: 0;
+  right: 0;
+  z-index: 40;
 }
-.hero-text{
-  margin:0;
-  font-size:1.08rem;
-  color:var(--muted);
-  letter-spacing:.05em;
+
+.nav-shell {
+  width: min(1020px, calc(100vw - 28px));
+  margin: 0 auto;
+  height: 62px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  background: rgba(12, 18, 28, 0.68);
+  backdrop-filter: blur(18px) saturate(115%);
+  -webkit-backdrop-filter: blur(18px) saturate(115%);
+  box-shadow: 0 16px 40px rgba(3, 7, 13, 0.34);
 }
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-.hero-actions a{
-  text-decoration:none;
-  padding:12px 20px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  color:var(--ink);
-  background:rgba(255,255,255,.82);
-  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+
+.brand {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
-.hero-actions a.primary{
-  background:linear-gradient(180deg,#ffffff,#e7f2ff);
-  color:var(--accent);
-  border-color:rgba(72,118,174,.3);
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
-.hero-actions a:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(82,124,179,.18)}
-.features{
-  max-width:980px;
-  margin:0 auto;
-  padding:32px 18px 70px;
+
+.nav-links a {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: rgba(248, 249, 251, 0.82);
+  transition: color 0.32s var(--ease-out), opacity 0.32s var(--ease-out);
 }
-.features h2{margin:0 0 14px}
-.feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.feature-card{
-  border:1px solid var(--line);
-  border-radius:18px;
-  background:rgba(255,255,255,.78);
-  padding:14px;
+
+.nav-links a:hover {
+  color: #ffffff;
+  opacity: 1;
 }
-.feature-card h3{margin:0 0 6px;font-size:1rem}
-.feature-card p{margin:0;color:var(--muted);line-height:1.7}
-.edge-bubble{
-  position:absolute;
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.72),rgba(232,243,255,.5));
-  border:1px solid rgba(91,134,186,.14);
-  box-shadow:0 6px 14px rgba(98,138,186,.08);
-  animation:edgeRise 4.9s linear forwards;
+
+.section {
+  position: relative;
+  z-index: 2;
 }
-@keyframes riseInitial{
-  0%{transform:translateY(26vh) scale(.95);opacity:.94}
-  22%{transform:translateY(0) scale(1);opacity:.96}
-  100%{transform:translateY(-132vh) scale(1.04);opacity:0}
+
+.hero {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 150px 0 90px;
 }
-@keyframes symbolRise{
-  0%{bottom:-220px;opacity:0;transform:translateX(-50%) scale(.72)}
-  100%{bottom:40vh;opacity:1;transform:translateX(-50%) scale(1)}
+
+.hero-panel {
+  width: min(980px, calc(100vw - 48px));
+  border-radius: calc(var(--radius-xl) + 8px);
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  padding: clamp(36px, 5vw, 72px) clamp(22px, 5vw, 88px);
+  opacity: 0;
+  transform: translateY(28px);
+  animation: reveal-up 1s var(--ease-out) 0.18s forwards;
 }
-@keyframes contentIn{
-  from{opacity:0;transform:translateY(18px)}
-  to{opacity:1;transform:translateY(0)}
+
+.hero h1 {
+  margin: 0;
+  line-height: 1.04;
+  font-size: clamp(2.5rem, 6.5vw, 6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
-@keyframes edgeRise{
-  0%{transform:translateY(0) scale(.9);opacity:.58}
-  100%{transform:translateY(-110vh) scale(1.1);opacity:0}
+
+.hero-sub {
+  margin: 26px auto 0;
+  max-width: 650px;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  line-height: 1.68;
+  font-weight: 400;
 }
-@media (max-width:760px){
-  .symbol-bubble{width:232px;height:232px;font-size:1.06rem}
-  .bubble{width:88px;height:88px}
-  .edge-bubble{width:24px;height:24px}
-  .hero{padding-bottom:56px}
-  .feature-grid{grid-template-columns:1fr}
+
+.cta-row {
+  margin-top: 34px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  min-width: 160px;
+  border-radius: var(--radius-pill);
+  padding: 13px 25px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: transform 0.36s var(--ease-out), background-color 0.36s var(--ease-out), border-color 0.36s var(--ease-out), color 0.36s var(--ease-out), box-shadow 0.36s var(--ease-out);
+}
+
+.btn-primary {
+  background: #f7f9ff;
+  color: #0b1119;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.26);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #f8f9fb;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary:hover {
+  background: #ffffff;
+}
+
+.btn-outline:hover {
+  border-color: rgba(255, 255, 255, 0.66);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.value {
+  padding: 110px 0;
+}
+
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.value-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 30px 26px;
+  background: var(--surface);
+  backdrop-filter: blur(10px) saturate(110%);
+  -webkit-backdrop-filter: blur(10px) saturate(110%);
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.value-card:nth-child(1) {
+  animation: reveal-up 0.9s var(--ease-out) 0.1s forwards;
+}
+
+.value-card:nth-child(2) {
+  animation: reveal-up 0.9s var(--ease-out) 0.2s forwards;
+}
+
+.value-card:nth-child(3) {
+  animation: reveal-up 0.9s var(--ease-out) 0.3s forwards;
+}
+
+.value-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  margin-bottom: 18px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.value-card h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.value-card p {
+  margin: 14px 0 0;
+  color: var(--muted);
+  line-height: 1.82;
+  font-size: 0.98rem;
+}
+
+.feature-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 86px 0;
+}
+
+.feature-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(22px, 4vw, 56px);
+  align-items: center;
+}
+
+.feature-wrap.reverse .feature-copy {
+  order: 2;
+}
+
+.feature-wrap.reverse .feature-visual {
+  order: 1;
+}
+
+.feature-copy h2 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.feature-copy p {
+  margin: 20px 0 0;
+  font-size: 1.02rem;
+  line-height: 1.95;
+  color: var(--muted);
+  max-width: 520px;
+}
+
+.feature-visual {
+  height: clamp(260px, 44vw, 500px);
+  border-radius: calc(var(--radius-xl) + 6px);
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.2), transparent 48%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px) saturate(110%);
+  -webkit-backdrop-filter: blur(10px) saturate(110%);
+}
+
+.feature-visual::before,
+.feature-visual::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.feature-visual::before {
+  width: 210px;
+  height: 210px;
+  top: -68px;
+  right: -32px;
+  background: radial-gradient(circle at 40% 34%, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05));
+}
+
+.feature-visual::after {
+  width: 150px;
+  height: 150px;
+  left: -36px;
+  bottom: -44px;
+  background: radial-gradient(circle at 45% 45%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.06));
+}
+
+.feature-chip {
+  position: absolute;
+  left: 26px;
+  bottom: 24px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(6, 10, 16, 0.44);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 9px 16px;
+  color: rgba(248, 249, 251, 0.9);
+  font-size: 0.84rem;
+  letter-spacing: 0.03em;
+}
+
+.philosophy {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 100px 0;
+}
+
+.philosophy-panel {
+  width: min(860px, calc(100vw - 48px));
+}
+
+.philosophy h2 {
+  margin: 0;
+  font-size: clamp(2rem, 4.1vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.philosophy p {
+  margin: 20px auto 0;
+  max-width: 760px;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.95;
+}
+
+.final-cta {
+  min-height: 86vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 90px 0;
+}
+
+.final-cta h2 {
+  margin: 0;
+  font-size: clamp(2.1rem, 4.8vw, 4rem);
+  line-height: 1.15;
+}
+
+.final-cta p {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+}
+
+.final-cta .btn-primary {
+  margin-top: 28px;
+  min-width: 210px;
+  padding: 15px 30px;
+}
+
+.footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(7, 10, 15, 0.58);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 54px 0 30px;
+}
+
+.footer-top {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 26px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
+}
+
+.footer-col h4 {
+  margin: 0 0 14px;
+  font-size: 0.84rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(248, 249, 251, 0.62);
+  font-weight: 600;
+}
+
+.footer-col a {
+  display: block;
+  margin-bottom: 10px;
+  color: rgba(248, 249, 251, 0.84);
+  font-size: 0.95rem;
+  transition: color 0.28s var(--ease-out);
+}
+
+.footer-col a:hover {
+  color: #ffffff;
+}
+
+.copyright {
+  margin-top: 34px;
+  text-align: center;
+  color: rgba(248, 249, 251, 0.5);
+  font-size: 0.76rem;
+  line-height: 1.8;
+}
+
+.parallax {
+  transform: translate3d(0, var(--parallax-y, 0px), 0);
+  transition: transform 0.9s var(--ease-out);
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.88s var(--ease-out), transform 0.88s var(--ease-out);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 980px) {
+  .feature-wrap,
+  .feature-wrap.reverse {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-wrap.reverse .feature-copy,
+  .feature-wrap.reverse .feature-visual {
+    order: initial;
+  }
+
+  .feature-copy p {
+    max-width: 100%;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --container: min(1180px, calc(100vw - 32px));
+  }
+
+  .navbar {
+    top: 10px;
+  }
+
+  .nav-shell {
+    height: 56px;
+    padding: 0 14px;
+    gap: 12px;
+  }
+
+  .nav-links {
+    gap: 14px;
+  }
+
+  .nav-links a {
+    font-size: 0.82rem;
+  }
+
+  .hero {
+    padding-top: 122px;
+  }
+
+  .hero-sub {
+    line-height: 1.8;
+  }
+
+  .value {
+    padding: 84px 0;
+  }
+
+  .value-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-section {
+    min-height: auto;
+    padding: 74px 0;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }
 </style>
 </head>
 <body>
-<div class="page">
-  <section class="hero" id="top">
-    <div class="bubble-stage" id="bubbleStage"></div>
-    <div class="symbol-bubble">Daymori</div>
-    <div class="hero-content">
-      <p class="hero-text">温柔自律，您的专注小助手！</p>
-      <div class="hero-actions">
-        <a class="primary" href="./Daymori.html">开始旅程</a>
-        <a href="#features">功能概览</a>
+<header class="navbar">
+  <nav class="nav-shell">
+    <div class="brand">Daymori</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#design">Design</a>
+      <a href="#download">Download</a>
+      <a href="#support">Support</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="section hero" id="top">
+    <div class="hero-panel parallax" data-speed="0.14">
+      <h1>Daymori<br>自律，本该极简</h1>
+      <p class="hero-sub">
+        为专注而生的数字自律伴侣<br>
+        告别冗余，回归生活本身的秩序
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="./Daymori.html">Download Now</a>
+        <a class="btn btn-outline" href="#features">Learn More</a>
       </div>
     </div>
   </section>
 
-  <section class="features" id="features">
-    <h2>功能概览</h2>
-    <div class="feature-grid">
-      <article class="feature-card">
-        <h3>今日三件事</h3>
-        <p>先写下最重要的三件事，让执行更有方向。</p>
+  <section class="section value" id="features">
+    <div class="container value-grid">
+      <article class="value-card" data-reveal>
+        <div class="value-icon">01</div>
+        <h3>极致专注</h3>
+        <p>无冗余功能，无推送打扰，只保留帮你进入深度专注的核心能力</p>
       </article>
-      <article class="feature-card">
-        <h3>番茄专注闭环</h3>
-        <p>任务估时、专注计时、晚间复盘，一天一个闭环。</p>
+      <article class="value-card" data-reveal>
+        <div class="value-icon">02</div>
+        <h3>极简设计</h3>
+        <p>遵循Apple式美学，每一处像素都经过打磨，克制且富有力量</p>
       </article>
-      <article class="feature-card">
-        <h3>Super 专注模式</h3>
-        <p>完全自定义时长，搭配咖啡馆、图书馆、森林场景白噪音。</p>
+      <article class="value-card" data-reveal>
+        <div class="value-icon">03</div>
+        <h3>全链路自律</h3>
+        <p>从专注计时到睡眠监测，从护眼模式到习惯养成，一站式守护你的自律生活</p>
       </article>
     </div>
   </section>
-</div>
+
+  <section class="section feature-section">
+    <div class="container feature-wrap">
+      <div class="feature-copy" data-reveal>
+        <h2>专注，一键开启</h2>
+        <p>
+          告别复杂设置，一键启动专注计时<br>
+          自定义专注时长，白噪音辅助沉浸<br>
+          帮你快速进入心流状态<br>
+          记录每一段不被打扰的专注时光
+        </p>
+      </div>
+      <div class="feature-visual parallax" data-speed="0.08" data-reveal>
+        <span class="feature-chip">Core Feature 01</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section feature-section">
+    <div class="container feature-wrap reverse">
+      <div class="feature-copy" data-reveal>
+        <h2>安睡，整夜守护</h2>
+        <p>
+          精准监测睡眠状态，深度分析睡眠周期<br>
+          晨起生成轻量化睡眠报告<br>
+          温和自然唤醒，告别生硬闹钟<br>
+          帮你养成规律作息，找回高质量睡眠
+        </p>
+      </div>
+      <div class="feature-visual parallax" data-speed="0.1" data-reveal>
+        <span class="feature-chip">Core Feature 02</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section feature-section">
+    <div class="container feature-wrap">
+      <div class="feature-copy" data-reveal>
+        <h2>视觉，温柔以待</h2>
+        <p>
+          全局深色模式自适应<br>
+          左滑一键开启护眼模式<br>
+          屏幕色温智能跟随环境调节<br>
+          减少蓝光伤害，长时间使用也能守护双眼舒适
+        </p>
+      </div>
+      <div class="feature-visual parallax" data-speed="0.08" data-reveal>
+        <span class="feature-chip">Core Feature 03</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section feature-section">
+    <div class="container feature-wrap reverse">
+      <div class="feature-copy" data-reveal>
+        <h2>自律，日积月累</h2>
+        <p>
+          极简的习惯打卡体系，无复杂任务设置<br>
+          只记录你的每一次坚持<br>
+          自动生成可视化成长轨迹<br>
+          让自律，成为自然而然的日常习惯
+        </p>
+      </div>
+      <div class="feature-visual parallax" data-speed="0.1" data-reveal>
+        <span class="feature-chip">Core Feature 04</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section philosophy" id="design">
+    <div class="philosophy-panel" data-reveal>
+      <h2>设计，为体验而生</h2>
+      <p>
+        我们相信，好的产品，是隐形的。<br>
+        不抢夺你的注意力，只在你需要的时候，提供恰到好处的帮助。<br><br>
+        Daymori的每一处设计，都遵循「少即是多」的原则。<br>
+        剔除所有不必要的元素，只保留最核心的功能，与最舒适的体验。<br><br>
+        就像你手中的Apple设备，极致简约，却又无比强大。
+      </p>
+    </div>
+  </section>
+
+  <section class="section final-cta" id="download">
+    <div data-reveal>
+      <h2>开启你的极简自律之旅</h2>
+      <p>Daymori，陪你把自律，变成日常</p>
+      <a class="btn btn-primary" href="./Daymori.html">Download Daymori</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer" id="support">
+  <div class="container">
+    <div class="footer-top">Daymori</div>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>产品</h4>
+        <a href="#features">Features</a>
+        <a href="#design">Design</a>
+        <a href="#download">Download</a>
+        <a href="#top">What's New</a>
+      </div>
+      <div class="footer-col">
+        <h4>支持</h4>
+        <a href="#support">Help Center</a>
+        <a href="#support">Contact Us</a>
+        <a href="#support">Privacy Policy</a>
+        <a href="#support">Terms of Service</a>
+      </div>
+    </div>
+    <div class="copyright">
+      Copyright © 2026 Daymori. All rights reserved.<br>
+      Designed with minimalism in mind.
+    </div>
+  </div>
+</footer>
 
 <script>
-const stage=document.getElementById('bubbleStage');
+const revealTargets = document.querySelectorAll('[data-reveal]');
+const parallaxTargets = document.querySelectorAll('.parallax');
 
-function addInitialBubble(index,total){
-  const b=document.createElement('div');
-  b.className='bubble';
-  const cols=12;
-  const rows=Math.ceil(total/cols);
-  const row=Math.floor(index/cols);
-  const col=index%cols;
-  const x=(col+0.5)*(100/cols);
-  const rowSpan=66/Math.max(1,rows-1);
-  const bottomVh=-18+row*rowSpan;
-  b.style.left=`calc(${x}% - 68px)`;
-  b.style.bottom=`${bottomVh}vh`;
-  b.style.animationDelay=`${Math.random()*.22}s`;
-  stage.appendChild(b);
+const revealObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, {
+  threshold: 0.25,
+  rootMargin: '0px 0px -8% 0px'
+});
+
+revealTargets.forEach((el) => revealObserver.observe(el));
+
+function updateParallax() {
+  const viewportH = window.innerHeight;
+  parallaxTargets.forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    const speed = Number(el.dataset.speed || 0.1);
+    const centerOffset = rect.top + rect.height * 0.5 - viewportH * 0.5;
+    const shift = centerOffset * speed * -0.18;
+    el.style.setProperty('--parallax-y', `${shift}px`);
+  });
 }
 
-function spawnInitialBubbles(){
-  const total=60;
-  for(let i=0;i<total;i+=1)addInitialBubble(i,total);
-}
-
-const edgePattern=[4,10,90,84,14,86,8,92,18,82];
-let edgeIndex=0;
-function spawnEdgeBubble(){
-  const b=document.createElement('div');
-  b.className='edge-bubble';
-  const base=edgePattern[edgeIndex%edgePattern.length];
-  edgeIndex+=1;
-  b.style.left=`${base}%`;
-  b.style.bottom='-24px';
-  const size=28+Math.random()*14;
-  b.style.width=`${size}px`;
-  b.style.height=`${size}px`;
-  b.style.animationDuration=`${4.1+Math.random()*1.4}s`;
-  stage.appendChild(b);
-  b.addEventListener('animationend',()=>b.remove());
-}
-
-spawnInitialBubbles();
-window.setTimeout(()=>{
-  window.setInterval(spawnEdgeBubble,420);
-},3000);
+updateParallax();
+window.addEventListener('scroll', updateParallax, { passive: true });
+window.addEventListener('resize', updateParallax);
 </script>
 </body>
 </html>
