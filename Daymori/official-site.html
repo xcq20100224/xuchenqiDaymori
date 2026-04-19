@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daymori 官网</title>
+<style>
+:root{
+  --bg-1:#f6fbff;
+  --bg-2:#ddeefe;
+  --ink:#1f3658;
+  --muted:#5f789b;
+  --line:rgba(91,134,186,.24);
+  --bubble:#eef6ff;
+  --accent:#4d78ad;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Avenir Next","PingFang SC","Microsoft YaHei",sans-serif;
+  color:var(--ink);
+  background:radial-gradient(circle at 16% 16%,#ffffff,transparent 34%),linear-gradient(165deg,var(--bg-1),var(--bg-2));
+}
+.page{min-height:100vh;overflow:hidden}
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:0 18px 70px;
+}
+.bubble-stage{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+}
+.bubble{
+  position:absolute;
+  bottom:-80px;
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  border:1px solid var(--line);
+  background:radial-gradient(circle at 30% 28%,#ffffff,var(--bubble));
+  box-shadow:0 10px 22px rgba(108,150,206,.18),inset 0 2px 7px rgba(255,255,255,.85);
+  animation:riseInitial 3s ease-in forwards;
+}
+.symbol-bubble{
+  position:absolute;
+  left:50%;
+  bottom:-120px;
+  transform:translateX(-50%);
+  width:124px;
+  height:124px;
+  border-radius:50%;
+  border:1px solid rgba(91,134,186,.35);
+  background:radial-gradient(circle at 35% 30%,#ffffff,#d9ebff 68%,#c6dfff);
+  box-shadow:0 16px 35px rgba(81,124,178,.3),inset 0 2px 12px rgba(255,255,255,.92);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.25rem;
+  letter-spacing:.03em;
+  color:#355f93;
+  font-weight:600;
+  opacity:0;
+  animation:symbolRise 1.5s ease-out 3s forwards;
+}
+.hero-content{
+  position:relative;
+  z-index:5;
+  display:grid;
+  justify-items:center;
+  gap:14px;
+  opacity:0;
+  transform:translateY(18px);
+  animation:contentIn .65s ease-out 4.15s forwards;
+}
+.hero-text{
+  margin:0;
+  font-size:1.08rem;
+  color:var(--muted);
+  letter-spacing:.05em;
+}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.hero-actions a{
+  text-decoration:none;
+  padding:12px 20px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--ink);
+  background:rgba(255,255,255,.82);
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.hero-actions a.primary{
+  background:linear-gradient(180deg,#ffffff,#e7f2ff);
+  color:var(--accent);
+  border-color:rgba(72,118,174,.3);
+}
+.hero-actions a:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(82,124,179,.18)}
+.features{
+  max-width:980px;
+  margin:0 auto;
+  padding:32px 18px 70px;
+}
+.features h2{margin:0 0 14px}
+.feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.feature-card{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(255,255,255,.78);
+  padding:14px;
+}
+.feature-card h3{margin:0 0 6px;font-size:1rem}
+.feature-card p{margin:0;color:var(--muted);line-height:1.7}
+.edge-bubble{
+  position:absolute;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#ffffff,#e8f3ff);
+  border:1px solid rgba(91,134,186,.2);
+  box-shadow:0 6px 14px rgba(98,138,186,.15);
+  animation:edgeRise 4.4s linear forwards;
+}
+@keyframes riseInitial{
+  0%{transform:translateY(0) scale(.95);opacity:.9}
+  100%{transform:translateY(-95vh) scale(1.02);opacity:0}
+}
+@keyframes symbolRise{
+  0%{bottom:-120px;opacity:0;transform:translateX(-50%) scale(.75)}
+  100%{bottom:45vh;opacity:1;transform:translateX(-50%) scale(1)}
+}
+@keyframes contentIn{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes edgeRise{
+  0%{transform:translateY(0) scale(.9);opacity:.88}
+  100%{transform:translateY(-110vh) scale(1.1);opacity:0}
+}
+@media (max-width:760px){
+  .symbol-bubble{width:108px;height:108px;font-size:1.1rem}
+  .hero{padding-bottom:56px}
+  .feature-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <section class="hero" id="top">
+    <div class="bubble-stage" id="bubbleStage"></div>
+    <div class="symbol-bubble">Daymori</div>
+    <div class="hero-content">
+      <p class="hero-text">温柔自律，您的专注小助手！</p>
+      <div class="hero-actions">
+        <a class="primary" href="./Daymori.html">开始旅程</a>
+        <a href="#features">功能概览</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <h2>功能概览</h2>
+    <div class="feature-grid">
+      <article class="feature-card">
+        <h3>今日三件事</h3>
+        <p>先写下最重要的三件事，让执行更有方向。</p>
+      </article>
+      <article class="feature-card">
+        <h3>番茄专注闭环</h3>
+        <p>任务估时、专注计时、晚间复盘，一天一个闭环。</p>
+      </article>
+      <article class="feature-card">
+        <h3>Super 专注模式</h3>
+        <p>完全自定义时长，搭配咖啡馆、图书馆、森林场景白噪音。</p>
+      </article>
+    </div>
+  </section>
+</div>
+
+<script>
+const stage=document.getElementById('bubbleStage');
+
+function addInitialBubble(index,total){
+  const b=document.createElement('div');
+  b.className='bubble';
+  const x=((index+0.5)/total)*100;
+  b.style.left=`calc(${x}% - 27px)`;
+  b.style.animationDelay=`${Math.random()*.28}s`;
+  stage.appendChild(b);
+}
+
+function spawnInitialBubbles(){
+  const total=22;
+  for(let i=0;i<total;i+=1)addInitialBubble(i,total);
+}
+
+function spawnEdgeBubble(){
+  const b=document.createElement('div');
+  b.className='edge-bubble';
+  const isLeft=Math.random()>.5;
+  const base=isLeft?Math.random()*14:86+Math.random()*14;
+  b.style.left=`${base}%`;
+  b.style.bottom='-24px';
+  const size=12+Math.random()*10;
+  b.style.width=`${size}px`;
+  b.style.height=`${size}px`;
+  b.style.animationDuration=`${3.6+Math.random()*2.2}s`;
+  stage.appendChild(b);
+  b.addEventListener('animationend',()=>b.remove());
+}
+
+spawnInitialBubbles();
+window.setTimeout(()=>{
+  window.setInterval(spawnEdgeBubble,180);
+},3000);
+</script>
+</body>
+</html>
