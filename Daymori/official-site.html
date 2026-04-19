@@ -6,15 +6,15 @@
 <title>Daymori Official</title>
 <style>
 :root {
-  --bg: #080b10;
-  --bg-soft: #0f1622;
-  --surface: rgba(255, 255, 255, 0.07);
-  --surface-strong: rgba(255, 255, 255, 0.14);
-  --ink: #f8f9fb;
-  --muted: rgba(248, 249, 251, 0.72);
-  --line: rgba(255, 255, 255, 0.16);
-  --accent: #dfe9ff;
-  --shadow: 0 22px 60px rgba(0, 0, 0, 0.42);
+  --bg: #eef5ff;
+  --bg-soft: #dfeafd;
+  --surface: rgba(255, 255, 255, 0.82);
+  --surface-strong: rgba(255, 255, 255, 0.92);
+  --ink: #233654;
+  --muted: #7085a0;
+  --line: rgba(106, 140, 186, 0.16);
+  --accent: #6d95cb;
+  --shadow: 0 24px 60px rgba(94, 128, 173, 0.16);
   --radius-xl: 28px;
   --radius-lg: 20px;
   --radius-pill: 999px;
@@ -37,11 +37,38 @@ body {
   font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   color: var(--ink);
   background:
-    radial-gradient(1100px 700px at 85% -10%, rgba(79, 110, 163, 0.22), transparent 60%),
-    radial-gradient(900px 560px at -8% 42%, rgba(120, 141, 172, 0.18), transparent 62%),
-    linear-gradient(160deg, #070a0f 0%, #0a1119 52%, #0b1320 100%);
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.96), transparent 28%),
+    radial-gradient(circle at 82% 12%, rgba(198, 224, 255, 0.72), transparent 22%),
+    linear-gradient(160deg, var(--bg), var(--bg-soft));
   letter-spacing: 0.01em;
   overflow-x: hidden;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 999px;
+  filter: blur(16px);
+  pointer-events: none;
+  opacity: 0.6;
+  z-index: 0;
+}
+
+body::before {
+  top: 8vh;
+  left: -6vw;
+  width: 240px;
+  height: 86px;
+  background: radial-gradient(circle at 35% 50%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.18) 70%, transparent 73%);
+}
+
+body::after {
+  top: 24vh;
+  right: -4vw;
+  width: 280px;
+  height: 96px;
+  background: radial-gradient(circle at 42% 50%, rgba(255, 255, 255, 0.84), rgba(222, 236, 255, 0.16) 72%, transparent 75%);
 }
 
 a {
@@ -72,10 +99,10 @@ a {
   align-items: center;
   justify-content: space-between;
   padding: 0 22px;
-  background: rgba(12, 18, 28, 0.68);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(18px) saturate(115%);
   -webkit-backdrop-filter: blur(18px) saturate(115%);
-  box-shadow: 0 16px 40px rgba(3, 7, 13, 0.34);
+  box-shadow: 0 16px 36px rgba(94, 128, 173, 0.15);
 }
 
 .brand {
@@ -93,12 +120,12 @@ a {
 .nav-links a {
   font-size: 0.92rem;
   font-weight: 500;
-  color: rgba(248, 249, 251, 0.82);
+  color: #4d72a1;
   transition: color 0.32s var(--ease-out), opacity 0.32s var(--ease-out);
 }
 
 .nav-links a:hover {
-  color: #ffffff;
+  color: #233654;
   opacity: 1;
 }
 
@@ -112,25 +139,25 @@ a {
   display: grid;
   place-items: center;
   text-align: center;
-  padding: 150px 0 90px;
+  padding: 162px 0 90px;
 }
 
 .hero-panel {
   width: min(980px, calc(100vw - 48px));
   border-radius: calc(var(--radius-xl) + 8px);
-  background: linear-gradient(140deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(236, 245, 255, 0.84));
+  border: 1px solid rgba(106, 140, 186, 0.18);
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px) saturate(120%);
   -webkit-backdrop-filter: blur(16px) saturate(120%);
-  padding: clamp(36px, 5vw, 72px) clamp(22px, 5vw, 88px);
+  padding: clamp(56px, 7vw, 98px) clamp(22px, 5vw, 88px) clamp(40px, 6vw, 80px);
   opacity: 0;
   transform: translateY(28px);
   animation: reveal-up 1s var(--ease-out) 0.18s forwards;
 }
 
 .hero h1 {
-  margin: 0;
+  margin: 10px 0 0;
   line-height: 1.04;
   font-size: clamp(2.5rem, 6.5vw, 6rem);
   font-weight: 700;
@@ -165,16 +192,16 @@ a {
 }
 
 .btn-primary {
-  background: #f7f9ff;
-  color: #0b1119;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.26);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(232, 242, 255, 0.92));
+  color: #416792;
+  border: 1px solid rgba(109, 149, 203, 0.16);
+  box-shadow: 0 14px 28px rgba(94, 128, 173, 0.2);
 }
 
 .btn-outline {
-  background: transparent;
-  color: #f8f9fb;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.74);
+  color: #233654;
+  border: 1px solid rgba(109, 149, 203, 0.16);
 }
 
 .btn:hover {
@@ -186,8 +213,8 @@ a {
 }
 
 .btn-outline:hover {
-  border-color: rgba(255, 255, 255, 0.66);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(109, 149, 203, 0.28);
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .value {
@@ -227,12 +254,13 @@ a {
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(109, 149, 203, 0.16);
   display: grid;
   place-items: center;
   font-size: 1.1rem;
   margin-bottom: 18px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.72);
+  color: #4d72a1;
 }
 
 .value-card h3 {
@@ -290,8 +318,8 @@ a {
   border-radius: calc(var(--radius-xl) + 6px);
   border: 1px solid var(--line);
   background:
-    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.2), transparent 48%),
-    linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
+    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.84), transparent 48%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.94), rgba(228, 240, 255, 0.74));
   box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
@@ -304,7 +332,7 @@ a {
   content: "";
   position: absolute;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(109, 149, 203, 0.2);
 }
 
 .feature-visual::before {
@@ -312,7 +340,7 @@ a {
   height: 210px;
   top: -68px;
   right: -32px;
-  background: radial-gradient(circle at 40% 34%, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05));
+  background: radial-gradient(circle at 40% 34%, rgba(255, 255, 255, 0.95), rgba(217, 235, 255, 0.4));
 }
 
 .feature-visual::after {
@@ -320,7 +348,7 @@ a {
   height: 150px;
   left: -36px;
   bottom: -44px;
-  background: radial-gradient(circle at 45% 45%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.06));
+  background: radial-gradient(circle at 45% 45%, rgba(255, 255, 255, 0.9), rgba(212, 232, 255, 0.36));
 }
 
 .feature-chip {
@@ -328,12 +356,12 @@ a {
   left: 26px;
   bottom: 24px;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: rgba(6, 10, 16, 0.44);
+  border: 1px solid rgba(109, 149, 203, 0.22);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 9px 16px;
-  color: rgba(248, 249, 251, 0.9);
+  color: #4d72a1;
   font-size: 0.84rem;
   letter-spacing: 0.03em;
 }
@@ -392,8 +420,8 @@ a {
 }
 
 .footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(7, 10, 15, 0.58);
+  border-top: 1px solid rgba(106, 140, 186, 0.18);
+  background: rgba(255, 255, 255, 0.68);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 54px 0 30px;
@@ -416,26 +444,26 @@ a {
   font-size: 0.84rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(248, 249, 251, 0.62);
+  color: #6f88a3;
   font-weight: 600;
 }
 
 .footer-col a {
   display: block;
   margin-bottom: 10px;
-  color: rgba(248, 249, 251, 0.84);
+  color: #4d72a1;
   font-size: 0.95rem;
   transition: color 0.28s var(--ease-out);
 }
 
 .footer-col a:hover {
-  color: #ffffff;
+  color: #233654;
 }
 
 .copyright {
   margin-top: 34px;
   text-align: center;
-  color: rgba(248, 249, 251, 0.5);
+  color: #7f97b2;
   font-size: 0.76rem;
   line-height: 1.8;
 }
@@ -564,7 +592,7 @@ a {
 <main>
   <section class="section hero" id="top">
     <div class="hero-panel parallax" data-speed="0.14">
-      <h1>Daymori<br>自律，本该极简</h1>
+      <h1>Daymori</h1>
       <p class="hero-sub">
         为专注而生的数字自律伴侣<br>
         告别冗余，回归生活本身的秩序
