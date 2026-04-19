@@ -37,22 +37,22 @@ body{
 }
 .bubble{
   position:absolute;
-  bottom:-80px;
-  width:54px;
-  height:54px;
+  bottom:-140px;
+  width:136px;
+  height:136px;
   border-radius:50%;
   border:1px solid var(--line);
   background:radial-gradient(circle at 30% 28%,#ffffff,var(--bubble));
   box-shadow:0 10px 22px rgba(108,150,206,.18),inset 0 2px 7px rgba(255,255,255,.85);
-  animation:riseInitial 3s ease-in forwards;
+  animation:riseInitial 3s cubic-bezier(.1,.75,.25,1) forwards;
 }
 .symbol-bubble{
   position:absolute;
   left:50%;
-  bottom:-120px;
+  bottom:-220px;
   transform:translateX(-50%);
-  width:124px;
-  height:124px;
+  width:336px;
+  height:336px;
   border-radius:50%;
   border:1px solid rgba(91,134,186,.35);
   background:radial-gradient(circle at 35% 30%,#ffffff,#d9ebff 68%,#c6dfff);
@@ -65,7 +65,7 @@ body{
   color:#355f93;
   font-weight:600;
   opacity:0;
-  animation:symbolRise 1.5s ease-out 3s forwards;
+  animation:symbolRise 1.45s ease-out 3s forwards;
 }
 .hero-content{
   position:relative;
@@ -116,32 +116,35 @@ body{
 .feature-card p{margin:0;color:var(--muted);line-height:1.7}
 .edge-bubble{
   position:absolute;
-  width:16px;
-  height:16px;
+  width:32px;
+  height:32px;
   border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,#ffffff,#e8f3ff);
-  border:1px solid rgba(91,134,186,.2);
-  box-shadow:0 6px 14px rgba(98,138,186,.15);
-  animation:edgeRise 4.4s linear forwards;
+  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.72),rgba(232,243,255,.5));
+  border:1px solid rgba(91,134,186,.14);
+  box-shadow:0 6px 14px rgba(98,138,186,.08);
+  animation:edgeRise 4.9s linear forwards;
 }
 @keyframes riseInitial{
-  0%{transform:translateY(0) scale(.95);opacity:.9}
-  100%{transform:translateY(-95vh) scale(1.02);opacity:0}
+  0%{transform:translateY(26vh) scale(.95);opacity:.94}
+  22%{transform:translateY(0) scale(1);opacity:.96}
+  100%{transform:translateY(-132vh) scale(1.04);opacity:0}
 }
 @keyframes symbolRise{
-  0%{bottom:-120px;opacity:0;transform:translateX(-50%) scale(.75)}
-  100%{bottom:45vh;opacity:1;transform:translateX(-50%) scale(1)}
+  0%{bottom:-220px;opacity:0;transform:translateX(-50%) scale(.72)}
+  100%{bottom:40vh;opacity:1;transform:translateX(-50%) scale(1)}
 }
 @keyframes contentIn{
   from{opacity:0;transform:translateY(18px)}
   to{opacity:1;transform:translateY(0)}
 }
 @keyframes edgeRise{
-  0%{transform:translateY(0) scale(.9);opacity:.88}
+  0%{transform:translateY(0) scale(.9);opacity:.58}
   100%{transform:translateY(-110vh) scale(1.1);opacity:0}
 }
 @media (max-width:760px){
-  .symbol-bubble{width:108px;height:108px;font-size:1.1rem}
+  .symbol-bubble{width:232px;height:232px;font-size:1.06rem}
+  .bubble{width:88px;height:88px}
+  .edge-bubble{width:24px;height:24px}
   .hero{padding-bottom:56px}
   .feature-grid{grid-template-columns:1fr}
 }
@@ -186,35 +189,44 @@ const stage=document.getElementById('bubbleStage');
 function addInitialBubble(index,total){
   const b=document.createElement('div');
   b.className='bubble';
-  const x=((index+0.5)/total)*100;
-  b.style.left=`calc(${x}% - 27px)`;
-  b.style.animationDelay=`${Math.random()*.28}s`;
+  const cols=12;
+  const rows=Math.ceil(total/cols);
+  const row=Math.floor(index/cols);
+  const col=index%cols;
+  const x=(col+0.5)*(100/cols);
+  const rowSpan=66/Math.max(1,rows-1);
+  const bottomVh=-18+row*rowSpan;
+  b.style.left=`calc(${x}% - 68px)`;
+  b.style.bottom=`${bottomVh}vh`;
+  b.style.animationDelay=`${Math.random()*.22}s`;
   stage.appendChild(b);
 }
 
 function spawnInitialBubbles(){
-  const total=22;
+  const total=60;
   for(let i=0;i<total;i+=1)addInitialBubble(i,total);
 }
 
+const edgePattern=[4,10,90,84,14,86,8,92,18,82];
+let edgeIndex=0;
 function spawnEdgeBubble(){
   const b=document.createElement('div');
   b.className='edge-bubble';
-  const isLeft=Math.random()>.5;
-  const base=isLeft?Math.random()*14:86+Math.random()*14;
+  const base=edgePattern[edgeIndex%edgePattern.length];
+  edgeIndex+=1;
   b.style.left=`${base}%`;
   b.style.bottom='-24px';
-  const size=12+Math.random()*10;
+  const size=28+Math.random()*14;
   b.style.width=`${size}px`;
   b.style.height=`${size}px`;
-  b.style.animationDuration=`${3.6+Math.random()*2.2}s`;
+  b.style.animationDuration=`${4.1+Math.random()*1.4}s`;
   stage.appendChild(b);
   b.addEventListener('animationend',()=>b.remove());
 }
 
 spawnInitialBubbles();
 window.setTimeout(()=>{
-  window.setInterval(spawnEdgeBubble,180);
+  window.setInterval(spawnEdgeBubble,420);
 },3000);
 </script>
 </body>
