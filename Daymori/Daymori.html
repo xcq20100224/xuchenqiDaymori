@@ -1273,8 +1273,58 @@ function startSuperTimer(){if(superState.interval||superState.left<=0)return;if(
 function applySuperCustom(){const h=clampNum(sfHour.value,0,23),m=clampNum(sfMinute.value,0,59),s=clampNum(sfSecond.value,0,59);setSuperDuration(h*3600+m*60+s||1500)}
 function applySuperLevel(level){const lv=['normal','cinematic','extreme'].includes(level)?level:'cinematic';superState.level=lv;superFocusLayer.classList.remove('level-normal','level-cinematic','level-extreme');superFocusLayer.classList.add(`level-${lv}`);sfLevelButtons.forEach(btn=>btn.classList.toggle('active',btn.dataset.sfLevel===lv));localStorage.setItem('superAnimLevel',lv)}
 function updateNoiseTip(on){if(!sfNoiseTip)return;const labels={coffee:'咖啡馆',library:'图书馆',forest:'森林'};const current=labels[sfNoiseType&&sfNoiseType.value]||'场景';sfNoiseTip.textContent=on?`${current}白噪音已开启，带上耳机，效果更佳！`:'开启后，带上耳机，效果更佳！'}
-function createNoiseBuffer(ctx,type){const size=ctx.sampleRate*2;const buffer=ctx.createBuffer(1,size,ctx.sampleRate);const data=buffer.getChannelData(0);if(type==='coffee'){let b0=0,b1=0,b2=0;for(let i=0;i<size;i+=1){const w=Math.random()*2-1;b0=.985*b0+w*.08;b1=.94*b1+w*.04;b2=.7*b2+w*.015;let v=(b0+b1+b2+w*.1)*.08;if(i%(ctx.sampleRate/3)<42)v+=Math.sin((i%42)/42*Math.PI)*.03;data[i]=Math.max(-1,Math.min(1,v))}}else if(type==='library'){let last=0;for(let i=0;i<size;i+=1){const w=(Math.random()*2-1)*.3;last=(last+.015*w)/1.015;let v=last*.5;if(i%(ctx.sampleRate*1.2)<28)v+=Math.sin((i%28)/28*Math.PI)*.02;data[i]=Math.max(-1,Math.min(1,v))}}else if(type==='forest'){let brown=0;for(let i=0;i<size;i+=1){const w=Math.random()*2-1;brown=(brown+.02*w)/1.02;let v=brown*.22;const birdGate=i%(ctx.sampleRate*0.85);if(birdGate<120){const t=birdGate/ctx.sampleRate;v+=Math.sin(2*Math.PI*(1200+400*Math.sin(t*18))*t)*.05*(1-birdGate/120)}data[i]=Math.max(-1,Math.min(1,v))}}else{for(let i=0;i<size;i+=1){data[i]=Math.random()*2-1}}return buffer}
-async function startSuperNoise(){if(superState.noiseContext&&superState.noiseSource)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C();const source=ctx.createBufferSource();source.buffer=createNoiseBuffer(ctx,sfNoiseType.value);source.loop=true;const gain=ctx.createGain();gain.gain.value=0.025;source.connect(gain);gain.connect(ctx.destination);source.start(0);superState.noiseContext=ctx;superState.noiseSource=source;superState.noiseGain=gain;updateNoiseTip(true)}
+function createNoiseBuffer(ctx,type){
+  const size=ctx.sampleRate*2;
+  const buffer=ctx.createBuffer(1,size,ctx.sampleRate);
+  const data=buffer.getChannelData(0);
+  if(type==='coffee'){
+    let crowdA=0,crowdB=0,room=0;
+    for(let i=0;i<size;i+=1){
+      const w=Math.random()*2-1;
+      crowdA=.992*crowdA+w*.055;
+      crowdB=.968*crowdB+w*.03;
+      room=.82*room+w*.008;
+      let v=(crowdA*.62+crowdB*.38+room)*.09;
+      const cupTick=i%(ctx.sampleRate*.45);
+      if(cupTick<22)v+=Math.sin((cupTick/22)*Math.PI)*.022;
+      const hiss=i%(ctx.sampleRate*1.7);
+      if(hiss<90)v+=Math.sin((hiss/90)*Math.PI)*.015;
+      data[i]=Math.max(-1,Math.min(1,v));
+    }
+  }else if(type==='library'){
+    let base=0;
+    for(let i=0;i<size;i+=1){
+      const w=(Math.random()*2-1)*.22;
+      base=(base+.012*w)/1.012;
+      let v=base*.32;
+      const pageTurn=i%(ctx.sampleRate*2.6);
+      if(pageTurn<140)v+=Math.sin((pageTurn/140)*Math.PI)*.012;
+      const chairShift=i%(ctx.sampleRate*4.2);
+      if(chairShift<48)v+=Math.sin((chairShift/48)*Math.PI)*.008;
+      data[i]=Math.max(-1,Math.min(1,v));
+    }
+  }else if(type==='forest'){
+    let wind=0,leaf=0;
+    for(let i=0;i<size;i+=1){
+      const w=Math.random()*2-1;
+      wind=(wind+.02*w)/1.02;
+      leaf=.97*leaf+w*.02;
+      let v=wind*.16+leaf*.04;
+      const bird=i%(ctx.sampleRate*0.95);
+      if(bird<180){
+        const t=bird/ctx.sampleRate;
+        v+=Math.sin(2*Math.PI*(1450+320*Math.sin(t*20))*t)*.028*(1-bird/180);
+      }
+      const gust=i%(ctx.sampleRate*3.1);
+      if(gust<260)v+=Math.sin((gust/260)*Math.PI)*.01;
+      data[i]=Math.max(-1,Math.min(1,v));
+    }
+  }else{
+    for(let i=0;i<size;i+=1)data[i]=Math.random()*2-1;
+  }
+  return buffer;
+}
+async function startSuperNoise(){if(superState.noiseContext&&superState.noiseSource)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C();const source=ctx.createBufferSource();const type=sfNoiseType.value;source.buffer=createNoiseBuffer(ctx,type);source.loop=true;const gain=ctx.createGain();gain.gain.value=type==='library'?.022:type==='forest'?.026:.03;source.connect(gain);gain.connect(ctx.destination);source.start(0);superState.noiseContext=ctx;superState.noiseSource=source;superState.noiseGain=gain;updateNoiseTip(true)}
 function stopSuperNoise(){if(superState.noiseSource){try{superState.noiseSource.stop(0)}catch{}}if(superState.noiseContext){superState.noiseContext.close().catch(()=>{})}superState.noiseSource=null;superState.noiseGain=null;superState.noiseContext=null;updateNoiseTip(false)}
 startBtn.addEventListener('click',handleStartClick);bindTaskBtn.addEventListener('click',()=>openBindTaskModal(false));bindTaskConfirm.addEventListener('click',()=>{if(bindSelectedTask()){closeBindTaskModal();if(shouldAutoStartAfterBind)toggleTimer();shouldAutoStartAfterBind=false}});bindTaskSkip.addEventListener('click',()=>{closeBindTaskModal();if(shouldAutoStartAfterBind)toggleTimer();shouldAutoStartAfterBind=false});bindTaskCancel.addEventListener('click',()=>{closeBindTaskModal();shouldAutoStartAfterBind=false});bindTaskModal.addEventListener('click',e=>{if(e.target===bindTaskModal){closeBindTaskModal();shouldAutoStartAfterBind=false}});resetBtn.addEventListener('click',resetTimer);nextQuoteBtn.addEventListener('click',()=>setRandomQuote(true));addTodoBtn.addEventListener('click',addTodo);clearDoneBtn.addEventListener('click',clearDone);addWishBtn.addEventListener('click',addWish);momentLinkEl.addEventListener('click',openDream);sortInput.addEventListener('change',e=>{state.sortBy=e.target.value;renderTodos();saveState()});todoInput.addEventListener('keydown',e=>{if(e.key==='Enter')addTodo()});wishInput.addEventListener('keydown',e=>{if(e.key==='Enter')addWish()});introOverlayEl.addEventListener('click',runIntroAnimation);introOverlayEl.addEventListener('touchstart',runIntroAnimation,{passive:true});window.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')runIntroAnimation()});
 if(pomodoroConfirmTask)pomodoroConfirmTask.addEventListener('click',pickPomodoroTask);
