@@ -1,4 +1,4 @@
-const CACHE_NAME = 'daymori-pwa-v27';
+const CACHE_NAME = 'daymori-pwa-v29';
 const APP_SHELL = [
   './',
   './Daymori.html',
