@@ -494,6 +494,168 @@ body.dark-mode .snapshot-empty{background:rgba(35,30,24,.76);border-color:rgba(1
 .completion-kpis .kpi span{font-size:.74rem;color:rgba(61,26,0,.68)}
 @media (max-width:760px){.analytics-grid{grid-template-columns:1fr}
 .grid,.wish-layout,.todo-extra-group,.todo-input-group,.stats,.daily-top-three-list{grid-template-columns:1fr}.hero-actions,.timer-actions,.mode-switcher,.todo-tools{flex-direction:column}.page{padding-top:16px;gap:16px}.panel,.hero,.daily-top-three{padding:18px}.moment{right:14px;bottom:14px;width:calc(100vw - 28px)}button,a.button{width:100%}.sidebar{width:calc(100vw - 60px)}.progress-task-row{flex-direction:column;align-items:stretch}.progress-bound-task{max-width:100%;text-align:center}.daily-top-three-head{align-items:stretch}}
+
+/* iOS 17+ visual refinement layer: CSS-only, non-structural overrides */
+:root{
+  --ios-surface:rgba(255,255,255,.52);
+  --ios-surface-strong:rgba(255,255,255,.66);
+  --ios-line:rgba(255,255,255,.46);
+  --ios-shadow:0 12px 28px rgba(15,23,42,.10);
+  --ios-text-primary:rgba(17,17,17,.92);
+  --ios-text-secondary:rgba(64,64,64,.80);
+  --ios-text-tertiary:rgba(115,115,115,.78);
+  --ios-ease:cubic-bezier(.4,0,.2,1);
+  --ios-primary:#007AFF;
+}
+
+.card,
+.panel,
+.hero,
+.stat,
+.item,
+.onboarding-card,
+.super-report-card,
+.super-resume-card,
+.moment,
+.encourage,
+.quick-task-list,
+.daily-top-three,
+.analytics-card,
+.evening-report-card,
+.dev-letter-paper{
+  background:var(--ios-surface);
+  border:1px solid var(--ios-line);
+  box-shadow:var(--ios-shadow);
+  backdrop-filter:blur(10px);
+}
+
+.hero h1,
+.panel h2,
+.stat strong,
+.evening-report-title,
+.dev-letter-title,
+.onboarding-title,
+.analytics-header h2{
+  color:var(--ios-text-primary);
+  font-weight:700;
+}
+
+.hero p,
+.note,
+.quote-foot,
+.todo-meta,
+.item .meta,
+.evening-report-body,
+.dev-letter-content,
+.onboarding-desc,
+.analytics-card h3{
+  color:var(--ios-text-secondary);
+  font-weight:500;
+}
+
+.tag,
+.stat span,
+.install-note,
+.empty,
+.focus-trend-head,
+.focus-trend-bar span,
+.analytics-streak-bar span,
+.completion-kpis .kpi span{
+  color:var(--ios-text-tertiary);
+  font-weight:500;
+}
+
+button,
+a.button{
+  border:none;
+  background:transparent;
+  color:var(--ios-text-secondary);
+  font-weight:600;
+  transition:opacity .24s var(--ios-ease),transform .24s var(--ios-ease),background-color .24s var(--ios-ease),color .24s var(--ios-ease),box-shadow .24s var(--ios-ease),border-color .24s var(--ios-ease);
+}
+
+button:hover,
+a.button:hover{opacity:.78}
+button:active,
+a.button:active{opacity:.64;transform:translateY(1px)}
+
+button.primary,
+a.primary,
+.mode-btn.active,
+.dev-letter-btn,
+.evening-report-confirm,
+.super-start-btn,
+.super-finish-btn,
+.onboarding-next,
+.onboarding-prev,
+.onboarding-close,
+.onboarding-skip,
+.analytics-close-btn{
+  background:var(--ios-primary);
+  color:#fff;
+  border:1px solid transparent;
+  border-radius:999px;
+  box-shadow:0 6px 18px rgba(0,122,255,.24);
+}
+
+button.primary:hover,
+a.primary:hover,
+.mode-btn.active:hover,
+.dev-letter-btn:hover,
+.evening-report-confirm:hover,
+.super-start-btn:hover,
+.super-finish-btn:hover,
+.onboarding-next:hover,
+.onboarding-prev:hover,
+.onboarding-close:hover,
+.onboarding-skip:hover,
+.analytics-close-btn:hover{
+  opacity:.92;
+}
+
+.settings-btn,
+.feature-btn,
+.feature-item,
+.switch-slider,
+.switch-slider::before{
+  transition:all .24s var(--ios-ease);
+}
+
+input[type=text],
+input[type=date],
+input[type=number],
+select,
+textarea{
+  background:var(--ios-surface-strong);
+  border:1px solid rgba(0,0,0,.12);
+  box-shadow:none;
+  color:var(--ios-text-primary);
+  transition:border-color .24s var(--ios-ease),background-color .24s var(--ios-ease),box-shadow .24s var(--ios-ease);
+}
+
+input[type=text]:focus,
+input[type=date]:focus,
+input[type=number]:focus,
+select:focus,
+textarea:focus{
+  outline:none;
+  border-color:rgba(0,122,255,.62);
+  box-shadow:none;
+}
+
+.item.done .text,
+.item.done .main .text{
+  color:var(--ios-text-tertiary);
+  font-weight:500;
+}
+
+@media (max-width:760px){
+  .page{padding:18px 14px 32px;gap:18px}
+  .hero,.panel,.daily-top-three{padding:20px}
+  .stats{gap:10px}
+  .item{padding:13px 14px}
+  .todo-meta{gap:8px}
+}
 </style>
 </head>
 <body>
