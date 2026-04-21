@@ -762,6 +762,87 @@ select{
     width:100%;
   }
 }
+
+/* Daymori linear redesign layer */
+.intro{display:none!important}
+.page{max-width:800px!important;gap:48px!important}
+.hero{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;text-align:center;padding:26px 0 0!important}
+.hero h1{font-weight:500}
+.hero .hero-copy{font-weight:400;color:rgba(64,64,64,.78)}
+.daily-top-three{background:transparent;border:none;box-shadow:none;padding:0}
+.daily-top-three .daily-top-three-head{align-items:end}
+.daily-top-three .daily-top-three-head p{margin:0;color:var(--muted)}
+.daily-top-three-edit{display:none}
+.todo-input-group{grid-template-columns:1fr auto}
+.todo-input-group input[type=text]{background:transparent;border:none;border-bottom:1px solid rgba(109,149,203,.24);border-radius:0;padding:10px 2px 8px;box-shadow:none}
+.todo-input-group input[type=text]:focus{border-bottom-color:#007AFF}
+.grid{display:block}
+#timerBlock{border-radius:16px;background:rgba(255,255,255,.56);backdrop-filter:blur(10px);box-shadow:0 14px 30px rgba(94,128,173,.12)}
+#timerBlock .timer-display{margin:12px 0 6px;font-weight:600}
+#timerBlock .progress-bound-task{display:block;text-align:center;margin-bottom:12px;font-weight:500}
+.timer-actions{justify-content:center}
+.timer-actions .primary{background:#007AFF!important;color:#fff!important}
+.timer-actions button{min-width:120px}
+.minimalist-hidden{display:none!important}
+#quoteBlock{display:none!important}
+#wishBlock{border-radius:16px;background:rgba(255,255,255,.56);backdrop-filter:blur(10px);box-shadow:0 14px 30px rgba(94,128,173,.12)}
+.growth-primary{margin:2px 0 2px;font-weight:500;color:rgba(35,54,84,.9)}
+.growth-secondary{margin:0 0 14px;color:var(--muted)}
+.long-goal-progress{height:8px;border-radius:999px;background:rgba(109,149,203,.16);margin-top:12px;overflow:hidden}
+#longGoalProgressBar{height:100%;width:0;background:#007AFF;transition:width .24s cubic-bezier(.4,0,.2,1)}
+.sidebar{width:min(360px,calc(100vw - 28px));padding:16px}
+.sidebar-content{border-radius:16px;background:rgba(255,255,255,.72)}
+.repair-app-btn,.super-btn{display:none}
+.feature-btn,.feature-disk{display:none!important}
+
+@media (max-width:768px){
+  .page{gap:22px!important;padding:18px 14px 28px!important}
+  .todo-input-group{grid-template-columns:1fr}
+  .timer-actions{flex-direction:column}
+  .timer-actions button{width:100%}
+}
+
+/* AI companion main interface */
+body.ai-chat-mode .settings-btn,
+body.ai-chat-mode .feature-btn,
+body.ai-chat-mode .sidebar,
+body.ai-chat-mode .feature-disk,
+body.ai-chat-mode .moment,
+body.ai-chat-mode .bind-modal,
+body.ai-chat-mode .intro,
+body.ai-chat-mode .super-focus,
+body.ai-chat-mode .dev-letter-overlay,
+body.ai-chat-mode .analytics-page,
+body.ai-chat-mode .analytics-loading,
+body.ai-chat-mode .evening-report-overlay,
+body.ai-chat-mode .super-report-overlay,
+body.ai-chat-mode .super-resume-overlay{display:none!important}
+
+body.ai-chat-mode #pageShell{opacity:1!important;gap:0!important;padding-top:28px!important}
+body.ai-chat-mode #pageShell>*:not(#aiCompanionApp){display:none!important}
+
+#aiCompanionApp{display:none}
+body.ai-chat-mode #aiCompanionApp{display:flex;flex-direction:column;min-height:calc(100vh - 80px);width:min(100%,800px);margin:0 auto}
+
+.ai-shell{display:flex;flex-direction:column;gap:14px;background:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.42);border-radius:22px;backdrop-filter:blur(10px);box-shadow:0 16px 34px rgba(94,128,173,.12);padding:20px;min-height:72vh}
+.ai-head h1{margin:0;font-weight:600}
+.ai-head p{margin:6px 0 0;color:var(--muted)}
+.ai-thread{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:2px 2px 8px}
+.ai-bubble{max-width:min(92%,680px);padding:11px 14px;border-radius:14px;line-height:1.75}
+.ai-bubble.bot{align-self:flex-start;background:rgba(255,255,255,.68);color:var(--text);border:1px solid rgba(106,140,186,.16)}
+.ai-bubble.user{align-self:flex-end;background:#007AFF;color:#fff}
+.ai-input-wrap{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}
+#aiInput{width:100%;min-height:48px;max-height:130px;resize:none;padding:12px 14px;border-radius:14px;border:1px solid rgba(106,140,186,.2);background:rgba(255,255,255,.8);font:inherit;color:var(--text)}
+#aiInput:focus{outline:none;border-color:#007AFF}
+#aiSendBtn{min-height:48px;padding:0 18px;border-radius:999px;background:#007AFF;color:#fff;border:none;font:inherit;cursor:pointer;transition:opacity .24s cubic-bezier(.4,0,.2,1),transform .24s cubic-bezier(.4,0,.2,1)}
+#aiSendBtn:hover{opacity:.9}
+#aiSendBtn:active{transform:scale(.98)}
+
+@media (max-width:768px){
+  body.ai-chat-mode #pageShell{padding:16px 12px 18px!important}
+  .ai-shell{padding:14px;border-radius:18px;min-height:78vh}
+  .ai-input-wrap{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -795,12 +876,25 @@ select{
   </div>
 </div>
 <main class="page" id="pageShell">
-<section class="hero card reveal" id="heroBlock"><h1>Daymori</h1><p class="hero-copy">Gentle discipline for everyday growth.</p><div class="hero-actions"><button class="primary install-btn" id="installBtn" type="button">Install Daymori</button></div><div class="install-note" id="installNote" aria-live="polite"></div></section>
-<section class="card reveal daily-top-three" id="dailyTopThreeBlock"><div class="daily-top-three-head"><div><h2>今日三件事</h2><p>写下今天最重要的三件事。</p></div><button class="daily-top-three-edit" id="dailyTopThreeEditBtn" type="button">编辑</button></div><ul class="daily-top-three-list" id="dailyTopThreeList"><li class="daily-top-three-item"><span class="daily-top-three-index">1</span><div class="daily-top-three-text daily-top-three-empty">未填写</div></li><li class="daily-top-three-item"><span class="daily-top-three-index">2</span><div class="daily-top-three-text daily-top-three-empty">未填写</div></li><li class="daily-top-three-item"><span class="daily-top-three-index">3</span><div class="daily-top-three-text daily-top-three-empty">未填写</div></li></ul></section>
+<section id="aiCompanionApp" aria-label="Daymori AI伙伴">
+  <div class="ai-shell">
+    <header class="ai-head">
+      <h1>Daymori AI伙伴</h1>
+      <p>Gentle discipline for everyday growth</p>
+    </header>
+    <div class="ai-thread" id="aiThread" aria-live="polite"></div>
+    <div class="ai-input-wrap">
+      <textarea id="aiInput" placeholder="和 Daymori AI伙伴聊聊今天最重要的一件事..."></textarea>
+      <button id="aiSendBtn" type="button">发送</button>
+    </div>
+  </div>
+</section>
+<section class="hero reveal" id="heroBlock"><h1>Daymori</h1><p class="hero-copy" id="brandStatusText">今天，我们先从一件小事开始</p><div class="hero-actions"><button class="primary install-btn" id="installBtn" type="button">Install Daymori</button></div><div class="install-note" id="installNote" aria-live="polite"></div></section>
+<section class="reveal daily-top-three" id="dailyTopThreeBlock"><div class="daily-top-three-head"><div><h2>今日核心目标</h2><p>写下今天最重要的一件事</p></div><button class="daily-top-three-edit" id="dailyTopThreeEditBtn" type="button">编辑</button></div><div class="todo-input-group"><div class="float-field"><input type="text" id="todoInput" placeholder=" "><label for="todoInput">写下今天最重要的一件事</label></div><button class="primary" id="addTodoBtn" type="button">加入</button></div><div class="todo-extra-group minimalist-hidden"><select id="priorityInput"><option value="high">高优先级</option><option value="medium" selected>中优先级</option><option value="low">低优先级</option></select><input type="date" id="deadlineInput"><input type="number" id="estimateInput" min="1" max="12" value="1" placeholder="预计番茄数"></div><div class="todo-meta"><span id="todoSummary">我们今天可以继续完成它。</span><div class="todo-tools minimalist-hidden"><select id="sortInput" class="sort-select"><option value="manual">默认顺序</option><option value="priority">按优先级排序</option><option value="deadline">按截止时间排序</option></select><button id="clearDoneBtn" type="button">清除已完成</button></div></div><ul class="list" id="todoList"></ul><ul class="daily-top-three-list minimalist-hidden" id="dailyTopThreeList"></ul></section>
 <section class="grid">
   <article class="panel card reveal" id="timerBlock">
-    <h2>番茄钟</h2>
-    <div class="pomodoro-setup">
+    <h2>专注执行</h2>
+    <div class="pomodoro-setup minimalist-hidden">
       <h3>选任务后开始 25 分钟专注</h3>
       <div class="task-choice-row">
         <select id="pomodoroTaskSelect">
@@ -808,51 +902,39 @@ select{
         </select>
         <button id="pomodoroConfirmTask" class="primary" type="button">开始番茄钟</button>
       </div>
-      <div class="quick-task-row" id="quickTaskRow">
-        <button class="quick-task-btn" type="button" data-task="复习错题">复习错题</button>
-        <button class="quick-task-btn" type="button" data-task="背单词">背单词</button>
-        <button class="quick-task-btn" type="button" data-task="阅读 20 页">阅读 20 页</button>
-        <button class="quick-task-btn" type="button" data-task="整理笔记">整理笔记</button>
-      </div>
-      <div class="float-field">
+      <div class="quick-task-row" id="quickTaskRow"></div>
+      <div class="float-field minimalist-hidden">
         <input type="text" id="pomodoroCustomTask" placeholder=" ">
         <label for="pomodoroCustomTask">自定义任务</label>
       </div>
-      <p class="pomodoro-banner" id="pomodoroBanner">请选择任务并开始。</p>
-      <p class="pomodoro-budget" id="pomodoroBudget">预计 0 / 实际 0 / 剩余 0</p>
-      <p class="pomodoro-overtime" id="pomodoroOvertime"></p>
+      <p class="pomodoro-banner" id="pomodoroBanner">准备好就开始</p>
+      <p class="pomodoro-budget minimalist-hidden" id="pomodoroBudget">预计 0 / 实际 0 / 剩余 0</p>
+      <p class="pomodoro-overtime minimalist-hidden" id="pomodoroOvertime"></p>
     </div>
-    <div class="pill" id="timerStage">当前阶段：待开始</div>
+    <div class="pill minimalist-hidden" id="timerStage">当前阶段：待开始</div>
     <div class="timer-display" id="timer">25:00</div>
-    <div class="progress-task-row">
+    <div class="progress-task-row minimalist-hidden">
       <div class="progress"><div id="progressBar"></div></div>
-      <span class="progress-bound-task" id="progressBoundTask">任务：未选择</span>
     </div>
+    <span class="progress-bound-task" id="progressBoundTask">任务：未选择</span>
     <div class="timer-actions">
-      <button class="primary" id="startBtn" type="button" disabled>暂停</button>
-      <button id="resetBtn" type="button">重选任务</button>
-      <button id="nextQuoteBtn" type="button">换一句</button>
-      <button id="bindTaskBtn" class="bind-task-btn" type="button" style="display:none">绑定当前任务</button>
+      <button class="primary" id="startBtn" type="button" disabled>启动</button>
+      <button id="resetBtn" type="button" class="minimalist-hidden">重选任务</button>
+      <button id="nextQuoteBtn" type="button" class="minimalist-hidden">换一句</button>
+      <button id="bindTaskBtn" class="bind-task-btn minimalist-hidden" type="button" style="display:none">绑定当前任务</button>
+      <button id="enterImmersiveBtn" type="button">沉浸模式</button>
     </div>
-    <div class="bound-task-chip" id="currentBoundTask">当前任务：未选择</div>
-    <div class="stats">
+    <div class="bound-task-chip minimalist-hidden" id="currentBoundTask">当前任务：未选择</div>
+    <div class="stats minimalist-hidden">
       <div class="stat"><strong id="completedSessions">0</strong><span>完成番茄</span></div>
       <div class="stat"><strong id="completedTasks">0</strong><span>已完成任务</span></div>
       <div class="stat"><strong id="focusModeLabel">番茄钟</strong><span>当前节奏</span></div>
     </div>
-
-    <div class="merged-divider"></div>
-    <h3 class="tomato-merged-title">番茄钟模式（25+5）x4+20</h3>
-    <div id="todoBlock">
-      <div class="todo-input-group todo-hidden"><div class="float-field"><input type="text" id="todoInput" placeholder=" "><label for="todoInput">写下你现在最重要的一件事</label></div><button class="primary" id="addTodoBtn" type="button">添加</button></div>
-      <div class="todo-extra-group todo-hidden"><select id="priorityInput"><option value="high">高优先级</option><option value="medium" selected>中优先级</option><option value="low">低优先级</option></select><input type="date" id="deadlineInput"><input type="number" id="estimateInput" min="1" max="12" value="1" placeholder="预计番茄数"></div>
-      <div class="todo-meta"><span id="todoSummary">写下一件待办并开始。</span><div class="todo-tools todo-hidden"><select id="sortInput" class="sort-select"><option value="manual">默认顺序</option><option value="priority">按优先级排序</option><option value="deadline">按截止时间排序</option></select><button id="clearDoneBtn" type="button">清除已完成</button></div></div>
-      <ul class="list todo-hidden" id="todoList"></ul>
-    </div>
+    <div id="todoBlock" class="minimalist-hidden"></div>
   </article>
 </section>
-<section class="panel card reveal" id="quoteBlock"><h2>今日一句</h2><p class="quote-text" id="quote">正在选择一句话...</p><div class="quote-foot">慢一点也没关系。</div></section>
-<section class="panel card reveal" id="wishBlock"><h2>愿望墙</h2><div class="wish-layout"><div><p class="note">写下你现在最想完成的一件事。</p><div class="float-field"><input type="text" id="wishInput" placeholder=" "><label for="wishInput">例如：完成课程第3章</label></div><div style="height:10px"></div><button class="primary" id="addWishBtn" type="button">加入</button><div class="encourage" id="wishEncourage">写下愿望后会显示一句鼓励。</div></div><div><ul class="list" id="wishList"></ul></div></div></section>
+<section class="panel reveal minimalist-hidden" id="quoteBlock"><p class="quote-text" id="quote">正在选择一句话...</p><div class="quote-foot">慢一点也没关系。</div></section>
+<section class="panel card reveal" id="wishBlock"><h2>成长与目标闭环</h2><p class="growth-primary" id="growthPrimary">你已经在路上了，我们一起慢慢变好。</p><p class="growth-secondary" id="growthSecondary">完成一次专注，进度就会自动前进。</p><div class="wish-layout"><div><div class="float-field"><input type="text" id="wishInput" placeholder=" "><label for="wishInput">输入长期目标，例如：3个月数学拿A*</label></div><div style="height:10px"></div><button class="primary" id="addWishBtn" type="button">拆解</button><div class="encourage" id="wishEncourage">拆解后会自动同步到今日目标。</div><div class="long-goal-progress"><div id="longGoalProgressBar"></div></div></div><div><ul class="list" id="wishList"></ul></div></div></section>
 <aside class="moment" id="lightningMoment"><small>Lightning Moment</small><h3>这一刻值得被记住。</h3><p id="momentCopy">当你完成一个愿望，这里会出现通往 Dream 的入口。</p><a class="button primary" id="momentLink" href="dream.html">进入 Dream</a></aside>
 </main>
 <div class="bind-modal" id="bindTaskModal" aria-hidden="true">
@@ -996,6 +1078,7 @@ const $=id=>document.getElementById(id);const timerEl=$('timer'),timerStageEl=$(
 const superResumeOverlay=$('superResumeOverlay'),superReasonGrid=$('superReasonGrid'),superResumeCountdown=$('superResumeCountdown');
 const pomodoroTaskSelect=$('pomodoroTaskSelect'),pomodoroConfirmTask=$('pomodoroConfirmTask'),pomodoroCustomTask=$('pomodoroCustomTask'),pomodoroBanner=$('pomodoroBanner');
 const quickTaskButtons=Array.from(document.querySelectorAll('[data-task]'));
+const brandStatusText=$('brandStatusText'),growthPrimary=$('growthPrimary'),growthSecondary=$('growthSecondary'),longGoalProgressBar=$('longGoalProgressBar'),enterImmersiveBtn=$('enterImmersiveBtn');
 const POMODORO_FOCUS_SECONDS=25*60,POMODORO_SHORT_BREAK_SECONDS=5*60,POMODORO_LONG_BREAK_SECONDS=20*60,POMODORO_CYCLES_PER_ROUND=4;
 const pomodoroState={phase:'idle',completedCycles:0,currentTask:'',roundFinished:false,selectedQuickTask:''};
 const DEV_LETTER_TEXT=`感谢您使用这一软件，首先，不知您是否觉得很好用呢？super专注模式好用吗，这是否帮助您更加地专注于学习和生活了呢？护眼模式是否满足您在晚自习使用时的需求了呢？活动圆盘是否让您耳目一新呢？
@@ -1159,6 +1242,8 @@ function onPomodoroPhaseComplete(){
       updatePomodoroBanner('完成一轮，休息 5 分钟。');
     }
     openPomodoroReviewModal(POMODORO_FOCUS_SECONDS,breakSeconds);
+    updateBrandStatus();
+    updateGrowthFeedback();
     startBtn.textContent='暂停';
     startTimer();
     return;
@@ -1353,12 +1438,7 @@ function revealHome(){
   pageShellEl.classList.add('ready');
   try{sessionStorage.setItem('daymori-intro-seen','1')}catch{}
   setupReveal();
-  const openedEveningReport=maybeOpenEveningReport();
-  if(openedEveningReport){
-    window.setTimeout(()=>{maybeOpenDailyPlan()},3300);
-    return;
-  }
-  maybeOpenDailyPlan();
+  maybeOpenEveningReport();
 }
 function runIntroAnimation(){if(introStarted)return;introStarted=true;playIntroChime();introHintEl.textContent='Sound on. Entering Daymori...';introOverlayEl.classList.add('exit');setTimeout(revealHome,800)}
 function typeIntroHint(text){
@@ -1435,16 +1515,20 @@ function populatePomodoroTaskSelect(){
 function todoItem(todo){const li=document.createElement('li');li.dataset.todoId=String(todo.id);li.className=`item${todo.done?' done':''}${isOverdue(todo)?' overdue':''}`;const cb=document.createElement('input');cb.type='checkbox';cb.className='checkbox';cb.checked=todo.done;cb.addEventListener('change',()=>toggleTodo(todo.id));const main=document.createElement('div');main.className='main';const text=document.createElement('span');text.className='text';text.textContent=todo.text;const tags=document.createElement('div');tags.className='tags';const p=document.createElement('span');p.className=`tag priority-${todo.priority}`;p.textContent=`${priorityLabel(todo.priority)}优先级`;const d=document.createElement('span');d.className='tag';d.textContent=todo.deadline?`截止：${formatDate(todo.deadline)}`:'未设截止日期';const estimateTag=document.createElement('span');estimateTag.className='tag';estimateTag.textContent=`预计 ${clampEstimatePomodoros(todo.estimatePomodoros)} 个番茄`;const actualTag=document.createElement('span');actualTag.className='tag';actualTag.textContent=`今日实际 ${getTodoPomodorosToday(todo)} 个`;const st=getTodoStatus(todo);const s=document.createElement('span');s.className=`tag task-status status-${st}`;s.textContent=getTodoStatusLabel(st);tags.append(p,d,estimateTag,actualTag,s);main.append(text,tags);const del=document.createElement('button');del.type='button';del.textContent='删除';del.addEventListener('click',()=>removeTodo(todo.id));li.append(cb,main,del);return li}
 function renderTodos(){todoListEl.innerHTML='';const todos=sortedTodos();if(!todos.length){const e=document.createElement('li');e.className='empty';e.textContent='暂无任务';todoListEl.appendChild(e)}else todos.forEach(t=>todoListEl.appendChild(todoItem(t)));todoSummaryEl.textContent='写下一件待办并开始。';if(state.boundTodoId&&!state.todos.some(t=>t.id===state.boundTodoId&&!t.done))state.boundTodoId=null;populatePomodoroTaskSelect();renderBoundTask();updatePomodoroBudgetOverview()}
 function updateStats(){completedSessionsEl.textContent=String(state.sessionsCompleted);completedTasksEl.textContent=String(state.todos.filter(t=>t.done).length);updatePomodoroBudgetOverview()}
-function addTodo(){const text=todoInput.value.trim();if(!text)return;state.todos.unshift(normalizeTodo({id:Date.now(),text,done:false,status:'todo',priority:priorityInput.value,deadline:deadlineInput.value||'',estimatePomodoros:clampEstimatePomodoros(estimateInput?estimateInput.value:1),pomodoroHistory:{},createdDate:todayYMD()}));todoInput.value='';priorityInput.value='medium';deadlineInput.value='';if(estimateInput)estimateInput.value='1';renderTodos();updateStats();saveState()}
-function toggleTodo(id){state.todos=state.todos.map(t=>t.id===id?{...t,done:!t.done,status:!t.done?'done':'todo'}:t);renderTodos();updateStats();saveState()}
+function syncDefaultPomodoroTask(){if(!pomodoroTaskSelect)return;const first=state.todos.find(todo=>!todo.done);if(!first)return;const exists=Array.from(pomodoroTaskSelect.options).some(option=>option.value===first.text);if(exists)pomodoroTaskSelect.value=first.text}
+function updateLongGoalProgress(){if(!longGoalProgressBar)return;const total=Math.max(1,state.wishes.length);const done=state.wishes.filter(item=>item.done).length;longGoalProgressBar.style.width=`${Math.round((done/total)*100)}%`}
+function updateGrowthFeedback(){if(!growthPrimary||!growthSecondary)return;const donePomodoros=Number((getPomodoroMetricsData()[todayYMD()]||{}).completed)||0;if(donePomodoros>0){growthPrimary.textContent='你刚刚又向目标靠近了一步';growthSecondary.textContent='每一次专注都在沉淀长期能力。';return;}if(state.todos.length>0){growthPrimary.textContent='准备好了，我们随时可以出发';growthSecondary.textContent='今天先做好最重要的一件事。';return;}growthPrimary.textContent='你已经在路上了，我们一起慢慢变好。';growthSecondary.textContent='完成一次专注，进度就会自动前进。'}
+function updateBrandStatus(){if(!brandStatusText)return;const hour=new Date().getHours();if(hour>=20){brandStatusText.textContent='今天的你已经很棒了，好好休息吧';return;}const donePomodoros=Number((getPomodoroMetricsData()[todayYMD()]||{}).completed)||0;if(state.todos.length===0){brandStatusText.textContent='今天，我们先从一件小事开始';return;}if(state.todos.length>0&&state.todos.every(todo=>todo.done)){brandStatusText.textContent='太棒了！你今天完成了最重要的事';return;}if(donePomodoros>0){brandStatusText.textContent='你刚刚又向目标靠近了一步';return;}brandStatusText.textContent='准备好了，我们随时可以出发'}
+function addTodo(){const text=todoInput.value.trim();if(!text)return;state.todos.unshift(normalizeTodo({id:Date.now(),text,done:false,status:'todo',priority:priorityInput.value,deadline:deadlineInput.value||'',estimatePomodoros:clampEstimatePomodoros(estimateInput?estimateInput.value:1),pomodoroHistory:{},createdDate:todayYMD()}));todoInput.value='';priorityInput.value='medium';deadlineInput.value='';if(estimateInput)estimateInput.value='1';renderTodos();syncDefaultPomodoroTask();updateStats();updateBrandStatus();updateGrowthFeedback();saveState()}
+function toggleTodo(id){state.todos=state.todos.map(t=>t.id===id?{...t,done:!t.done,status:!t.done?'done':'todo'}:t);renderTodos();updateStats();updateBrandStatus();updateGrowthFeedback();saveState()}
 function removeTodo(id){const row=todoListEl.querySelector('[data-todo-id="'+id+'"]');if(!row){state.todos=state.todos.filter(t=>t.id!==id);if(state.boundTodoId===id)state.boundTodoId=null;renderTodos();updateStats();saveState();return}row.classList.add('removing');window.setTimeout(()=>{state.todos=state.todos.filter(t=>t.id!==id);if(state.boundTodoId===id)state.boundTodoId=null;renderTodos();updateStats();saveState()},320)}
 function clearDone(){state.todos=state.todos.filter(t=>!t.done);if(state.boundTodoId&&!state.todos.some(t=>t.id===state.boundTodoId))state.boundTodoId=null;renderTodos();updateStats();saveState()}
 function setRandomQuote(shouldSave=true){const q=quotes[Math.floor(Math.random()*quotes.length)];state.quote=q;quoteEl.textContent=q;if(shouldSave)saveState()}function renderQuote(){quoteEl.textContent=state.quote}
 function wishTime(s){const d=new Date(s);if(Number.isNaN(d.getTime()))return'刚刚';return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`}
 function wishItem(w){const li=document.createElement('li');li.dataset.wishId=String(w.id);li.className=`item${w.done?' done':''}`;const cb=document.createElement('input');cb.type='checkbox';cb.className='checkbox';cb.checked=w.done;cb.addEventListener('change',()=>toggleWish(w.id));const main=document.createElement('div');main.className='main';const text=document.createElement('span');text.className='text';text.textContent=w.text;const meta=document.createElement('div');meta.className='tags';const tag=document.createElement('span');tag.className='tag';tag.textContent=`写下于 ${wishTime(w.createdAt)}`;meta.appendChild(tag);main.append(text,meta);const del=document.createElement('button');del.type='button';del.textContent='移除';del.addEventListener('click',()=>removeWish(w.id));li.append(cb,main,del);return li}
-function renderWishes(){wishListEl.innerHTML='';if(!state.wishes.length){const e=document.createElement('li');e.className='empty';e.textContent='暂无愿望';wishListEl.appendChild(e)}else state.wishes.forEach(w=>wishListEl.appendChild(wishItem(w)));wishEncourageEl.textContent=state.wishMessage}
+function renderWishes(){wishListEl.innerHTML='';if(!state.wishes.length){const e=document.createElement('li');e.className='empty';e.textContent='暂无愿望';wishListEl.appendChild(e)}else state.wishes.forEach(w=>wishListEl.appendChild(wishItem(w)));wishEncourageEl.textContent=state.wishMessage;updateLongGoalProgress()}
 function showMoment(d){momentCopyEl.textContent=`你刚刚完成了“${d.wishText}”，这一刻已经被收进 Dream。`;lightningMomentEl.classList.add('show')}function createDreamMoment(w){const d={wishText:w.text,wishedAt:w.createdAt,completedAt:new Date().toISOString(),completedTasks:state.todos.filter(t=>t.done).length,sessionsCompleted:state.sessionsCompleted,visitCount:state.visitCount};localStorage.setItem(DREAM_MOMENT_KEY,JSON.stringify(d));showMoment(d)}
-function addWish(){const text=wishInput.value.trim();if(!text)return;state.wishes.unshift({id:Date.now(),text,done:false,createdAt:new Date().toISOString()});state.wishMessage=quotes[Math.floor(Math.random()*quotes.length)];wishInput.value='';renderWishes();saveState()}function toggleWish(id){let now=false,chosen=null;state.wishes=state.wishes.map(w=>{if(w.id!==id)return w;const n={...w,done:!w.done};now=n.done;chosen=n;return n});if(now&&chosen){state.wishMessage='Good job，你又完成了一个写下来的愿望。';celebrateWishCompletion();createDreamMoment(chosen)}renderWishes();saveState()}function removeWish(id){const row=wishListEl.querySelector('[data-wish-id="'+id+'"]');if(!row){state.wishes=state.wishes.filter(w=>w.id!==id);renderWishes();saveState();return}row.classList.add('removing');window.setTimeout(()=>{state.wishes=state.wishes.filter(w=>w.id!==id);renderWishes();saveState()},320)}
+function addWish(){const text=wishInput.value.trim();if(!text)return;state.wishes.unshift({id:Date.now(),text,done:false,createdAt:new Date().toISOString()});state.wishMessage='已拆解长期目标，今天我们先完成一小步。';if(state.todos.length<3){state.todos.unshift(normalizeTodo({id:Date.now()+1,text:`推进：${text}`,done:false,status:'todo',priority:'medium',deadline:'',estimatePomodoros:1,pomodoroHistory:{},createdDate:todayYMD()}));renderTodos();syncDefaultPomodoroTask();}wishInput.value='';renderWishes();updateGrowthFeedback();updateBrandStatus();saveState()}function toggleWish(id){let now=false,chosen=null;state.wishes=state.wishes.map(w=>{if(w.id!==id)return w;const n={...w,done:!w.done};now=n.done;chosen=n;return n});if(now&&chosen){state.wishMessage='Good job，你又完成了一个写下来的愿望。';celebrateWishCompletion();createDreamMoment(chosen)}renderWishes();updateGrowthFeedback();updateBrandStatus();saveState()}function removeWish(id){const row=wishListEl.querySelector('[data-wish-id="'+id+'"]');if(!row){state.wishes=state.wishes.filter(w=>w.id!==id);renderWishes();saveState();return}row.classList.add('removing');window.setTimeout(()=>{state.wishes=state.wishes.filter(w=>w.id!==id);renderWishes();saveState()},320)}
 function withAppVersion(pathname){const url=new URL(pathname,window.location.href);url.searchParams.set('v',APP_VERSION);return url.toString()}
 function normalizeCurrentUrlVersion(){const current=new URL(window.location.href);if(current.pathname.endsWith('/Daymori.html')||current.pathname.endsWith('/Daymori/')||current.pathname==='/'){if(current.searchParams.get('v')!==APP_VERSION){current.searchParams.set('v',APP_VERSION);history.replaceState(null,'',current.toString())}}}
 function forceLatestOnRestore(){window.addEventListener('pageshow',event=>{if(event.persisted){window.location.replace(withAppVersion('./Daymori.html'))}})}
@@ -1607,8 +1691,12 @@ state.timeLeft=POMODORO_FOCUS_SECONDS;
 updateTimerDisplay();
 renderDailyTopThree();
 renderBoundTask();
+syncDefaultPomodoroTask();
+updateBrandStatus();
+updateGrowthFeedback();
+updateLongGoalProgress();
 primeIntroChimeOnFirstGesture();
-runIntroAnimationSilent()
+revealHome()
 
 window.addEventListener('storage',e=>{
   if(e.key!==STORAGE_KEY&&e.key!==DREAM_MOMENT_KEY)return;
@@ -1622,6 +1710,10 @@ window.addEventListener('storage',e=>{
   updateTimerDisplay();
   renderDailyTopThree();
   renderBoundTask();
+  syncDefaultPomodoroTask();
+  updateBrandStatus();
+  updateGrowthFeedback();
+  updateLongGoalProgress();
 });
 
 // 设置按钮打开侧边栏
@@ -1659,6 +1751,7 @@ darkModeToggle.addEventListener('change',()=>{
 
 // 先绑定 Super 入口，避免后续模块异常影响进入专注模式
 superFocusBtn.addEventListener('click',enterSuperFocus);
+if(enterImmersiveBtn)enterImmersiveBtn.addEventListener('click',enterSuperFocus);
 sfExitBtn.addEventListener('click',exitSuperFocus);
 
 function toggleFeatureDisk(){
@@ -1899,6 +1992,80 @@ renderBoundTask();
 scheduleAutoSnapshot('app-start',true);
 window.setInterval(()=>scheduleAutoSnapshot('interval-auto'),5*60*1000);
 window.addEventListener('beforeunload',()=>scheduleAutoSnapshot('before-unload'));
+
+// AI companion chat interface
+(function initAiCompanion(){
+  document.body.classList.add('ai-chat-mode');
+  const historyKey='daymori-ai-chat-history';
+  const thread=document.getElementById('aiThread');
+  const input=document.getElementById('aiInput');
+  const sendBtn=document.getElementById('aiSendBtn');
+  if(!thread||!input||!sendBtn)return;
+
+  const defaultHistory=[
+    {role:'bot',text:'你好，我是 Daymori AI伙伴。我们先从今天最重要的一件小事开始。'}
+  ];
+
+  function loadHistory(){
+    try{
+      const list=JSON.parse(localStorage.getItem(historyKey)||'[]');
+      if(Array.isArray(list)&&list.length)return list;
+    }catch{}
+    return defaultHistory;
+  }
+
+  function saveHistory(list){
+    localStorage.setItem(historyKey,JSON.stringify(list.slice(-120)));
+  }
+
+  function bubble(role,text){
+    const div=document.createElement('div');
+    div.className=`ai-bubble ${role}`;
+    div.textContent=text;
+    return div;
+  }
+
+  function render(list){
+    thread.innerHTML='';
+    list.forEach(item=>thread.appendChild(bubble(item.role,item.text)));
+    thread.scrollTop=thread.scrollHeight;
+  }
+
+  function reply(message){
+    const lower=message.toLowerCase();
+    if(lower.includes('计划')||lower.includes('安排'))return '可以。先做 25 分钟专注，再休息 5 分钟。告诉我你现在要做的第一件事，我帮你拆成三步。';
+    if(lower.includes('焦虑')||lower.includes('累')||lower.includes('烦'))return '收到。你已经很努力了。我们先把目标缩小到 10 分钟，只做一个最小动作就算赢。';
+    if(lower.includes('考试')||lower.includes('作业'))return '我们用温和节奏：先列 1 个核心任务，开始 1 个番茄钟，结束后我再陪你复盘下一步。';
+    return '好，我们就从这一件事开始。我建议你现在设定 25 分钟专注，完成后回来告诉我进展。';
+  }
+
+  let chatHistory=loadHistory();
+  render(chatHistory);
+
+  function send(){
+    const text=input.value.trim();
+    if(!text)return;
+    chatHistory.push({role:'user',text});
+    chatHistory.push({role:'bot',text:reply(text)});
+    saveHistory(chatHistory);
+    render(chatHistory);
+    input.value='';
+    input.style.height='48px';
+    input.focus();
+  }
+
+  sendBtn.addEventListener('click',send);
+  input.addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){
+      e.preventDefault();
+      send();
+    }
+  });
+  input.addEventListener('input',()=>{
+    input.style.height='48px';
+    input.style.height=`${Math.min(130,input.scrollHeight)}px`;
+  });
+})();
 </script>
 </body>
 </html>
