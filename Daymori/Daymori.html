@@ -822,21 +822,29 @@ body.ai-chat-mode #pageShell{opacity:1!important;gap:0!important;padding-top:28p
 body.ai-chat-mode #pageShell>*:not(#aiCompanionApp){display:none!important}
 
 #aiCompanionApp{display:none}
-body.ai-chat-mode #aiCompanionApp{display:flex;flex-direction:column;min-height:calc(100vh - 80px);width:min(100%,800px);margin:0 auto}
+body.ai-chat-mode #aiCompanionApp{display:flex;flex-direction:column;min-height:calc(100vh - 80px);width:min(100%,700px);margin:0 auto}
 
 .ai-shell{display:flex;flex-direction:column;gap:14px;background:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.42);border-radius:22px;backdrop-filter:blur(10px);box-shadow:0 16px 34px rgba(94,128,173,.12);padding:20px;min-height:72vh}
 .ai-head h1{margin:0;font-weight:600}
 .ai-head p{margin:6px 0 0;color:var(--muted)}
 .ai-thread{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:2px 2px 8px}
-.ai-bubble{max-width:min(92%,680px);padding:11px 14px;border-radius:14px;line-height:1.75}
-.ai-bubble.bot{align-self:flex-start;background:rgba(255,255,255,.68);color:var(--text);border:1px solid rgba(106,140,186,.16)}
-.ai-bubble.user{align-self:flex-end;background:#007AFF;color:#fff}
+.ai-bubble{max-width:min(92%,640px);padding:11px 14px;border-radius:18px;line-height:1.6;animation:aiBubbleIn .24s cubic-bezier(.4,0,.2,1)}
+.ai-bubble.bot{align-self:flex-start;background:#F2F2F7;color:#1D1D1F;border:none}
+.ai-bubble.user{align-self:flex-end;background:#007AFF;color:#fff;border:none}
 .ai-input-wrap{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}
 #aiInput{width:100%;min-height:48px;max-height:130px;resize:none;padding:12px 14px;border-radius:14px;border:1px solid rgba(106,140,186,.2);background:rgba(255,255,255,.8);font:inherit;color:var(--text)}
 #aiInput:focus{outline:none;border-color:#007AFF}
 #aiSendBtn{min-height:48px;padding:0 18px;border-radius:999px;background:#007AFF;color:#fff;border:none;font:inherit;cursor:pointer;transition:opacity .24s cubic-bezier(.4,0,.2,1),transform .24s cubic-bezier(.4,0,.2,1)}
 #aiSendBtn:hover{opacity:.9}
 #aiSendBtn:active{transform:scale(.98)}
+
+.ai-typing{display:inline-flex;gap:4px;align-items:center;padding:8px 2px}
+.ai-typing span{width:6px;height:6px;border-radius:999px;background:rgba(29,29,31,.38);animation:aiDotPulse 1s ease-in-out infinite}
+.ai-typing span:nth-child(2){animation-delay:.16s}
+.ai-typing span:nth-child(3){animation-delay:.32s}
+
+@keyframes aiBubbleIn{from{opacity:0;transform:translateY(6px) scale(.99)}to{opacity:1;transform:none}}
+@keyframes aiDotPulse{0%,80%,100%{transform:translateY(0);opacity:.45}40%{transform:translateY(-3px);opacity:.95}}
 
 @media (max-width:768px){
   body.ai-chat-mode #pageShell{padding:16px 12px 18px!important}
@@ -1997,25 +2005,66 @@ window.addEventListener('beforeunload',()=>scheduleAutoSnapshot('before-unload')
 (function initAiCompanion(){
   document.body.classList.add('ai-chat-mode');
   const historyKey='daymori-ai-chat-history';
+  const profileKey='daymori-ai-profile';
+  const settingsKey='daymori-ai-settings';
+  const triggerKey='daymori-ai-trigger-log';
+  const goalLogKey='daymori-ai-goal-log';
   const thread=document.getElementById('aiThread');
   const input=document.getElementById('aiInput');
   const sendBtn=document.getElementById('aiSendBtn');
   if(!thread||!input||!sendBtn)return;
 
-  const defaultHistory=[
-    {role:'bot',text:'你好，我是 Daymori AI伙伴。我们先从今天最重要的一件小事开始。'}
-  ];
+  const bannedPatterns=[/你必须/g,/你应该/g,/你失败了/g,/你没完成/g,/别人都/g,/你不够好/g];
+  let typingEl=null;
 
   function loadHistory(){
     try{
       const list=JSON.parse(localStorage.getItem(historyKey)||'[]');
       if(Array.isArray(list)&&list.length)return list;
     }catch{}
-    return defaultHistory;
+    return [];
   }
 
   function saveHistory(list){
-    localStorage.setItem(historyKey,JSON.stringify(list.slice(-120)));
+    localStorage.setItem(historyKey,JSON.stringify(list.slice(-20)));
+  }
+
+  function loadProfile(){
+    try{return JSON.parse(localStorage.getItem(profileKey)||'{}')||{}}catch{return{}}
+  }
+
+  function saveProfile(profile){
+    localStorage.setItem(profileKey,JSON.stringify(profile||{}));
+  }
+
+  function loadSettings(){
+    try{return JSON.parse(localStorage.getItem(settingsKey)||'{}')||{}}catch{return{}}
+  }
+
+  function saveSettings(settings){
+    localStorage.setItem(settingsKey,JSON.stringify(settings||{}));
+  }
+
+  function loadTriggerLog(){
+    try{return JSON.parse(localStorage.getItem(triggerKey)||'{}')||{}}catch{return{}}
+  }
+
+  function saveTriggerLog(log){
+    localStorage.setItem(triggerKey,JSON.stringify(log||{}));
+  }
+
+  function loadGoalLog(){
+    try{return JSON.parse(localStorage.getItem(goalLogKey)||'{}')||{}}catch{return{}}
+  }
+
+  function saveGoalLog(log){
+    localStorage.setItem(goalLogKey,JSON.stringify(log||{}));
+  }
+
+  function getDateKey(offset=0){
+    const d=new Date();
+    d.setDate(d.getDate()-offset);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   }
 
   function bubble(role,text){
@@ -2031,27 +2080,345 @@ window.addEventListener('beforeunload',()=>scheduleAutoSnapshot('before-unload')
     thread.scrollTop=thread.scrollHeight;
   }
 
-  function reply(message){
-    const lower=message.toLowerCase();
-    if(lower.includes('计划')||lower.includes('安排'))return '可以。先做 25 分钟专注，再休息 5 分钟。告诉我你现在要做的第一件事，我帮你拆成三步。';
-    if(lower.includes('焦虑')||lower.includes('累')||lower.includes('烦'))return '收到。你已经很努力了。我们先把目标缩小到 10 分钟，只做一个最小动作就算赢。';
-    if(lower.includes('考试')||lower.includes('作业'))return '我们用温和节奏：先列 1 个核心任务，开始 1 个番茄钟，结束后我再陪你复盘下一步。';
-    return '好，我们就从这一件事开始。我建议你现在设定 25 分钟专注，完成后回来告诉我进展。';
+  function sanitize(text){
+    let output=(text||'').trim();
+    bannedPatterns.forEach(pattern=>{output=output.replace(pattern,'')});
+    return output||'我在呢，我们先从一件小事开始就好。';
+  }
+
+  function appendMessage(role,text,save=true){
+    const safeText=sanitize(text);
+    if(role==='bot'){
+      const recentBot=chatHistory.filter(item=>item.role==='bot').slice(-3).map(item=>item.text);
+      if(recentBot.includes(safeText))return;
+    }
+    chatHistory.push({role,text:safeText,at:Date.now()});
+    if(chatHistory.length>120)chatHistory=chatHistory.slice(-120);
+    render(chatHistory);
+    if(save)saveHistory(chatHistory);
+  }
+
+  function addTyping(){
+    removeTyping();
+    typingEl=document.createElement('div');
+    typingEl.className='ai-bubble bot';
+    typingEl.innerHTML='<div class="ai-typing"><span></span><span></span><span></span></div>';
+    thread.appendChild(typingEl);
+    thread.scrollTop=thread.scrollHeight;
+  }
+
+  function removeTyping(){
+    if(typingEl&&typingEl.parentNode)typingEl.parentNode.removeChild(typingEl);
+    typingEl=null;
+  }
+
+  function getWelcomeText(){
+    const h=new Date().getHours();
+    if(h>=6&&h<12)return '你好，我是Daymori AI伙伴。新的一天，我们先从今天最重要的一件小事开始吧。';
+    if(h>=12&&h<14)return '你好，我是Daymori AI伙伴。午间时光，我们可以聊聊下午的专注计划，也可以好好休息一下。';
+    if(h>=14&&h<18)return '你好，我是Daymori AI伙伴。随时可以和我聊聊今天的专注目标，我会陪着你一起开始。';
+    return '你好，我是Daymori AI伙伴。今天辛苦了，我们可以复盘今天的成长，也可以聊聊明天的计划。';
+  }
+
+  function inferProfile(message){
+    const text=message.toLowerCase();
+    if(/a-level|alevel|美本|sat|托福|雅思/.test(text))profile.examTrack=message.trim();
+    if(/习惯|作息|晚睡|拖延/.test(text))profile.habitHint=message.trim();
+    saveProfile(profile);
+  }
+
+  function syncGoalLog(){
+    const log=loadGoalLog();
+    const total=state.todos.length;
+    const done=state.todos.filter(item=>item.done).length;
+    const row={total,done,focus:getTodayFocusMins(),pomodoros:Number((getPomodoroMetricsData()[todayYMD()]||{}).completed)||0,at:Date.now()};
+    log[getDateKey(0)]=row;
+    saveGoalLog(log);
+    return row;
+  }
+
+  function getWeekGrowth(){
+    const log=loadGoalLog();
+    let totalDone=0,totalFocus=0;
+    for(let i=0;i<7;i+=1){
+      const row=log[getDateKey(i)]||{};
+      totalDone+=Number(row.done)||0;
+      totalFocus+=Number(row.focus)||0;
+    }
+    return{totalDone,totalFocus};
+  }
+
+  function hasThreeDayUnfinished(){
+    const log=loadGoalLog();
+    const days=[0,1,2].map(offset=>log[getDateKey(offset)]||{});
+    return days.every(row=>(Number(row.total)||0)>0&&(Number(row.done)||0)<(Number(row.total)||0));
+  }
+
+  function ensureTodo(text){
+    const value=(text||'').trim();
+    if(!value)return null;
+    const existing=state.todos.find(item=>item.text===value&&!item.done);
+    if(existing)return existing;
+    const todo=normalizeTodo({id:Date.now()+Math.floor(Math.random()*900),text:value,done:false,status:'todo',priority:'medium',deadline:'',estimatePomodoros:1,pomodoroHistory:{},createdDate:todayYMD()});
+    state.todos.unshift(todo);
+    return todo;
+  }
+
+  function syncCoreView(){
+    renderTodos();
+    updateStats();
+    if(typeof syncDefaultPomodoroTask==='function')syncDefaultPomodoroTask();
+    if(typeof updateBrandStatus==='function')updateBrandStatus();
+    if(typeof updateGrowthFeedback==='function')updateGrowthFeedback();
+    if(typeof updateLongGoalProgress==='function')updateLongGoalProgress();
+    saveState();
+    syncGoalLog();
+  }
+
+  function setGoals(goals){
+    state.todos=[];
+    goals.filter(Boolean).slice(0,3).forEach(text=>ensureTodo(text));
+    syncCoreView();
+  }
+
+  function splitGoalToDaily(goalText){
+    const seed=(goalText||'').replace(/^帮我把|拆解成每日任务|拆解|目标/g,'').trim()||'长期目标';
+    const tasks=[`复习 ${seed} 核心知识 30 分钟`,`完成 ${seed} 练习题 1 组`,`整理 ${seed} 错题与笔记 20 分钟`];
+    tasks.forEach(task=>ensureTodo(task));
+    state.wishes.unshift({id:Date.now(),text:seed,done:false,createdAt:new Date().toISOString()});
+    state.wishMessage='已拆解为可执行小任务，我们每天推进一点点。';
+    syncCoreView();
+    renderWishes();
+  }
+
+  function startFocus(minutes){
+    const mins=Math.max(5,Math.min(180,Number(minutes)||aiSettings.preferredFocusMinutes||25));
+    aiSettings.preferredFocusMinutes=mins;
+    saveSettings(aiSettings);
+    let task=state.todos.find(item=>!item.done);
+    if(!task)task=ensureTodo('今天最重要的一件小事');
+    pomodoroState.currentTask=task.text;
+    pomodoroState.phase='focus';
+    pomodoroState.completedCycles=0;
+    pomodoroState.roundFinished=false;
+    stopTimer();
+    state.totalDuration=mins*60;
+    state.timeLeft=mins*60;
+    startBtn.disabled=false;
+    startBtn.textContent='暂停';
+    updatePomodoroBanner('已进入专注。');
+    renderBoundTask();
+    updateTimerDisplay();
+    logPomodoroMetric('started');
+    startTimer();
+    saveState();
+    syncGoalLog();
+    return mins;
+  }
+
+  function pauseFocus(){
+    if(!state.timerInterval)return false;
+    stopTimer();
+    startBtn.textContent='继续';
+    updatePomodoroBanner('已暂停，点击继续。');
+    saveState();
+    syncGoalLog();
+    return true;
+  }
+
+  function resumeFocus(){
+    if(state.timerInterval||pomodoroState.phase==='idle')return false;
+    startBtn.textContent='暂停';
+    startTimer();
+    return true;
+  }
+
+  function adjustFocusMinutes(minutes){
+    const mins=Math.max(5,Math.min(180,Number(minutes)||25));
+    aiSettings.preferredFocusMinutes=mins;
+    saveSettings(aiSettings);
+    if(!state.timerInterval&&pomodoroState.phase==='idle'){
+      state.totalDuration=mins*60;
+      state.timeLeft=mins*60;
+      updateTimerDisplay();
+      saveState();
+    }
+    return mins;
+  }
+
+  async function maybeExternalReply(userText){
+    const cfg=window.DAYMORI_AI_CONFIG;
+    if(!cfg||!cfg.endpoint)return null;
+    try{
+      const payload={message:userText,history:chatHistory.slice(-20),profile,state:{todos:state.todos,sessionsCompleted:state.sessionsCompleted,timeLeft:state.timeLeft}};
+      const res=await fetch(cfg.endpoint,{method:'POST',headers:{'Content-Type':'application/json',...(cfg.apiKey?{'Authorization':`Bearer ${cfg.apiKey}`}:{})},body:JSON.stringify(payload)});
+      if(!res.ok)return null;
+      const data=await res.json();
+      return typeof data.reply==='string'?data.reply:null;
+    }catch{return null}
+  }
+
+  function localReply(userText){
+    const text=userText.trim();
+    const lower=text.toLowerCase();
+    const minuteMatch=text.match(/(\d{1,3})\s*分钟/);
+
+    if(/帮我定今天的?3个学习目标|帮我定今天的?3个目标/.test(text)){
+      const goals=['完成一套核心题并订正','复习今天最薄弱的知识点','用 10 分钟整理学习笔记'];
+      setGoals(goals);
+      return '我已经帮你把今天的3个目标同步好了，我们现在就可以开始啦。';
+    }
+
+    if(/清空今天的目标|重新填写目标/.test(text)){
+      state.todos=[];
+      syncCoreView();
+      return '已经帮你清空啦，我们可以重新定下今天的新目标。';
+    }
+
+    if(/拆解/.test(text)&&/(雅思|托福|a-level|alevel|sat|备考|目标)/i.test(text)){
+      splitGoalToDaily(text);
+      return '我已经帮你把目标拆解成了每日小任务，并同步到了今日目标里。';
+    }
+
+    if(/开启沉浸模式|进入全屏专注|全屏专注|沉浸模式/.test(text)){
+      enterSuperFocus();
+      return '沉浸模式已经开启，专注当下就好，我一直都在。';
+    }
+
+    if(/暂停番茄钟|停止专注|暂停专注|暂停番茄/.test(text)){
+      return pauseFocus()?'已经暂停啦，好好休息一下，随时可以重新开始。':'现在还没有正在进行的专注，我们随时可以开始。';
+    }
+
+    if(/继续专注|继续番茄/.test(text)){
+      return resumeFocus()?'已经继续专注啦，我们稳稳推进就好。':'我先帮你设定一段专注，准备好了我们就开始。';
+    }
+
+    if(/(开始|启动).*(番茄|专注)|开始\s*\d+\s*分钟专注/.test(text)){
+      const mins=startFocus(minuteMatch?Number(minuteMatch[1]):aiSettings.preferredFocusMinutes||25);
+      return `好的，${mins}分钟专注已经开始啦，我会在这里陪着你。`;
+    }
+
+    if(/(改成|调整).*(番茄|专注|时长)|专注时长/.test(text)&&minuteMatch){
+      const mins=adjustFocusMinutes(Number(minuteMatch[1]));
+      return `已经帮你把专注时长调整为${mins}分钟啦，准备好了我们就开始。`;
+    }
+
+    if(/我今天专注了多久|今天专注了多久|今天完成了多少番茄钟|今天番茄/.test(text)){
+      const todayMinutes=getTodayFocusMins();
+      const completed=Number((getPomodoroMetricsData()[todayYMD()]||{}).completed)||0;
+      return `你今天已经累计专注了${todayMinutes}分钟，完成了${completed}个番茄钟，超棒的。`;
+    }
+
+    if(/这周的成长数据|这周完成了多少目标|这周专注/.test(text)){
+      const week=getWeekGrowth();
+      return `这周你累计专注了${week.totalFocus}分钟，完成了${week.totalDone}个核心目标，一直在稳稳往前走。`;
+    }
+
+    if(/焦虑|学不进|挫败|烦|累|压力|失败|没完成/.test(lower)){
+      return '我懂这种感觉，真的不容易。我们先从5分钟开始就好，做完这一小步就已经很棒了。';
+    }
+
+    if(/计划|安排|目标/.test(lower)){
+      return '可以，我们先明确今天最重要的一件事。你说一句目标，我马上帮你同步并启动专注。';
+    }
+
+    return '我在呢，如果你愿意，我们可以从今天的一件小事开始。也可以直接告诉我“开始25分钟专注”。';
   }
 
   let chatHistory=loadHistory();
-  render(chatHistory);
+  let profile=loadProfile();
+  let aiSettings=loadSettings();
+
+  if(!chatHistory.length){
+    appendMessage('bot',getWelcomeText(),false);
+    saveHistory(chatHistory);
+  }else{
+    render(chatHistory);
+  }
+
+  function sceneEmit(key,text){
+    const today=todayYMD();
+    const log=loadTriggerLog();
+    log[today]=log[today]||{};
+    if(log[today][key])return;
+    log[today][key]=Date.now();
+    saveTriggerLog(log);
+    appendMessage('bot',text,true);
+  }
+
+  const watcher={
+    todoCount:state.todos.length,
+    wishCount:state.wishes.length,
+    completedPomodoros:Number((getPomodoroMetricsData()[todayYMD()]||{}).completed)||0,
+    running:!!state.timerInterval,
+    timeLeft:state.timeLeft,
+    allDone:state.todos.length>0&&state.todos.every(item=>item.done)
+  };
+
+  function watchScenes(){
+    const nowCompleted=Number((getPomodoroMetricsData()[todayYMD()]||{}).completed)||0;
+    const nowAllDone=state.todos.length>0&&state.todos.every(item=>item.done);
+    const nowRunning=!!state.timerInterval;
+
+    if(watcher.todoCount===0&&state.todos.length>0){
+      sceneEmit('goal-filled','太棒了，今天的目标很清晰！要不要我帮你设定25分钟专注，现在就开始？');
+    }
+
+    if(nowCompleted>watcher.completedPomodoros){
+      sceneEmit(`focus-complete-${nowCompleted}`,'你太厉害了！刚刚完整专注了一段时间，要不要休息5分钟再继续？');
+    }
+
+    if(watcher.running&&!nowRunning&&pomodoroState.phase==='focus'&&state.timeLeft>0&&state.timeLeft<state.totalDuration&&nowCompleted===watcher.completedPomodoros){
+      const focused=Math.max(1,Math.round((state.totalDuration-state.timeLeft)/60));
+      appendMessage('bot',`哪怕只专注了${focused}分钟，也是超棒的开始。我们休息一下，随时可以重新出发。`,true);
+    }
+
+    if(!watcher.allDone&&nowAllDone){
+      sceneEmit('all-goals-done','太为你开心了！你今天完成了所有最重要的目标，今天的你已经足够优秀了。');
+    }
+
+    if(state.wishes.length>watcher.wishCount){
+      sceneEmit('wish-added','这个目标很有意义！要不要我继续把它拆成今天就能执行的小任务？');
+    }
+
+    watcher.todoCount=state.todos.length;
+    watcher.wishCount=state.wishes.length;
+    watcher.completedPomodoros=nowCompleted;
+    watcher.running=nowRunning;
+    watcher.timeLeft=state.timeLeft;
+    watcher.allDone=nowAllDone;
+    syncGoalLog();
+  }
+
+  function checkOpenScenes(){
+    const h=new Date().getHours();
+    const focus=getTodayFocusMins();
+    if(h>=20&&focus>0)sceneEmit('evening-review',`今天辛苦了，你累计专注了${focus}分钟。要不要我们简单复盘一下今天的收获？`);
+    if(hasThreeDayUnfinished())sceneEmit('three-day-soft','没关系呀，成长从来不是一条直线。今天我们先从一件5分钟就能完成的小事开始，好不好？');
+  }
+
+  async function handleUserMessage(text){
+    inferProfile(text);
+    addTyping();
+    const external=await maybeExternalReply(text);
+    const response=external||localReply(text);
+    window.setTimeout(()=>{
+      removeTyping();
+      appendMessage('bot',response,true);
+    },240);
+  }
 
   function send(){
     const text=input.value.trim();
     if(!text)return;
-    chatHistory.push({role:'user',text});
-    chatHistory.push({role:'bot',text:reply(text)});
-    saveHistory(chatHistory);
-    render(chatHistory);
+    appendMessage('user',text,true);
     input.value='';
     input.style.height='48px';
     input.focus();
+    handleUserMessage(text).catch(()=>{
+      removeTyping();
+      appendMessage('bot','我在呢～如果你有烦恼可以和我说，也可以聊聊今天的专注计划，我会一直陪着你。',true);
+    });
   }
 
   sendBtn.addEventListener('click',send);
@@ -2065,6 +2432,10 @@ window.addEventListener('beforeunload',()=>scheduleAutoSnapshot('before-unload')
     input.style.height='48px';
     input.style.height=`${Math.min(130,input.scrollHeight)}px`;
   });
+
+  checkOpenScenes();
+  syncGoalLog();
+  window.setInterval(watchScenes,1500);
 })();
 </script>
 </body>
